@@ -65,6 +65,15 @@
     "@dcloudio/uni-stacktracey": "3.0.0-3090920231225001",
     "@dcloudio/vite-plugin-uni": "3.0.0-3090920231225001",
     "@vue/runtime-core": "^3.2.45",
-    "vite": "4.0.3"
+    "eslint": "^8.53.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-vue": "^9.18.1",
+    "path": "^0.12.7",
+    "prettier": "^3.0.3",
+    "sass": "^1.71.0",
+    "vant": "^4.8.4",
+    "vite": "4.0.3",
+    "weixin-js-sdk": "^1.6.5"
   }
 }
