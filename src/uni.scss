@@ -78,6 +78,10 @@ $uni-font-size-paragraph: 15px;
 $theme: red;
 $tab-bar-height: 77px;
 
+view{
+  font-size: 32rpx;
+}
+
 @mixin vertical-center {
   // 垂直水平居中
   display: flex;

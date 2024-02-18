@@ -1,20 +1,23 @@
 <template>
   <view class="content">
-    {{ requestVariables.loading }}
-    <tab-bar></tab-bar>
-    <div>----</div>
+    <HeaderPanel @handleTabChange="handleTabChange"></HeaderPanel>
     <van-cell-group>
       <van-cell title="单元格" value="内容" />
       <van-cell title="单元格" value="内容" label="描述信息" />
     </van-cell-group>
     <van-button type="primary" @click="handleRequest">模拟请求</van-button>
+    <tab-bar></tab-bar>
   </view>
 </template>
 
 <script setup>
   import TabBar from '@/components/TabBar.vue'
+  import HeaderPanel from '@/components/plaza/HeaderPanel.vue'
   import { login } from '@/api/api.js'
   import { useRequest } from '@/hooks/useRequest'
+  import useStore from '@/store/app.js'
+
+  const appStore = useStore()
 
   const { requestVariables, getRequest } = useRequest(login, {
     filterOptions: {
@@ -24,6 +27,9 @@
   })
   const handleRequest = () => {
     getRequest()
+  }
+  const handleTabChange = (tabActive) => {
+    console.log(32, tabActive)
   }
 </script>
 
