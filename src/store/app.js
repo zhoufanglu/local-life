@@ -5,6 +5,7 @@ export default defineStore({
     return {
       systemInfo: {},
       username: 'aaa',
+      statusBarHeight: 0,
     }
   },
   actions: {
@@ -13,6 +14,9 @@ export default defineStore({
       const systemInfo = uni.getSystemInfoSync()
       Object.assign(this.systemInfo, systemInfo)
       return systemInfo
+    },
+    setStatusBarHeight(val) {
+      this.statusBarHeight = val
     },
   },
 })

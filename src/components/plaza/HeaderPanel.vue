@@ -1,12 +1,16 @@
 <script setup>
   import { ref } from 'vue'
+  import useStore from '@/store/app.js'
+
+  const appStore = useStore()
   // ?胶囊属性
   const systemInfo = uni.getSystemInfoSync()
   const statusBarHeight = systemInfo.statusBarHeight // 顶部高度
   const boundWidth = uni.getMenuButtonBoundingClientRect()?.width || 0 // 胶囊宽度
   const boundTop = uni.getMenuButtonBoundingClientRect()?.top || statusBarHeight // 胶囊距离顶部的高度
 
-  const active = ref('follow')
+  appStore.setStatusBarHeight(statusBarHeight)
+
   const headerTabs = ref([
     { name: '关注', value: 'follow' },
     { name: '动态', value: 'dynamicState' },

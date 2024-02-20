@@ -44,6 +44,12 @@
     "app-plus": {
       animationType: 'none'
     },
+    /*"usingComponents": {
+      "van-image": "./wxcomponents/vant/image/index",
+      "van-icon": "./wxcomponents/vant/icon/index",
+      "van-loading": "./wxcomponents/vant/loading/index",
+      "van-info": "./wxcomponents/vant/info/index",
+    }*/
   },
   "easycom": {
     "custom": {

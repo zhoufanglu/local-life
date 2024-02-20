@@ -3,47 +3,49 @@
     <!--?头部-->
     <HeaderPanel @handleTabChange="handleTabChange"></HeaderPanel>
     <!--?主体-->
-    <!--
     <div class="panel">
-      <waterfall :col="2" :data="list" :gutterWidth="10" @scroll="handleScroll">
-        <div class="item" v-for="(item, index) in list" :key="index">
-          <van-image
-            :class="item.isSmall ? 'is-small' : null"
-            class="cover"
-            :src="item.bg"
-            style="width: 336rpx; height: 497rpx"
-            fit="cover"
-          ></van-image>
-          <div class="info">
-            <p>{{ index }}今天给有聚公司设计的 插画被采纳了，好开啊啊啊啊</p>
-            <div class="end-row">
-              <div class="left" @click="goUserInfo">
-                <van-image
-                  class="avatar"
-                  :src="item.avatar"
-                  style="width: 50rpx; height: 50rpx; border-radius: 50%"
-                  fit="cover"
-                ></van-image>
-                <span>用户名</span>
-              </div>
-              <div class="right" @click="handleLikeClick(index, item.isLike)">
-                <img
-                  v-show="!item.isLike"
-                  src="@/static/plaza/like.png"
-                  alt=""
-                />
-                <img
-                  v-show="item.isLike"
-                  src="@/static/plaza/like_active.png"
-                  alt=""
-                />
-                <span>{{ item.likes }}</span>
-              </div>
+      <div class="item" v-for="(item, index) in list" :key="index">
+        <u-image
+          :class="item.isSmall ? 'is-small' : null"
+          class="cover"
+          mode="widthFix"
+          radius="20"
+          :src="item.bg"
+          width="100%"
+          height="497rpx"
+        ></u-image>
+        <div class="info">
+          <text
+            >{{ index }}今天给有聚公司设计的 插画被采纳了，好开啊啊啊啊</text
+          >
+          <div class="end-row">
+            <div class="left" @click="goUserInfo">
+              <u-image
+                class="avatar"
+                :src="item.avatar"
+                shape="circle"
+                width="50rpx"
+                height="50rpx"
+              ></u-image>
+              <span class="username">用户名</span>
+            </div>
+            <div class="right" @click="handleLikeClick(index, item.isLike)">
+              <image
+                v-show="!item.isLike"
+                src="@/static/plaza/like.png"
+                alt=""
+              />
+              <image
+                v-show="item.isLike"
+                src="@/static/plaza/like_active.png"
+                alt=""
+              />
+              <span class="count">{{ item.likes }}</span>
             </div>
           </div>
         </div>
-      </waterfall>
-      &lt;!&ndash;
+      </div>
+      <!--
       <div class="item" v-for="(item, index) in list" :key="index">
         <van-image
           class="cover"
@@ -75,9 +77,8 @@
           </div>
         </div>
       </div>
-&ndash;&gt;
-    </div>
 -->
+    </div>
     <!--？底部tab-->
     <tab-bar></tab-bar>
   </view>
@@ -90,8 +91,6 @@
   // import { showToast } from 'vant'
   import { login } from '@/api/api.js'
   import { useRequest } from '@/hooks/useRequest'
-  import useStore from '@/store/app.js'
-  const test = ref('aa')
   /*const appStore = useStore()
 
   const { requestVariables, getRequest } = useRequest(login, {
@@ -194,17 +193,12 @@
       padding: 25rpx 30rpx;
       box-sizing: border-box;
       height: calc(100vh - 204rpx - 100rpx);
-      .vue-waterfall {
-        height: 100%;
-      }
-      /*box-sizing: border-box;
-      width: 100%;
-      overflow-y: auto;
-      padding: 25rpx 30rpx;*/
-      /*display: flex;
+      display: flex;
+      justify-content: space-between;
       flex-wrap: wrap;
-      gap: 16rpx; !* 设置列之间的间距 *!*/
       .item {
+        width: 48%;
+        // border: solid 1px red;
         border-radius: 20rpx;
         margin-bottom: 20rpx;
         box-sizing: border-box;
@@ -215,11 +209,12 @@
         }
         .info {
           padding: 0 20rpx;
-          p {
+          text {
             color: #333333;
             font-size: 26rpx;
             @include ellipsis(2);
             margin: 20rpx 0;
+            margin-top: 0;
           }
           .end-row {
             @include vertical-center;
@@ -239,18 +234,22 @@
             .right {
               display: flex;
               align-items: center;
-              img {
+              image {
                 border-radius: 0;
                 margin-right: 8rpx;
-                width: 34rpx;
-                height: 30rpx;
+                width: 34rpx !important;
+                height: 30rpx !important;
               }
+            }
+            .username,
+            .count {
+              font-size: 22rpx;
             }
           }
         }
       }
       .is-small {
-        height: 354rpx !important;
+        // height: 354rpx !important;
       }
     }
   }
