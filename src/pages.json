@@ -23,6 +23,7 @@
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "广场",
+        "styleIsolation": "shared"
       }
     },
     {

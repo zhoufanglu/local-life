@@ -1,15 +1,10 @@
 <script setup>
   import { ref } from 'vue'
   import useStore from '@/store/app.js'
+  import { getBoundInfo } from '@/utils/index.js'
 
   const appStore = useStore()
-  // ?胶囊属性
-  const systemInfo = uni.getSystemInfoSync()
-  const statusBarHeight = systemInfo.statusBarHeight // 顶部高度
-  const boundWidth = uni.getMenuButtonBoundingClientRect()?.width || 0 // 胶囊宽度
-  const boundTop = uni.getMenuButtonBoundingClientRect()?.top || statusBarHeight // 胶囊距离顶部的高度
-
-  appStore.setStatusBarHeight(statusBarHeight)
+  const { statusBarHeight, boundWidth, boundTop } = getBoundInfo()
 
   const headerTabs = ref([
     { name: '关注', value: 'follow' },
@@ -31,6 +26,11 @@
   }
   const handlePosition = () => {
     console.log('postion')
+  }
+</script>
+<script>
+  export default {
+    options: { styleIsolation: 'shared' },
   }
 </script>
 <template>
@@ -62,14 +62,12 @@
     </view>
 
     <view class="tab-row">
-      <!--      <u-button class="test-btn" type="primary" text="确定"></u-button>-->
-
       <up-tabs
         class="plaza-tabs-inner"
         :list="headerTabs"
         @click="handleTabClick"
         lineColor="white"
-        lineWidth="30"
+        lineWidth="60rpx"
         lineHeight="6"
         :scrollable="false"
         :activeStyle="{
@@ -159,9 +157,6 @@
 </style>
 <style lang="scss">
   .header-panel {
-    .u-button {
-      border: solid 1px red;
-    }
     /*    .search-row {
       border: solid 1px red;
       display: flex;

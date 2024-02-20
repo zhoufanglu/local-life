@@ -1,16 +1,25 @@
 <script setup lang="ts">
   import TabBar from '@/components/TabBar.vue'
-  import useStore from '@/store/app.js'
+  import { getBoundInfo } from '@/utils/index.js'
 
-  const appStore = useStore()
-  console.log(6, appStore.statusBarHeight)
+  const { statusBarHeight } = getBoundInfo()
 </script>
 <template>
-  <tab-bar></tab-bar>
-  <div class=""> study </div>
+  <view class="p-study" :style="{ paddingTop: statusBarHeight * 2 + 'rpx' }">
+    ?????
+    <u-button class="test-btn">aaa</u-button>
+    <tab-bar></tab-bar>
+  </view>
 </template>
 
 <style scoped lang="scss">
-  .test {
+  .p-study {
+  }
+</style>
+<style lang="scss">
+  .p-study {
+    .test-btn {
+      border: solid 1px red !important;
+    }
   }
 </style>
