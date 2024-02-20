@@ -16,6 +16,7 @@
     "dev:mp-qq": "uni -p mp-qq",
     "dev:mp-toutiao": "uni -p mp-toutiao",
     "dev:mp-weixin": "uni -p mp-weixin",
+    "dev:mp-wx": "uni -p mp-weixin",
     "dev:mp-xhs": "uni -p mp-xhs",
     "dev:quickapp-webview": "uni -p quickapp-webview",
     "dev:quickapp-webview-huawei": "uni -p quickapp-webview-huawei",
@@ -54,8 +55,10 @@
     "@dcloudio/uni-mp-weixin": "3.0.0-3090920231225001",
     "@dcloudio/uni-mp-xhs": "3.0.0-3090920231225001",
     "@dcloudio/uni-quickapp-webview": "3.0.0-3090920231225001",
-    "pinia": "^2.0.33",
+    "@vant/weapp": "^1.11.4",
+    "pinia": "2.0.35",
     "pinia-plugin-persist-uni": "1.2.0",
+    "uview-plus": "^3.1.45",
     "vue": "^3.2.31",
     "vue-i18n": "^9.1.9"
   },
@@ -75,6 +78,7 @@
     "sass": "^1.71.0",
     "vant": "^4.8.4",
     "vite": "4.0.3",
+    "vue-waterfall2": "latest",
     "weixin-js-sdk": "^1.6.5"
   }
 }

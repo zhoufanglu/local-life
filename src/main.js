@@ -2,35 +2,15 @@ import { createSSRApp } from 'vue'
 import App from './App.vue'
 import store from '@/store'
 
-/**********************vant***********************/
-import {
-  Button,
-  Tabbar,
-  TabbarItem,
-  Cell,
-  CellGroup,
-  Notify,
-  Icon,
-  Tab,
-  Tabs,
-  Field,
-} from 'vant'
-import 'vant/lib/index.css'
+import uviewPlus from 'uview-plus'
+uni.$u.config.unit = 'rpx'
+// import waterfall from 'vue-waterfall2'
 
 export function createApp() {
   const app = createSSRApp(App)
   app.use(store)
-  app
-    .use(Button)
-    .use(Tabbar)
-    .use(TabbarItem)
-    .use(Cell)
-    .use(CellGroup)
-    .use(Notify)
-    .use(Icon)
-    .use(Tab)
-    .use(Tabs)
-    .use(Field)
+  app.use(uviewPlus)
+  // app.use(waterfall)
   return {
     app,
   }

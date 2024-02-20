@@ -1,5 +1,5 @@
 import logout from '@/utils/logout'
-import { showNotify } from 'vant'
+// import { showNotify } from 'vant'
 
 const BASE_URL = import.meta.env.VITE_APP_WEB_URL
 
@@ -61,7 +61,7 @@ const http = ({
         if (res.statusCode === 200) {
           resolve(res.data)
         } else {
-          showNotify({ type: 'danger', message: '请求出错' })
+          // showNotify({ type: 'danger', message: '请求出错' })
           reject(res)
         }
       },

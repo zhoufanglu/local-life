@@ -1,27 +1,89 @@
 <script setup>
   import { ref } from 'vue'
+  // ?胶囊属性
+  const systemInfo = uni.getSystemInfoSync()
+  const statusBarHeight = systemInfo.statusBarHeight // 顶部高度
+  const boundWidth = uni.getMenuButtonBoundingClientRect()?.width || 0 // 胶囊宽度
+  const boundTop = uni.getMenuButtonBoundingClientRect()?.top || statusBarHeight // 胶囊距离顶部的高度
+
   const active = ref('follow')
   const headerTabs = ref([
-    { label: '关注', value: 'follow' },
-    { label: '动态', value: 'dynamicState' },
-    { label: '美食', value: 'foods' },
-    { label: '兼职', value: 'partTimeJob' },
-    { label: '租房', value: 'tenement' },
-    { label: '转卖', value: 'resell' },
+    { name: '关注', value: 'follow' },
+    { name: '动态', value: 'dynamicState' },
+    { name: '美食', value: 'foods' },
+    { name: '兼职', value: 'partTimeJob' },
+    { name: '租房', value: 'tenement' },
+    { name: '转卖', value: 'resell' },
   ])
+
   const emit = defineEmits(['handleTabChange'])
-  const handleChange = () => {
-    emit('handleTabChange', active.value)
+
+  const handleTabClick = (item) => {
+    emit('handleTabChange', item.value)
+  }
+  // ?事件
+  const handleAdd = () => {
+    console.log('add')
+  }
+  const handlePosition = () => {
+    console.log('postion')
   }
 </script>
 <template>
-  <view class="header-panel">
-    <view>
-      <van-icon :size="30" name="location-o" />
-      <van-field rows="1" placeholder="搜索你感兴趣的内容" />
-      <van-icon size="30" name="add-o" />
+  <view
+    class="header-panel"
+    :style="{ height: statusBarHeight * 2 + 204 + 'rpx' }"
+  >
+    <view
+      class="search-row"
+      :style="{
+        marginTop: boundTop + 'px',
+        width: `calc(100% - ${boundWidth}px - 6px)`,
+      }"
+    >
+      <img
+        @click="handlePosition"
+        class="position-img"
+        src="@/static/plaza/position.png"
+        alt=""
+      />
+      <input type="text" placeholder="搜索你感兴趣的内容" />
+      <img
+        @click="handleAdd"
+        class="add-img"
+        :width="26"
+        src="@/static/plaza/add.png"
+        alt=""
+      />
     </view>
-    <view>
+
+    <view class="tab-row">
+      <!--      <u-button class="test-btn" type="primary" text="确定"></u-button>-->
+
+      <up-tabs
+        class="plaza-tabs-inner"
+        :list="headerTabs"
+        @click="handleTabClick"
+        lineColor="white"
+        lineWidth="30"
+        lineHeight="6"
+        :scrollable="false"
+        :activeStyle="{
+          color: 'white',
+          fontWeight: 'bold',
+          transform: 'scale(1.05)',
+          fontSize: '34rpx',
+        }"
+        :inactiveStyle="{
+          color: 'white',
+          transform: 'scale(1)',
+          fontSize: '34rpx',
+        }"
+      ></up-tabs>
+    </view>
+
+    <!--
+    <view class="tab-row">
       <van-tabs
         v-model:active="active"
         class="plaza-tabs"
@@ -35,34 +97,71 @@
         ></van-tab>
       </van-tabs>
     </view>
+-->
   </view>
 </template>
 
 <style scoped lang="scss">
   .header-panel {
-    height: 204rpx;
-    width: 100%;
+    // height: 204rpx !important;
+    width: 100vw;
     background-color: #a26d37;
     color: white;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    > view:first-child {
+    box-sizing: border-box;
+    .search-row {
+      padding: 0 20rpx;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 20rpx;
-      height: 100%;
-      padding-right: 120rpx;
+      box-sizing: border-box;
+
+      input {
+        box-sizing: border-box;
+        background-color: white;
+        width: 375rpx;
+        height: 60rpx;
+        line-height: 60rpx;
+        font-size: 24rpx;
+        border-radius: 29rpx;
+        color: #999;
+        padding: 8rpx 20rpx;
+      }
+
+      input::-webkit-input-placeholder {
+        /* placeholder颜色 */
+        color: #999;
+        /* placeholder字体大小 */
+        font-size: 24rpx;
+      }
+
+      .add-img {
+        width: 26px;
+        height: 26px;
+      }
+      .position-img {
+        width: 36px * 0.7;
+        height: 44px * 0.7;
+      }
     }
-    > view:last-child {
+    .tab-row {
       padding: 0 20rpx;
+      box-sizing: border-box;
+      width: 100%;
     }
   }
 </style>
 <style lang="scss">
   .header-panel {
-    > view:first-child {
+    .u-button {
+      border: solid 1px red;
+    }
+    /*    .search-row {
+      border: solid 1px red;
+      display: flex;
+      align-items: center;
       .van-field {
         width: 100%;
         color: white;
@@ -75,25 +174,24 @@
       > .van-icon:first-child {
         margin-right: 25rpx !important;
       }
-      > .van-icon:last-child {
+      > .van-icon:last-child,
+      .add-img {
         margin-left: 25rpx;
       }
     }
     .plaza-tabs {
-      border: solid 1px #a26d27;
-      .van-tabs__wrap {
-        .van-tabs__nav {
-          background-color: #a26d37 !important;
-          .van-tab__text {
-            color: white !important;
-            font-weight: normal !important;
-            font-size: 32rpx;
-          }
-          .van-tabs__line {
-            background-color: white !important;
-          }
+      // border: solid 1px red;
+      .van-tabs__nav {
+        background-color: #a26d37 !important;
+        .van-tab__text {
+          color: white !important;
+          font-weight: normal !important;
+          font-size: 32rpx;
+        }
+        .van-tabs__line {
+          background-color: white !important;
         }
       }
-    }
+    }*/
   }
 </style>

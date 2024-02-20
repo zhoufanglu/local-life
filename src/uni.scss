@@ -77,7 +77,8 @@ $uni-font-size-paragraph: 15px;
 
 $theme: red;
 $tab-bar-height: 77px;
-
+/* 颜色变量 */
+@import 'uview-plus/theme.scss';
 view{
   font-size: 32rpx;
 }

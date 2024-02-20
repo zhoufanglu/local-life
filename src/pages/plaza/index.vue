@@ -1,11 +1,84 @@
 <template>
   <view class="content">
+    <!--?头部-->
     <HeaderPanel @handleTabChange="handleTabChange"></HeaderPanel>
-    <van-cell-group>
-      <van-cell title="单元格" value="内容" />
-      <van-cell title="单元格" value="内容" label="描述信息" />
-    </van-cell-group>
-    <van-button type="primary" @click="handleRequest">模拟请求</van-button>
+    <!--?主体-->
+    <!--
+    <div class="panel">
+      <waterfall :col="2" :data="list" :gutterWidth="10" @scroll="handleScroll">
+        <div class="item" v-for="(item, index) in list" :key="index">
+          <van-image
+            :class="item.isSmall ? 'is-small' : null"
+            class="cover"
+            :src="item.bg"
+            style="width: 336rpx; height: 497rpx"
+            fit="cover"
+          ></van-image>
+          <div class="info">
+            <p>{{ index }}今天给有聚公司设计的 插画被采纳了，好开啊啊啊啊</p>
+            <div class="end-row">
+              <div class="left" @click="goUserInfo">
+                <van-image
+                  class="avatar"
+                  :src="item.avatar"
+                  style="width: 50rpx; height: 50rpx; border-radius: 50%"
+                  fit="cover"
+                ></van-image>
+                <span>用户名</span>
+              </div>
+              <div class="right" @click="handleLikeClick(index, item.isLike)">
+                <img
+                  v-show="!item.isLike"
+                  src="@/static/plaza/like.png"
+                  alt=""
+                />
+                <img
+                  v-show="item.isLike"
+                  src="@/static/plaza/like_active.png"
+                  alt=""
+                />
+                <span>{{ item.likes }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </waterfall>
+      &lt;!&ndash;
+      <div class="item" v-for="(item, index) in list" :key="index">
+        <van-image
+          class="cover"
+          :src="item.bg"
+          style="width: 336rpx; height: 497rpx"
+          fit="cover"
+        ></van-image>
+        <div class="info">
+          <p>{{ index }}今天给有聚公司设计的 插画被采纳了，好开啊啊啊啊</p>
+          <div class="end-row">
+            <div class="left">
+              <van-image
+                class="avatar"
+                :src="item.avatar"
+                style="width: 50rpx; height: 50rpx; border-radius: 50%"
+                fit="cover"
+              ></van-image>
+              <span>用户名</span>
+            </div>
+            <div class="right">
+              <img v-show="!item.isLike" src="@/static/plaza/like.png" alt="" />
+              <img
+                v-show="item.isLike"
+                src="@/static/plaza/like_active.png"
+                alt=""
+              />
+              <span>{{ item.likes }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+&ndash;&gt;
+    </div>
+-->
+    <!--？底部tab-->
     <tab-bar></tab-bar>
   </view>
 </template>
@@ -13,11 +86,13 @@
 <script setup>
   import TabBar from '@/components/TabBar.vue'
   import HeaderPanel from '@/components/plaza/HeaderPanel.vue'
+  import { ref, onMounted } from 'vue'
+  // import { showToast } from 'vant'
   import { login } from '@/api/api.js'
   import { useRequest } from '@/hooks/useRequest'
   import useStore from '@/store/app.js'
-
-  const appStore = useStore()
+  const test = ref('aa')
+  /*const appStore = useStore()
 
   const { requestVariables, getRequest } = useRequest(login, {
     filterOptions: {
@@ -27,35 +102,156 @@
   })
   const handleRequest = () => {
     getRequest()
+  }*/
+  const curPanel = ref('follow')
+  let list = ref([])
+  //?test
+  list.value = [
+    {
+      isLike: false,
+      likes: 100,
+      avatar:
+        'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
+      bg: 'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
+    },
+    {
+      isSmall: true,
+      isLike: false,
+      likes: 100,
+      avatar:
+        'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
+      bg: 'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
+    },
+    {
+      isLike: false,
+      likes: 100,
+      avatar:
+        'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
+      bg: 'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
+    },
+    {
+      isLike: false,
+      likes: 100,
+      avatar:
+        'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
+      bg: 'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
+    },
+    {
+      isLike: false,
+      likes: 100,
+      avatar:
+        'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
+      bg: 'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
+    },
+    {
+      isLike: false,
+      likes: 100,
+      avatar:
+        'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
+      bg: 'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
+    },
+  ]
+
+  onMounted(() => {})
+  /**********************事件***********************/
+  const goUserInfo = () => {
+    console.log('user')
   }
+
+  const handleLikeClick = (index, isLike) => {
+    list.value[index].isLike = !isLike
+    let likes = list.value[index].likes
+    list.value[index].likes = !isLike ? ++likes : --likes
+    console.log(list.value[0])
+    // showToast(!isLike ? '取消点赞' : '点赞成功')
+  }
+
   const handleTabChange = (tabActive) => {
-    console.log(32, tabActive)
+    curPanel.value = tabActive
+  }
+
+  const handleScroll = () => {
+    const container = document.getElementById('vueWaterfall')
+    const isAtBottom =
+      container.scrollHeight - container.scrollTop === container.clientHeight
+
+    if (isAtBottom) {
+      console.log('Scrolled to the bottom!')
+      list.value = list.value.concat(list.value)
+      console.log(167, list.value)
+    }
   }
 </script>
 
 <style lang="scss">
   .content {
-    color: $theme;
     @include vertical-center;
     flex-direction: column;
-  }
-
-  .logo {
-    height: 200rpx;
-    width: 200rpx;
-    margin-top: 200rpx;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 50rpx;
-  }
-
-  .text-area {
-    display: flex;
-    justify-content: center;
-  }
-
-  .title {
-    font-size: 36rpx;
-    color: #8f8f94;
+    // height: calc(100vh - 204rpx);
+    .panel {
+      width: 100%;
+      // overflow-y: auto;
+      padding: 25rpx 30rpx;
+      box-sizing: border-box;
+      height: calc(100vh - 204rpx - 100rpx);
+      .vue-waterfall {
+        height: 100%;
+      }
+      /*box-sizing: border-box;
+      width: 100%;
+      overflow-y: auto;
+      padding: 25rpx 30rpx;*/
+      /*display: flex;
+      flex-wrap: wrap;
+      gap: 16rpx; !* 设置列之间的间距 *!*/
+      .item {
+        border-radius: 20rpx;
+        margin-bottom: 20rpx;
+        box-sizing: border-box;
+        padding-bottom: 30rpx;
+        background-color: white;
+        img {
+          border-radius: 20rpx;
+        }
+        .info {
+          padding: 0 20rpx;
+          p {
+            color: #333333;
+            font-size: 26rpx;
+            @include ellipsis(2);
+            margin: 20rpx 0;
+          }
+          .end-row {
+            @include vertical-center;
+            justify-content: space-between;
+            color: #666666;
+            font-size: 22rpx;
+            .left {
+              display: flex;
+              align-items: center;
+              .avatar {
+                margin-right: 8rpx;
+                img {
+                  border-radius: 50%;
+                }
+              }
+            }
+            .right {
+              display: flex;
+              align-items: center;
+              img {
+                border-radius: 0;
+                margin-right: 8rpx;
+                width: 34rpx;
+                height: 30rpx;
+              }
+            }
+          }
+        }
+      }
+      .is-small {
+        height: 354rpx !important;
+      }
+    }
   }
 </style>

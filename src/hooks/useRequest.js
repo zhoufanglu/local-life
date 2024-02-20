@@ -1,4 +1,4 @@
-import { showNotify } from 'vant'
+// import { showNotify } from 'vant'
 import { reactive } from 'vue'
 
 const useRequest = (request, options) => {
@@ -26,7 +26,7 @@ const useRequest = (request, options) => {
       requestVariables.data = transformFn ? transformFn(data) : data
       requestVariables.loading = false
     } catch (err) {
-      showNotify({ type: 'danger', message: '请求出错' })
+      // showNotify({ type: 'danger', message: '请求出错' })
     } finally {
       requestVariables.loading = false
     }
