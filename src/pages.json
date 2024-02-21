@@ -1,4 +1,5 @@
 {
+/*
   "tabBar": {
     "color": "#7F7F7F",
     "selectedColor": "#000",
@@ -8,14 +9,17 @@
       { "text": "消息", "pagePath": "pages/message/index", },
       { "text": "我的", "pagePath": "pages/mine/index", },
     ],
-    /*"list": [
+    */
+/*"list": [
       { "text": "首页", "iconPath": "static/首页.png", "pagePath": "pages/首页/首页", "selectedIconPath": "static/首页_.png" },
       { "text": "每日", "iconPath": "static/每日.png", "pagePath": "pages/每日/每日", "selectedIconPath": "static/每日_.png" },
       { "text": "聊天", "iconPath": "static/聊天.png", "pagePath": "pages/聊天/聊天", "selectedIconPath": "static/聊天_.png" },
       { "text": "数据", "iconPath": "static/数据.png", "pagePath": "pages/数据/数据", "selectedIconPath": "static/数据_.png" },
       { "text": "我的", "iconPath": "static/我的.png", "pagePath": "pages/我的/我的", "selectedIconPath": "static/我的_.png" }
-    ]*/
+    ]*//*
+
   },
+*/
   "pages": [
     //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
     {
@@ -23,7 +27,6 @@
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "广场",
-        "styleIsolation": "shared"
       }
     },
     {

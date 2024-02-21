@@ -78,7 +78,6 @@
     "sass": "^1.71.0",
     "vant": "^4.8.4",
     "vite": "4.0.3",
-    "vue-waterfall2": "latest",
     "weixin-js-sdk": "^1.6.5"
   }
 }
