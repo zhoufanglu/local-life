@@ -43,7 +43,7 @@
   const handleRequest = () => {
     getRequest()
   }*/
-  const curPanel = ref('foods')
+  const curPanel = ref('follow')
   let list = ref([])
   //?test
   list.value = [
@@ -118,7 +118,7 @@
     height: 100%;
     .inner-content {
       box-sizing: border-box;
-      border: solid 1px blue;
+      // border: solid 1px blue;
       overflow-y: auto;
     }
   }

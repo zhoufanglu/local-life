@@ -1,68 +1,8 @@
-<template>
-  <view class="container waterfall-list">
-    <!--?列数-->
-    <view
-      v-for="(colNum, colIndex) in state.columnNum"
-      :key="colNum"
-      class="columnItem"
-    >
-      <!--?item-->
-      <view v-for="(item, i) in state.columnData[colNum]" :key="i">
-        <div class="item">
-          <img class="pic" :src="item.imgUrl" mode="widthFix" />
-          <!--        <u-image
-    :class="item.isSmall ? 'is-small' : null"
-    class="cover"
-    mode="widthFix"
-    radius="20"
-    :src="item.bg"
-    width="100%"
-    height="497rpx"
-  ></u-image>-->
-          <div class="info">
-            <text>{{ i }}{{ item.desc }}</text>
-            <div class="end-row">
-              <div class="left" @click="goUserInfo">
-                <u-image
-                  class="avatar"
-                  :src="item.imgUrl"
-                  shape="circle"
-                  width="50rpx"
-                  height="50rpx"
-                  @load="imageLoad"
-                  @error="imageLoad"
-                ></u-image>
-                <span class="username">用户名</span>
-              </div>
-              <div
-                class="right"
-                @click="handleLikeClick(colIndex, i, item.isLike)"
-              >
-                <image
-                  v-show="!item.isLike"
-                  src="@/static/plaza/like.png"
-                  alt=""
-                />
-                <image
-                  v-show="item.isLike"
-                  src="@/static/plaza/like_active.png"
-                  alt=""
-                />
-                <span class="count">{{ item.likes }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </view>
-    </view>
-  </view>
-  <view class="loading" v-show="state.loading">加载中…</view>
-</template>
-
 <script setup>
   import { onLoad, onReachBottom } from '@dcloudio/uni-app'
   import { data, list } from './data.js'
   import { reactive, getCurrentInstance, onMounted } from 'vue'
+  import loadingCom from '@/components/loading.vue'
   const { proxy } = getCurrentInstance()
 
   const state = reactive({
@@ -83,9 +23,9 @@
   })
 
   /*onLoad(() => {
-    setDefaultData()
-    getData()
-  })*/
+  setDefaultData()
+  getData()
+})*/
 
   // 模拟获取数据
   function getData() {
@@ -103,11 +43,11 @@
   }
 
   /** @加载更多 **/
-  onReachBottom(() => {
+  const loadMore = () => {
     console.log('加载更多')
     state.pages.page++
     getData()
-  })
+  }
 
   /** @图片加载成功 **/
   function imageLoad() {
@@ -176,14 +116,86 @@
     options: { styleIsolation: 'shared' },
   }
 </script>
+<template>
+  <view class="p-waterfall-list">
+    <scroll-view
+      class="follow-scroll-view"
+      scroll-y="true"
+      scroll-x="false"
+      lower-threshold="150"
+      @scrolltolower="loadMore"
+    >
+      <view class="container">
+        <!--?列数-->
+        <view
+          v-for="(colNum, colIndex) in state.columnNum"
+          :key="colNum"
+          class="columnItem"
+        >
+          <!--?item-->
+          <view v-for="(item, i) in state.columnData[colNum]" :key="i">
+            <div class="item">
+              <img class="pic" :src="item.imgUrl" mode="widthFix" />
+              <div class="info">
+                <text>{{ i }}{{ item.desc }}</text>
+                <div class="end-row">
+                  <div class="left" @click="goUserInfo">
+                    <u-image
+                      class="avatar"
+                      :src="item.imgUrl"
+                      shape="circle"
+                      width="50rpx"
+                      height="50rpx"
+                      @load="imageLoad"
+                      @error="imageLoad"
+                    ></u-image>
+                    <span class="username">用户名</span>
+                  </div>
+                  <div
+                    class="right"
+                    @click="handleLikeClick(colIndex, i, item.isLike)"
+                  >
+                    <image
+                      v-show="!item.isLike"
+                      src="@/static/plaza/like.png"
+                      alt=""
+                    />
+                    <image
+                      v-show="item.isLike"
+                      src="@/static/plaza/like_active.png"
+                      alt=""
+                    />
+                    <span class="count">{{ item.likes }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </view>
+        </view>
+      </view>
+      <loading-com v-show="state.loading"></loading-com>
+    </scroll-view>
+  </view>
+</template>
 <style lang="scss" scoped>
-  .waterfall-list {
-    border: solid 1px red;
-    overflow-y: auto;
+  .p-waterfall-list {
+    box-sizing: border-box;
+    overflow: hidden;
+    height: 100%;
+    .follow-scroll-view {
+      box-sizing: border-box;
+      // padding: 24rpx;
+      height: 100%;
+    }
   }
+
   .container {
     display: flex;
     padding: 20rpx;
+    .follow-scroll-view {
+      display: flex;
+      height: 100%;
+    }
     .columnItem {
       width: calc(100% / v-bind('state.columnNum'));
       height: fit-content;
