@@ -3,7 +3,17 @@
     <!--?头部-->
     <HeaderPanel @handleTabChange="handleTabChange"></HeaderPanel>
     <!--?主体-->
-    <waterFallList></waterFallList>
+    <div
+      class="inner-content"
+      :style="{ height: `calc(100% - ${statusBarHeight * 2 + 204 + 100}rpx)` }"
+    >
+      <!--关注-->
+      <waterFallList v-if="curPanel === 'follow'"></waterFallList>
+      <!--动态-->
+      <waterFallList v-if="curPanel === 'dynamicState'"></waterFallList>
+      <!--美食-->
+      <foods v-if="curPanel === 'foods'"></foods>
+    </div>
     <!--?底部tab-->
     <tab-bar></tab-bar>
   </view>
@@ -14,10 +24,14 @@
   import HeaderPanel from '@/components/plaza/HeaderPanel.vue'
   import { ref, onMounted } from 'vue'
   import waterFallList from '@/components/plaza/WaterFallList/WaterFallList.vue'
+  import Foods from '@/components/plaza/Foods.vue'
 
   // import { showToast } from 'vant'
+  const { statusBarHeight } = getBoundInfo()
+
   import { login } from '@/api/api.js'
   import { useRequest } from '@/hooks/useRequest'
+  import { getBoundInfo } from '@/utils'
   /*const appStore = useStore()
 
   const { requestVariables, getRequest } = useRequest(login, {
@@ -29,7 +43,7 @@
   const handleRequest = () => {
     getRequest()
   }*/
-  const curPanel = ref('follow')
+  const curPanel = ref('foods')
   let list = ref([])
   //?test
   list.value = [
@@ -99,7 +113,13 @@
 
 <style lang="scss">
   .content {
-    @include vertical-center;
+    display: flex;
     flex-direction: column;
+    height: 100%;
+    .inner-content {
+      box-sizing: border-box;
+      border: solid 1px blue;
+      overflow-y: auto;
+    }
   }
 </style>

@@ -56,35 +56,46 @@
       </view>
     </view>
   </view>
-  <view class="loading">加载中…</view>
+  <view class="loading" v-show="state.loading">加载中…</view>
 </template>
 
 <script setup>
   import { onLoad, onReachBottom } from '@dcloudio/uni-app'
   import { data, list } from './data.js'
-  import { reactive, getCurrentInstance } from 'vue'
+  import { reactive, getCurrentInstance, onMounted } from 'vue'
   const { proxy } = getCurrentInstance()
+
   const state = reactive({
     columnNum: 2,
     minHeightColNum: 1,
     columnData: {},
     totalList: [],
+    loading: false,
     pages: {
       page: 1,
       pageSize: 10,
     },
   })
-  onLoad(() => {
+  onMounted(() => {
+    console.log('mounted')
     setDefaultData()
     getData()
   })
 
+  /*onLoad(() => {
+    setDefaultData()
+    getData()
+  })*/
+
   // 模拟获取数据
   function getData() {
+    state.loading = true
     if (state.pages.page === 1) setDefaultData()
     return new Promise((resolve) => {
       setTimeout(() => {
         state.totalList.push(...data)
+        // console.log(95, state.totalList)
+        state.loading = false
         loadNextItem()
         resolve()
       }, 500)
@@ -93,8 +104,9 @@
 
   /** @加载更多 **/
   onReachBottom(() => {
-    /*state.pages.page++
-    getData()*/
+    console.log('加载更多')
+    state.pages.page++
+    getData()
   })
 
   /** @图片加载成功 **/

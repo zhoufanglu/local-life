@@ -6,9 +6,9 @@
     },
     onShow: function () {
       // console.log('App Show')
-      uni.hideTabBar({
+      /*uni.hideTabBar({
         animation: false,
-      })
+      })*/
     },
     onHide: function () {
       // console.log('App Hide')

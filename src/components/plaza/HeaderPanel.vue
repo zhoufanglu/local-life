@@ -7,17 +7,21 @@
   const { statusBarHeight, boundWidth, boundTop } = getBoundInfo()
 
   const headerTabs = ref([
-    { name: '关注', value: 'follow' },
-    { name: '动态', value: 'dynamicState' },
-    { name: '美食', value: 'foods' },
-    { name: '兼职', value: 'partTimeJob' },
-    { name: '租房', value: 'tenement' },
-    { name: '转卖', value: 'resell' },
+    { name: '关注', value: 'follow', index: 0 },
+    { name: '动态', value: 'dynamicState', index: 1 },
+    { name: '美食', value: 'foods', index: 2 },
+    { name: '兼职', value: 'partTimeJob', index: 3 },
+    { name: '租房', value: 'tenement', index: 4 },
+    { name: '转卖', value: 'resell', index: 5 },
   ])
+
+  const current = ref(2)
 
   const emit = defineEmits(['handleTabChange'])
 
   const handleTabClick = (item) => {
+    current.value = item.index
+    // current.value = item
     emit('handleTabChange', item.value)
   }
   // ?事件
@@ -62,7 +66,9 @@
     </view>
 
     <view class="tab-row">
-      <up-tabs
+      <u-tabs
+        :current="current"
+        v-model="current"
         class="plaza-tabs-inner"
         :list="headerTabs"
         @click="handleTabClick"
@@ -81,7 +87,7 @@
           transform: 'scale(1)',
           fontSize: '34rpx',
         }"
-      ></up-tabs>
+      ></u-tabs>
     </view>
 
     <!--

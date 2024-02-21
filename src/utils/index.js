@@ -1,3 +1,7 @@
+/**
+ * 获取胶囊信息，获取顶部元素信息
+ * @returns {{boundWidth: (number|number), statusBarHeight: number, boundTop: number}}
+ */
 export function getBoundInfo() {
   const systemInfo = uni.getSystemInfoSync()
   const statusBarHeight = systemInfo.statusBarHeight // 顶部高度
@@ -8,4 +12,14 @@ export function getBoundInfo() {
     boundWidth,
     boundTop,
   }
+}
+
+/**
+ * 延迟函数
+ * @param ms
+ * @returns {Promise<void>}
+ */
+export function sleep(ms = 2000) {
+  // console.log('Kindly remember to remove `sleep`')
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
