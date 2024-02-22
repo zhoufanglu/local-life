@@ -49,7 +49,7 @@
   const handleRequest = () => {
     getRequest()
   }*/
-  const curPanel = ref('partTimeJob')
+  const curPanel = ref('tenement')
   let list = ref([])
   //?test
   list.value = [

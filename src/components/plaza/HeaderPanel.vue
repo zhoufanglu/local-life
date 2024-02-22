@@ -17,6 +17,8 @@
 
   const current = ref(3)
 
+  const keyword = ref('')
+  // ?事件
   const emit = defineEmits(['handleTabChange'])
 
   const handleTabClick = (item) => {
@@ -24,7 +26,7 @@
     // current.value = item
     emit('handleTabChange', item.value)
   }
-  // ?事件
+
   const handleAdd = () => {
     console.log('add')
   }
@@ -55,7 +57,13 @@
         src="@/static/plaza/position.png"
         alt=""
       />
-      <input type="text" placeholder="搜索你感兴趣的内容" />
+      <!--      <u-search
+        class="search-input"
+        placeholder="搜索你感兴趣的内容"
+        v-model="keyword"
+      ></u-search>-->
+
+      <input type="text" placeholder="搜索你感兴趣的内容" v-model="keyword" />
       <img
         @click="handleAdd"
         class="add-img"
