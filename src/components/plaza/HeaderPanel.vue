@@ -15,7 +15,7 @@
     { name: '转卖', value: 'resell', index: 5 },
   ])
 
-  const current = ref(0)
+  const current = ref(3)
 
   const emit = defineEmits(['handleTabChange'])
 

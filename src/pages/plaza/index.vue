@@ -13,6 +13,11 @@
       <waterFallList v-if="curPanel === 'dynamicState'"></waterFallList>
       <!--美食-->
       <foods v-if="curPanel === 'foods'"></foods>
+      <!--兼职, 租房, 转卖-->
+      <goods-list
+        :type="curPanel"
+        v-if="['partTimeJob', 'tenement', 'resell'].includes(curPanel)"
+      ></goods-list>
     </div>
     <!--?底部tab-->
     <tab-bar></tab-bar>
@@ -25,6 +30,7 @@
   import { ref, onMounted } from 'vue'
   import waterFallList from '@/components/plaza/WaterFallList/WaterFallList.vue'
   import Foods from '@/components/plaza/Foods.vue'
+  import GoodsList from '@/components/plaza/GoodsList.vue'
 
   // import { showToast } from 'vant'
   const { statusBarHeight } = getBoundInfo()
@@ -43,7 +49,7 @@
   const handleRequest = () => {
     getRequest()
   }*/
-  const curPanel = ref('follow')
+  const curPanel = ref('partTimeJob')
   let list = ref([])
   //?test
   list.value = [

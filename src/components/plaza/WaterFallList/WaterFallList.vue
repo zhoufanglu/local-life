@@ -17,7 +17,7 @@
     },
   })
   onMounted(() => {
-    console.log('mounted')
+    // console.log('mounted')
     setDefaultData()
     getData()
   })
