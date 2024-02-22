@@ -49,7 +49,7 @@
   const handleRequest = () => {
     getRequest()
   }*/
-  const curPanel = ref('tenement')
+  const curPanel = ref('follow')
   let list = ref([])
   //?test
   list.value = [

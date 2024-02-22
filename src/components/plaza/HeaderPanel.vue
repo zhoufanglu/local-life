@@ -30,6 +30,12 @@
   const handleAdd = () => {
     console.log('add')
   }
+  const goSearch = () => {
+    uni.navigateTo({
+      url: '/pages/search/index',
+    })
+  }
+
   const handlePosition = () => {
     console.log('postion')
   }
@@ -63,7 +69,13 @@
         v-model="keyword"
       ></u-search>-->
 
-      <input type="text" placeholder="搜索你感兴趣的内容" v-model="keyword" />
+      <input
+        @click="goSearch"
+        disabled
+        type="text"
+        placeholder="搜索你感兴趣的内容"
+        v-model="keyword"
+      />
       <img
         @click="handleAdd"
         class="add-img"

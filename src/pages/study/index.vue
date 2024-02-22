@@ -6,7 +6,6 @@
 </script>
 <template>
   <view class="p-study" :style="{ paddingTop: statusBarHeight * 2 + 'rpx' }">
-    ????
     <tab-bar></tab-bar>
   </view>
 </template>

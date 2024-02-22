@@ -33,6 +33,9 @@
       "path": "pages/study/index"
     },
     {
+      "path": "pages/search/index"
+    },
+    {
       "path": "pages/message/index"
     },
     {

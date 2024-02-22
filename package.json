@@ -74,6 +74,7 @@
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-vue": "^9.18.1",
     "path": "^0.12.7",
+    "pinia-plugin-unistorage": "^0.0.19",
     "prettier": "^3.0.3",
     "sass": "^1.71.0",
     "vant": "^4.8.4",
