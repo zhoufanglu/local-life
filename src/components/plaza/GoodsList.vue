@@ -13,15 +13,17 @@
   const loading = ref(false)
   /**********************过滤项***********************/
   const filterOptions = reactive({
-    pickerVisible: false,
     options: [
-      [
-        { label: '全部', value: '' },
-        { label: '中国', value: 'china' },
-      ],
+      { label: '全部', value: '' },
+      { label: '中国', value: 'china' },
     ],
     curTab: 0,
   })
+
+  const handleAreaConfirm = (e) => {
+    const index = Number(e.detail.value)
+    console.log(24, index)
+  }
 
   watch(
     () => props.type,
@@ -64,14 +66,23 @@
   <view class="p-goods-list">
     <!--?租房项-->
     <view v-if="type === 'tenement'" class="pickers">
-      <view @click="openPicker('区域')"
-        >区域
-        <image src="@/static/plaza/triangle.png" />
-      </view>
-      <view @click="openPicker('整租')" class="left-line right-line"
+      <picker
+        mode="selector"
+        :value="filterOptions.curTab"
+        @change="handleAreaConfirm"
+        :range="filterOptions.options"
+        range-key="label"
+      >
+        <view class="item"
+          >区域
+          <image src="@/static/plaza/triangle.png" />
+        </view>
+      </picker>
+
+      <view @click="openPicker('整租')" class="left-line right-line item"
         >整租<image src="@/static/plaza/triangle.png"
       /></view>
-      <view @click="openPicker('房屋类型')"
+      <view class="item" @click="openPicker('房屋类型')"
         >房屋类型<image src="@/static/plaza/triangle.png"
       /></view>
     </view>
@@ -118,7 +129,7 @@
       </view>
       <loading-com v-show="loading"></loading-com>
     </scroll-view>
-    <u-picker
+    <!--    <u-picker
       @cancel="filterOptions.pickerVisible = false"
       @change="handleFilterChange"
       @confirm="handleFilterConfirm"
@@ -127,7 +138,7 @@
       keyName="label"
       :closeOnClickOverlay="true"
       @close="filterOptions.pickerVisible = false"
-    ></u-picker>
+    ></u-picker>-->
   </view>
 </template>
 
@@ -150,7 +161,7 @@
       .active {
         color: #a26d37;
       }
-      > view {
+      .item {
         flex: 1;
         text-align: center;
         @include vertical-center;

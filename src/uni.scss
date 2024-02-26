@@ -82,7 +82,16 @@ $tab-bar-height: 77px;
 view{
   font-size: 32rpx;
 }
-
+.price {
+  font-size: 20rpx;
+  color: #666666;
+  width: 150rpx;
+  text-align: right;
+  text {
+    font-size: 30rpx;
+    color: #a26d37;
+  }
+}
 @mixin vertical-center {
   // 垂直水平居中
   display: flex;

@@ -1,10 +1,22 @@
 <script setup>
   import { ref } from 'vue'
   import useStore from '@/store/app.js'
+  import uniTooltip from '@/components/uni-tooltip/uni-tooltip.vue'
   import { getBoundInfo } from '@/utils/index.js'
+  import dynamicState from '@/static/plaza/dynamicState.png'
+  import partTimeJob from '@/static/plaza/partTimeJob.png'
+  import tenement from '@/static/plaza/tenement.png'
+  import resell from '@/static/plaza/resell.png'
 
   const appStore = useStore()
   const { statusBarHeight, boundWidth, boundTop } = getBoundInfo()
+
+  const addList = ref([
+    { name: '动态', value: 'dynamicState', src: dynamicState },
+    { name: '兼职', value: 'partTimeJob', src: partTimeJob },
+    { name: '租房', value: 'tenement', src: tenement },
+    { name: '转卖', value: 'resell', src: resell },
+  ])
 
   const headerTabs = ref([
     { name: '关注', value: 'follow', index: 0 },
@@ -15,7 +27,7 @@
     { name: '转卖', value: 'resell', index: 5 },
   ])
 
-  const current = ref(3)
+  const current = ref(0)
 
   const keyword = ref('')
   // ?事件
@@ -33,6 +45,11 @@
   const goSearch = () => {
     uni.navigateTo({
       url: '/pages/search/index',
+    })
+  }
+  const goCreate = (val) => {
+    uni.navigateTo({
+      url: `/pages/create/index?type=${val}`,
     })
   }
 
@@ -76,13 +93,27 @@
         placeholder="搜索你感兴趣的内容"
         v-model="keyword"
       />
-      <img
-        @click="handleAdd"
-        class="add-img"
-        :width="26"
-        src="@/static/plaza/add.png"
-        alt=""
-      />
+      <uni-tooltip placement="bottom">
+        <template #content>
+          <view class="tip-content">
+            <view
+              v-for="(i, index) in addList"
+              :key="index"
+              @click="goCreate(i.value)"
+            >
+              <img class="logo" :src="i.src" alt="" />
+              <text>{{ i.name }}</text>
+            </view>
+          </view>
+        </template>
+        <img
+          @click="handleAdd"
+          class="add-img"
+          :width="26"
+          src="@/static/plaza/add.png"
+          alt=""
+        />
+      </uni-tooltip>
     </view>
 
     <view class="tab-row">
@@ -183,40 +214,25 @@
 </style>
 <style lang="scss">
   .header-panel {
-    /*    .search-row {
-      border: solid 1px red;
-      display: flex;
-      align-items: center;
-      .van-field {
-        width: 100%;
-        color: white;
+  }
+  .tip-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 300rpx;
+    height: 432rpx;
+    view {
+      flex: 1;
+      @include vertical-center;
+      .logo {
+        width: 50rpx;
+        height: 50rpx;
+        margin-right: 26rpx;
+      }
+      text {
         font-size: 32rpx;
-        border-radius: 29rpx;
-        height: 58rpx;
-        padding: 8rpx 20rpx;
-        //padding: 20rpx 20rpx;
-      }
-      > .van-icon:first-child {
-        margin-right: 25rpx !important;
-      }
-      > .van-icon:last-child,
-      .add-img {
-        margin-left: 25rpx;
+        color: white;
       }
     }
-    .plaza-tabs {
-      // border: solid 1px red;
-      .van-tabs__nav {
-        background-color: #a26d37 !important;
-        .van-tab__text {
-          color: white !important;
-          font-weight: normal !important;
-          font-size: 32rpx;
-        }
-        .van-tabs__line {
-          background-color: white !important;
-        }
-      }
-    }*/
   }
 </style>

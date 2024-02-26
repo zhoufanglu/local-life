@@ -4,6 +4,13 @@
  */
 export function getBoundInfo() {
   const systemInfo = uni.getSystemInfoSync()
+  if (systemInfo.uniPlatform !== 'mp-weixin') {
+    return {
+      statusBarHeight: 0,
+      boundWidth: 0,
+      boundTop: 20,
+    }
+  }
   const statusBarHeight = systemInfo.statusBarHeight // 顶部高度
   const boundWidth = uni.getMenuButtonBoundingClientRect()?.width || 0 // 胶囊宽度
   const boundTop = uni.getMenuButtonBoundingClientRect()?.top || statusBarHeight // 胶囊距离顶部的高度

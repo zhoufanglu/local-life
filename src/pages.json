@@ -40,6 +40,13 @@
     },
     {
       "path": "pages/mine/index"
+    },
+    {
+      "path": "pages/create/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "创建",
+      }
     }
   ],
   "globalStyle": {
