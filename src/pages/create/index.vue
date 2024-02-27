@@ -167,66 +167,39 @@
           border="none"
         ></u--input>
         <!--!正文-->
-        <!--        <u&#45;&#45;textarea
+        <u--textarea
           class="form-description"
           v-model="form.description"
           placeholder="新增正文"
           border="none"
-          height="500rpx"
-        ></u&#45;&#45;textarea>-->
-        <!--!定位-->
-        <u-cell-group class="form-position">
-          <!--          <u-cell title="时间:" :value="form.date" :isLink="true">
-            <template #value>
-              <picker
-                mode="selector"
-                :value="form.date"
-                @change="handlePicker($event, 'date')"
-                :range="pickers.datePickers.columns"
-                row-key="value"
-              >
-                <view class="uni-input">{{ form.date }}</view>
-              </picker>
-            </template>
-          </u-cell>
-          <u-cell
-            title="价格:"
-            :isLink="true"
-            @click="pickers.pricePickers.visible = true"
-          >
-            <template #value>
-              <picker
-                mode="selector"
-                :value="form.price"
-                @change="handlePicker($event, 'price')"
-                :range="pickers.pricePickers.columns"
-                row-key="value"
-              >
-                <view class="price" style="color: #a26d37"
-                  ><text>¥{{ form.price }}</text></view
-                >
-              </picker>
-            </template>
-          </u-cell>-->
+          height="200rpx"
+          maxlength="1000"
+        ></u--textarea>
+        <u-cell-group class="form-position" :border="false">
           <!--*兼职-->
-          <!--          <part-time-job-filter
+          <part-time-job-filter
+            v-if="curType === 'partTimeJob'"
             v-model:date="form.partTimeJob.date"
             v-model:price="form.partTimeJob.price"
-          ></part-time-job-filter>-->
+          ></part-time-job-filter>
           <!--*租房-->
-          <!--          <tenement-filter
+          <tenement-filter
+            v-else-if="curType === 'tenement'"
             v-model:tenementArea="form.tenement.tenementArea"
             v-model:tenementType="form.tenement.tenementType"
             v-model:tenementHouseType="form.tenement.tenementHouseType"
             v-model:price="form.tenement.price"
             v-model:date="form.tenement.date"
-          ></tenement-filter>-->
+          ></tenement-filter>
           <!--*转卖-->
           <resell-filter
+            v-else-if="curType === 'resell'"
             v-model:price="form.resell.price"
             v-model:type="form.resell.type"
           ></resell-filter>
+          <!--*定位-->
           <u-cell
+            class="position-cell"
             :isLink="true"
             @click="handlePosition"
             arrow-direction="right"
@@ -260,7 +233,7 @@
   .p-create {
     .content {
       position: relative;
-      border: solid 1px red;
+      // border: solid 1px red;
       box-sizing: border-box;
       // height: 1001rpx;
       border-radius: 34rpx;
@@ -289,10 +262,12 @@
       .form-title {
         margin-bottom: 36rpx;
         input {
+          font-weight: bolder;
         }
       }
       .form-description {
         margin-bottom: 36rpx;
+        // border: solid 1px red;
       }
       .form-position {
         position: absolute;
@@ -304,6 +279,11 @@
           //border-bottom-width: 0 !important;
         }
       }
+    }
+  }
+  .position-cell {
+    .u-line {
+      display: none !important;
     }
   }
   .u-upload__wrap__preview__other {

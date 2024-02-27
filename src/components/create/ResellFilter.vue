@@ -12,10 +12,10 @@
 
   // 1、接收参数
   const props = defineProps({
-    date: {
+    price: {
       type: String,
       required: true,
-      default: '每周',
+      default: 0,
     },
     type: {
       type: String,
@@ -30,6 +30,9 @@
 
   const handleType = (val) => {
     emit(`update:type`, val)
+  }
+  const handelPriceChange = (val) => {
+    emit(`update:price`, val)
   }
 </script>
 <script>
@@ -51,9 +54,17 @@
       </view>
     </template>
   </u-cell>
-  <u-cell title="价格:" :isLink="true">
+  <u-cell title="价格:" :isLink="false">
     <template #value>
-      <view class="uni-input">{{ date }}</view>
+      <view class="price-input-panel">
+        <text>¥</text>
+        <up-input
+          placeholder=""
+          type="number"
+          border="surround"
+          @change="handelPriceChange"
+        ></up-input>
+      </view>
     </template>
   </u-cell>
 </template>
@@ -74,6 +85,20 @@
         background: #a26d37;
         color: white;
       }
+    }
+  }
+  .price-input-panel {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    text,
+    input {
+      color: #a26c38 !important;
+      font-size: 16px;
+      font-weight: bolder;
+    }
+    input {
+      width: 100rpx;
     }
   }
 </style>
