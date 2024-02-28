@@ -30,3 +30,23 @@ export function sleep(ms = 2000) {
   // console.log('Kindly remember to remove `sleep`')
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
+
+/**
+ *
+ * @param query
+ */
+export function getElRectAsync(query) {
+  return new Promise((resolve) => {
+    uni.getSystemInfo({
+      success: function (res) {
+        let info = uni.createSelectorQuery().select('.search-row')
+        info
+          .boundingClientRect(function (data) {
+            //data - 各种参数
+            resolve(data)
+          })
+          .exec()
+      },
+    })
+  })
+}

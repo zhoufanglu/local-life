@@ -138,6 +138,7 @@
       }"
     >
       <!--?文件-->
+      <!--视频预览组件https://ext.dcloud.net.cn/plugin?id=11560-->
       <u-upload
         :fileList="fileList"
         accept="media,image"
