@@ -4,6 +4,11 @@
 
   const { statusBarHeight } = getBoundInfo()
 </script>
+<script>
+  export default {
+    options: { styleIsolation: 'shared' },
+  }
+</script>
 <template>
   <view class="p-study" :style="{ paddingTop: statusBarHeight * 2 + 'rpx' }">
     <tab-bar></tab-bar>

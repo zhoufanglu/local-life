@@ -39,7 +39,7 @@ export function getElRectAsync(query) {
   return new Promise((resolve) => {
     uni.getSystemInfo({
       success: function (res) {
-        let info = uni.createSelectorQuery().select('.search-row')
+        let info = uni.createSelectorQuery().select(query)
         info
           .boundingClientRect(function (data) {
             //data - 各种参数
