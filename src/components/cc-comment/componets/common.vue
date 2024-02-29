@@ -44,12 +44,12 @@
     </view>
     <view class="bottom">
       <span class="create_time">{{ props.data.create_time }}</span>
-      <span
+      <!--      <span
         v-if="props.data.owner"
         class="delete"
         @tap="deleteClick(props.data)"
         >删除</span
-      >
+      >-->
       <!-- <span v-else class="reply" @tap="replyClick(props.data)"
         >回复</span
       > -->

@@ -34,19 +34,21 @@
   const emit = defineEmits(['handleTabChange'])
 
   const handleTabClick = (item) => {
+    // current.value = item.value
     current.value = item.index
-    // current.value = item
     emit('handleTabChange', item.value)
   }
 
   const handleAdd = () => {
     console.log('add')
   }
+
   const goSearch = () => {
     uni.navigateTo({
       url: '/pages/search/index',
     })
   }
+
   const goCreate = (val) => {
     uni.navigateTo({
       url: `/pages/create/index?type=${val}`,
@@ -56,6 +58,14 @@
   const handlePosition = () => {
     console.log('postion')
   }
+
+  const setCurrent = (val) => {
+    current.value = headerTabs.value.findIndex((i) => i.value === val)
+  }
+
+  defineExpose({
+    setCurrent,
+  })
 </script>
 <script>
   export default {
@@ -119,7 +129,6 @@
     <view class="tab-row">
       <u-tabs
         :current="current"
-        v-model="current"
         class="plaza-tabs-inner"
         :list="headerTabs"
         @click="handleTabClick"
@@ -199,6 +208,8 @@
       .add-img {
         width: 26px;
         height: 26px;
+        position: relative;
+        top: 2px;
       }
       .position-img {
         width: 36px * 0.7;

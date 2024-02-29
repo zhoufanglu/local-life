@@ -45,6 +45,9 @@
       "path": "pages/detail/index"
     },
     {
+      "path": "pages/foods-detail/index"
+    },
+    {
       "path": "pages/create/index",
       "style": {
         "navigationStyle": "custom",

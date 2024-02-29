@@ -1,7 +1,10 @@
 <template>
   <view class="content">
     <!--?头部-->
-    <HeaderPanel @handleTabChange="handleTabChange"></HeaderPanel>
+    <HeaderPanel
+      ref="headerPanelRef"
+      @handleTabChange="handleTabChange"
+    ></HeaderPanel>
     <!--?主体-->
     <div
       class="inner-content"
@@ -38,6 +41,7 @@
   import { login } from '@/api/api.js'
   import { useRequest } from '@/hooks/useRequest'
   import { getBoundInfo } from '@/utils'
+  import { onLoad } from '@dcloudio/uni-app'
   /*const appStore = useStore()
 
   const { requestVariables, getRequest } = useRequest(login, {
@@ -98,7 +102,16 @@
     },
   ]
 
-  onMounted(() => {})
+  const headerPanelRef = ref(null)
+  /**
+   * route query的方式传输curType, 就能默认设置当前tab
+   */
+  onLoad((options) => {
+    curPanel.value = options.curType || 'follow'
+    onMounted(() => {
+      headerPanelRef.value.setCurrent(curPanel.value)
+    })
+  })
   /**********************事件***********************/
   const goUserInfo = () => {
     console.log('user')
