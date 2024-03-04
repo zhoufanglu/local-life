@@ -4,6 +4,8 @@
   import { reactive, getCurrentInstance, onMounted } from 'vue'
   import loadingCom from '@/components/loading.vue'
   const { proxy } = getCurrentInstance()
+  // type = follow, dynamicState
+  const props = defineProps(['type'])
 
   const state = reactive({
     columnNum: 2,
@@ -110,6 +112,13 @@
     let likes = state.columnData[colIndex + 1][index].likes
     state.columnData[colIndex + 1][index].likes = !isLike ? ++likes : --likes
   }
+  const goDetail = (item) => {
+    console.log(114, item)
+    console.log(117, props.type)
+    uni.navigateTo({
+      url: '/pages/detail/index',
+    })
+  }
 </script>
 <script>
   export default {
@@ -133,7 +142,11 @@
           class="columnItem"
         >
           <!--?item-->
-          <view v-for="(item, i) in state.columnData[colNum]" :key="i">
+          <view
+            v-for="(item, i) in state.columnData[colNum]"
+            :key="i"
+            @click="goDetail(item)"
+          >
             <div class="item">
               <img class="pic" :src="item.imgUrl" mode="widthFix" />
               <div class="info">

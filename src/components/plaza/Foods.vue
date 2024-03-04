@@ -12,6 +12,11 @@
       loading.value = false
     })
   }
+  const goFoodsDetail = (food) => {
+    uni.navigateTo({
+      url: `/pages/foods-detail/index?id=${22}`,
+    })
+  }
 </script>
 <script>
   export default {
@@ -26,7 +31,12 @@
       lower-threshold="100"
       @scrolltolower="loadMore"
     >
-      <view class="item" v-for="(food, index) in foods" :key="index">
+      <view
+        class="item"
+        v-for="(food, index) in foods"
+        :key="index"
+        @click="goFoodsDetail(food)"
+      >
         <up-image
           class="cover"
           :show-loading="true"

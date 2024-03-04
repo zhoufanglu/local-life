@@ -164,6 +164,12 @@
       create_time: '2024-01-08 00:45', // 创建时间
     },
   ]) // 评论表
+
+  const go = () => {
+    uni.navigateBack({
+      delta: 1,
+    })
+  }
 </script>
 <script>
   export default {
@@ -181,7 +187,7 @@
         paddingRight: `calc(${boundWidth}px + 6px)`,
       }"
     >
-      <u-icon name="arrow-left" color="black" size="28"></u-icon>
+      <u-icon @click="go()" name="arrow-left" color="black" size="28"></u-icon>
       <view class="user-info">
         <up-avatar
           :size="30"

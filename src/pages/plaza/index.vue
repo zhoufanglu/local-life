@@ -11,11 +11,14 @@
       :style="{ height: `calc(100% - ${statusBarHeight * 2 + 204 + 100}rpx)` }"
     >
       <!--关注-->
-      <waterFallList v-if="curPanel === 'follow'"></waterFallList>
+      <waterFallList type="follow" v-if="curPanel === 'follow'"></waterFallList>
       <!--动态-->
-      <waterFallList v-if="curPanel === 'dynamicState'"></waterFallList>
+      <waterFallList
+        type="dynamicState"
+        v-if="curPanel === 'dynamicState'"
+      ></waterFallList>
       <!--美食-->
-      <foods v-if="curPanel === 'foods'"></foods>
+      <foods type="foods" v-if="curPanel === 'foods'"></foods>
       <!--兼职, 租房, 转卖-->
       <goods-list
         :type="curPanel"
