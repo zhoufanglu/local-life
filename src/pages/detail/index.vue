@@ -3,11 +3,11 @@
   import { onMounted, reactive, ref } from 'vue'
   import CComment from '@/components/cc-comment/index.vue'
   const { boundTop, boundWidth } = getBoundInfo()
-
+  import { onLoad } from '@dcloudio/uni-app'
   const props = defineProps({
     type: {
-      // 兼职、租房、转卖, 动态， 这几个界面公用
-      // partTimeJob, tenement, resell, dynamicState
+      // ? 兼职、租房、转卖, 动态，关注, 这几个界面公用
+      // partTimeJob, tenement, resell, dynamicState, follow
       type: String,
       default: 'partTimeJob',
     },
@@ -28,6 +28,12 @@
     },
   })
 
+  onLoad((options) => {
+    const type = options.type
+    const row = JSON.parse(options.row)
+    console.log(34, type)
+    console.log(35, row)
+  })
   onMounted(() => {
     getElRectAsync('.top-row').then((res) => {
       variables.topRowHeight = res.height

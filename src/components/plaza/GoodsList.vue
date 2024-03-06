@@ -9,7 +9,7 @@
   import { data } from '@/components/plaza/WaterFallList/data.js'
   import { sleep } from '@/utils'
   import loadingCom from '@/components/loading.vue'
-  const foods = ref([...data])
+  const goods = ref([...data])
   const loading = ref(false)
   /**********************过滤项***********************/
   const filterOptions = reactive({
@@ -35,7 +35,7 @@
   const loadMore = () => {
     loading.value = true
     sleep(2000).then(() => {
-      foods.value.push(...data)
+      goods.value.push(...data)
       loading.value = false
     })
   }
@@ -83,6 +83,13 @@
   //? 闲置好物
   const handleTabChange = (val) => {
     filterOptions.curTab = val
+  }
+  //?详情页面  兼职、租房、转卖 这3个通用
+  const goDetail = (item) => {
+    console.log(88, props.type)
+    uni.navigateTo({
+      url: `/pages/detail/index?type=${props.type}&row=${JSON.stringify(item)}`,
+    })
   }
 </script>
 <script>
@@ -145,7 +152,12 @@
       lower-threshold="100"
       @scrolltolower="loadMore"
     >
-      <view class="item" v-for="(food, index) in foods" :key="index">
+      <view
+        class="item"
+        v-for="(food, index) in goods"
+        :key="index"
+        @click="goDetail"
+      >
         <up-image
           class="cover"
           :show-loading="true"

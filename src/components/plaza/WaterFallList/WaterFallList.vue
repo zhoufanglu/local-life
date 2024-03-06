@@ -116,7 +116,7 @@
     console.log(114, item)
     console.log(117, props.type)
     uni.navigateTo({
-      url: '/pages/detail/index',
+      url: `/pages/detail/index?type=${props.type}&row=${JSON.stringify(item)}`,
     })
   }
 </script>
