@@ -1,7 +1,6 @@
 <script setup>
   import { ref } from 'vue'
   import useStore from '@/store/app.js'
-  import uniTooltip from '@/components/uni-tooltip/uni-tooltip.vue'
   import { getBoundInfo } from '@/utils/index.js'
   import dynamicState from '@/static/plaza/dynamicState.png'
   import partTimeJob from '@/static/plaza/partTimeJob.png'

@@ -112,6 +112,8 @@
   onLoad((options) => {
     curPanel.value = options.curType || 'follow'
     onMounted(() => {
+      // ?测试
+      curPanel.value = 'tenement'
       headerPanelRef.value.setCurrent(curPanel.value)
     })
   })

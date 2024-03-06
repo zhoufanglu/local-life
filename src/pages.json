@@ -26,7 +26,7 @@
       "path": "pages/plaza/index",
       "style": {
         "navigationStyle": "custom",
-        "navigationBarTitleText": "广场",
+        "navigationBarTitleText": "广场"
       }
     },
     {
@@ -48,10 +48,13 @@
       "path": "pages/foods-detail/index"
     },
     {
+      "path": "pages/all-foods/index"
+    },
+    {
       "path": "pages/create/index",
       "style": {
         "navigationStyle": "custom",
-        "navigationBarTitleText": "创建",
+        "navigationBarTitleText": "创建"
       }
     }
   ],
@@ -62,8 +65,8 @@
     "backgroundColor": "#F8F8F8",
     "navigationStyle": "custom",//自定义导航
     "app-plus": {
-      animationType: 'none'
-    },
+      "animationType": "none"
+    }
     /*"usingComponents": {
       "van-image": "./wxcomponents/vant/image/index",
       "van-icon": "./wxcomponents/vant/icon/index",
@@ -79,5 +82,15 @@
       "^u-([^-].*)": "uview-plus/components/u-$1/u-$1.vue",
       "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
     }
-  }
+  },
+	"condition" : { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [
+			{
+				"name": "", //模式名称
+				"path": "", //启动页面，必选
+				"query": "" //启动参数，在页面的onLoad函数里面得到
+			}
+		]
+	}
 }

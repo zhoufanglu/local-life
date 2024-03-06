@@ -28,7 +28,9 @@
   }
 
   const goAllGoods = () => {
-    console.log('go all goods')
+    uni.navigateTo({
+      url: '/pages/all-foods/index',
+    })
   }
 </script>
 <script>
@@ -183,7 +185,7 @@
       }
     }
     .foods-list {
-      display: none !important;
+      // display: none !important;
       border-radius: 24rpx;
       background: white;
       padding: 32rpx;

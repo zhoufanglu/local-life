@@ -14,8 +14,8 @@
   /**********************过滤项***********************/
   const filterOptions = reactive({
     options: [
-      { label: '全部', value: '' },
-      { label: '中国', value: 'china' },
+      { text: '全部', value: '' },
+      { text: '中国', value: 'china' },
     ],
     curTab: 0,
   })
@@ -43,14 +43,42 @@
   const handleFilterChange = (val) => {
     console.log(38, val)
   }
+  const items = [
+    {
+      text: '一年级',
+      value: '1-0',
+      children: [
+        {
+          text: '1.1班',
+          value: '1-1',
+        },
+        {
+          text: '1.2班',
+          value: '1-2',
+        },
+      ],
+    },
+    {
+      text: '二年级',
+      value: '2-0',
+    },
+    {
+      text: '三年级',
+      value: '3-0',
+    },
+  ]
   const handleFilterConfirm = () => {}
   /**
    *
    * @param type 区域 整租 房屋类型
    */
-  const openPicker = (type) => {
+  /*const openPicker = (type) => {
     filterOptions.pickerVisible = true
+  }*/
+  const onchange = (val, type) => {
+    console.log(55, val, type)
   }
+  const onnodeclick = () => {}
 
   //? 闲置好物
   const handleTabChange = (val) => {
@@ -66,6 +94,10 @@
   <view class="p-goods-list">
     <!--?租房项-->
     <view v-if="type === 'tenement'" class="pickers">
+      <!--!区域-->
+      <uni-badge text="1"></uni-badge>
+
+      <!--
       <picker
         mode="selector"
         :value="filterOptions.curTab"
@@ -78,11 +110,18 @@
           <image src="@/static/plaza/triangle.png" />
         </view>
       </picker>
+-->
+      <uni-data-picker
+        :localdata="items"
+        popup-title="请选择班级"
+        @change="onchange"
+        @nodeclick="onnodeclick"
+      ></uni-data-picker>
 
-      <view @click="openPicker('整租')" class="left-line right-line item"
+      <view class="left-line right-line item"
         >整租<image src="@/static/plaza/triangle.png"
       /></view>
-      <view class="item" @click="openPicker('房屋类型')"
+      <view class="item"
         >房屋类型<image src="@/static/plaza/triangle.png"
       /></view>
     </view>
@@ -150,6 +189,7 @@
     overflow: hidden;
     height: 100%;
     .pickers {
+      border: solid 1px red;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -161,8 +201,11 @@
       .active {
         color: #a26d37;
       }
-      .item {
+      picker {
+        border: solid 1px green;
         flex: 1;
+      }
+      .item {
         text-align: center;
         @include vertical-center;
         image {

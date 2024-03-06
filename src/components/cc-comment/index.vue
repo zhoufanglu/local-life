@@ -91,7 +91,7 @@
 
 <script setup>
   import CommonComp from './componets/common'
-  import { reactive, ref, watch, computed, defineExpose } from 'vue'
+  import { reactive, ref, watch, computed } from 'vue'
 
   const props = defineProps({
     /** 用户信息
