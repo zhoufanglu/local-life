@@ -26,7 +26,11 @@
     })
   }
   const handleCart = () => {}
-  const handleBuyNow = () => {}
+  const handleBuyNow = () => {
+    uni.navigateTo({
+      url: '/pages/shopping-cart/index',
+    })
+  }
 </script>
 <script>
   export default {
