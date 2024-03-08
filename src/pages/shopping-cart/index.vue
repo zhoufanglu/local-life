@@ -181,7 +181,7 @@
           justify-content: space-between;
           box-sizing: border-box;
           padding: 8rpx;
-          padding-left: 28rpx;
+          padding-left: 38rpx;
           .top {
             display: flex;
             flex-direction: column;
