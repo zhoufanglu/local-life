@@ -51,6 +51,9 @@
       "path": "pages/all-foods/index"
     },
     {
+      "path": "pages/course-detail/index"
+    },
+    {
       "path": "pages/create/index",
       "style": {
         "navigationStyle": "custom",
