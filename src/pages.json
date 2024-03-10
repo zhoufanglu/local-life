@@ -60,6 +60,9 @@
       "path": "pages/edit-profile/index"
     },
     {
+      "path": "pages/mine-list/index"
+    },
+    {
       "path": "pages/create/index",
       "style": {
         "navigationStyle": "custom",

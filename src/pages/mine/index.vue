@@ -26,6 +26,11 @@
       url: '/pages/edit-profile/index',
     })
   }
+  const goMineList = (type) => {
+    uni.navigateTo({
+      url: `/pages/mine-list/index?type=${type}`,
+    })
+  }
 </script>
 <template>
   <tab-bar></tab-bar>
@@ -45,11 +50,11 @@
         </view>
         <view class="username">{{ variables.username }}</view>
         <view class="follow-and-fans">
-          <view>
+          <view @click="goMineList('follow')">
             <text>0</text>
             <text>关注</text>
           </view>
-          <view>
+          <view @click="goMineList('fans')">
             <text>0</text>
             <text>粉丝</text>
           </view>
