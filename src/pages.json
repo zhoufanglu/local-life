@@ -63,6 +63,9 @@
       "path": "pages/mine-list/index"
     },
     {
+      "path": "pages/message-list/index"
+    },
+    {
       "path": "pages/create/index",
       "style": {
         "navigationStyle": "custom",
