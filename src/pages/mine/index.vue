@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
   import TabBar from '@/components/TabBar.vue'
   import GoodsList from '@/components/mine/GoodsList.vue'
   import OrderList from '@/components/mine/OrderList.vue'
@@ -21,6 +21,11 @@
   const handleTabClick = (item) => {
     tabs.current = item.index
   }
+  const goEditProfile = () => {
+    uni.navigateTo({
+      url: '/pages/edit-profile/index',
+    })
+  }
 </script>
 <template>
   <tab-bar></tab-bar>
@@ -36,7 +41,7 @@
             :size="60"
             src="https://cdn.uviewui.com/uview/swiper/swiper3.png"
           ></up-avatar>
-          <view class="btn">编辑资料</view>
+          <view class="btn" @click="goEditProfile">编辑资料</view>
         </view>
         <view class="username">{{ variables.username }}</view>
         <view class="follow-and-fans">
@@ -99,7 +104,7 @@
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
-        padding-top: 123rpx;
+        padding-top: 163rpx;
         .avatar-row {
           align-items: center;
           justify-content: space-between;
@@ -119,7 +124,7 @@
           font-size: 36rpx;
           color: #ffffff;
           text-shadow: 1px 2px 10px 0 rgba(0, 0, 0, 1);
-          margin: 20rpx 0;
+          margin: 10rpx 0;
         }
         .follow-and-fans {
           margin: 20rpx 0;

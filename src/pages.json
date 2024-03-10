@@ -57,6 +57,9 @@
       "path": "pages/shopping-cart/index"
     },
     {
+      "path": "pages/edit-profile/index"
+    },
+    {
       "path": "pages/create/index",
       "style": {
         "navigationStyle": "custom",
