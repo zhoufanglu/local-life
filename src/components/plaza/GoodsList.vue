@@ -13,17 +13,19 @@
   const loading = ref(false)
   /**********************过滤项***********************/
   const filterOptions = reactive({
-    options: [
-      { text: '全部', value: '' },
-      { text: '中国', value: 'china' },
-    ],
-    curTab: 0,
+    pickerVisible: false,
+    pickerType: '区域',
+    area: {
+      options: [
+        [
+          { label: '全部', id: '' },
+          { label: '中国', id: 'china' },
+          { label: '美国', id: 'china' },
+        ],
+      ],
+      curTab: '',
+    },
   })
-
-  const handleAreaConfirm = (e) => {
-    const index = Number(e.detail.value)
-    console.log(24, index)
-  }
 
   watch(
     () => props.type,
@@ -39,46 +41,20 @@
       loading.value = false
     })
   }
-  //?租房
-  const handleFilterChange = (val) => {
-    console.log(38, val)
+  //?picker确认事件
+  const handleFilterConfirm = (e) => {
+    const curSelectObj = e.value[0]
+    filterOptions.pickerVisible = false
+    filterOptions.area.curTab = curSelectObj.label
   }
-  const items = [
-    {
-      text: '一年级',
-      value: '1-0',
-      children: [
-        {
-          text: '1.1班',
-          value: '1-1',
-        },
-        {
-          text: '1.2班',
-          value: '1-2',
-        },
-      ],
-    },
-    {
-      text: '二年级',
-      value: '2-0',
-    },
-    {
-      text: '三年级',
-      value: '3-0',
-    },
-  ]
-  const handleFilterConfirm = () => {}
   /**
    *
    * @param type 区域 整租 房屋类型
    */
-  /*const openPicker = (type) => {
+  const openPicker = (type) => {
+    filterOptions.pickerType = type
     filterOptions.pickerVisible = true
-  }*/
-  const onchange = (val, type) => {
-    console.log(55, val, type)
   }
-  const onnodeclick = () => {}
 
   //? 闲置好物
   const handleTabChange = (val) => {
@@ -99,36 +75,18 @@
 </script>
 <template>
   <view class="p-goods-list">
+    <view> {{ filterOptions }} </view>
     <!--?租房项-->
     <view v-if="type === 'tenement'" class="pickers">
-      <!--!区域-->
-      <uni-badge text="1"></uni-badge>
+      <view class="item" @click="openPicker('区域')">
+        {{ filterOptions.area.curTab || '区域' }}
 
-      <!--
-      <picker
-        mode="selector"
-        :value="filterOptions.curTab"
-        @change="handleAreaConfirm"
-        :range="filterOptions.options"
-        range-key="label"
-      >
-        <view class="item"
-          >区域
-          <image src="@/static/plaza/triangle.png" />
-        </view>
-      </picker>
--->
-      <uni-data-picker
-        :localdata="items"
-        popup-title="请选择班级"
-        @change="onchange"
-        @nodeclick="onnodeclick"
-      ></uni-data-picker>
-
-      <view class="left-line right-line item"
+        <image src="@/static/plaza/triangle.png" />
+      </view>
+      <view class="left-line right-line item" @click="openPicker('整租')"
         >整租<image src="@/static/plaza/triangle.png"
       /></view>
-      <view class="item"
+      <view class="item" @click="openPicker('房屋类型')"
         >房屋类型<image src="@/static/plaza/triangle.png"
       /></view>
     </view>
@@ -180,16 +138,15 @@
       </view>
       <loading-com v-show="loading"></loading-com>
     </scroll-view>
-    <!--    <u-picker
+    <u-picker
       @cancel="filterOptions.pickerVisible = false"
-      @change="handleFilterChange"
       @confirm="handleFilterConfirm"
       :show="filterOptions.pickerVisible"
-      :columns="filterOptions.options"
+      :columns="filterOptions.area.options"
       keyName="label"
       :closeOnClickOverlay="true"
       @close="filterOptions.pickerVisible = false"
-    ></u-picker>-->
+    ></u-picker>
   </view>
 </template>
 
@@ -213,11 +170,12 @@
       .active {
         color: #a26d37;
       }
-      picker {
+      /*picker {
         border: solid 1px green;
         flex: 1;
-      }
+      }*/
       .item {
+        flex: 1;
         text-align: center;
         @include vertical-center;
         image {
