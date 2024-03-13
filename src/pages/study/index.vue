@@ -34,6 +34,9 @@
   }
   const goDetail = (item) => {
     console.log('goDetail', item)
+    uni.navigateTo({
+      url: `/pages/course-detail/index?`,
+    })
   }
   const loadMore = () => {
     console.log('load more')

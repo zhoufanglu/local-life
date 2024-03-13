@@ -75,7 +75,6 @@
 </script>
 <template>
   <view class="p-goods-list">
-    <view> {{ filterOptions }} </view>
     <!--?租房项-->
     <view v-if="type === 'tenement'" class="pickers">
       <view class="item" @click="openPicker('区域')">
@@ -94,12 +93,13 @@
     <view v-if="type === 'resell'" class="pickers">
       <view
         @click="handleTabChange(0)"
-        class="right-line"
+        class="right-line item"
         :class="filterOptions.curTab === 0 ? 'active' : null"
         >二手好车
       </view>
       <view
         @click="handleTabChange(1)"
+        class="item"
         :class="filterOptions.curTab === 1 ? 'active' : null"
         >闲置好物</view
       >
@@ -158,7 +158,7 @@
     overflow: hidden;
     height: 100%;
     .pickers {
-      border: solid 1px red;
+      // border: solid 1px red;
       display: flex;
       justify-content: space-between;
       align-items: center;

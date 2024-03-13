@@ -112,8 +112,8 @@
   onLoad((options) => {
     curPanel.value = options.curType || 'follow'
     onMounted(() => {
-      // ?测试
-      curPanel.value = 'tenement'
+      // ?测试test
+      curPanel.value = 'resell'
       headerPanelRef.value.setCurrent(curPanel.value)
     })
   })
@@ -142,7 +142,6 @@
     height: 100%;
     .inner-content {
       box-sizing: border-box;
-      // border: solid 1px blue;
       overflow-y: auto;
     }
   }
