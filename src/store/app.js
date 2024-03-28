@@ -6,6 +6,7 @@ export default defineStore({
     return {
       systemInfo: {},
       username: 'aaa',
+      token: 'test',
       historyRecords: [],
     }
   },

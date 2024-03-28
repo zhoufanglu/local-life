@@ -1,5 +1,5 @@
 {
-/*
+    /*
   "tabBar": {
     "color": "#7F7F7F",
     "selectedColor": "#000",
@@ -9,8 +9,7 @@
       { "text": "消息", "pagePath": "pages/message/index", },
       { "text": "我的", "pagePath": "pages/mine/index", },
     ],
-    */
-/*"list": [
+    *//*"list": [
       { "text": "首页", "iconPath": "static/首页.png", "pagePath": "pages/首页/首页", "selectedIconPath": "static/首页_.png" },
       { "text": "每日", "iconPath": "static/每日.png", "pagePath": "pages/每日/每日", "selectedIconPath": "static/每日_.png" },
       { "text": "聊天", "iconPath": "static/聊天.png", "pagePath": "pages/聊天/聊天", "selectedIconPath": "static/聊天_.png" },
@@ -20,16 +19,16 @@
 
   },
 */
-  "pages": [
-    //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-    {
-      "path": "pages/plaza/index",
-      "style": {
-        "navigationStyle": "custom",
-        "navigationBarTitleText": "广场"
-      }
-    },
-    {
+    "pages" : [
+        //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+        {
+            "path" : "pages/plaza/index",
+            "style" : {
+                "navigationStyle" : "custom",
+                "navigationBarTitleText" : "广场"
+            }
+        },
+        {
       "path": "pages/study/index"
     },
     {
@@ -66,12 +65,15 @@
       "path": "pages/message-list/index"
     },
     {
+      "path": "pages/login-page/index"
+    },
+    {
       "path": "pages/create/index",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "创建"
-      }
-    }
+        }
+}
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
@@ -82,7 +84,7 @@
     "app-plus": {
       "animationType": "none"
     }
-    /*"usingComponents": {
+/*"usingComponents": {
       "van-image": "./wxcomponents/vant/image/index",
       "van-icon": "./wxcomponents/vant/icon/index",
       "van-loading": "./wxcomponents/vant/loading/index",

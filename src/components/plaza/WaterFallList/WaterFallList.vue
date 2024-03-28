@@ -6,6 +6,10 @@
   const { proxy } = getCurrentInstance()
   // type = follow, dynamicState
   const props = defineProps(['type'])
+  import { useLogin } from '@/hooks/useLogin'
+  // import { WXBizDataCrypt } from '@/utils/WXBizDataCrypt'
+
+  const { handleLogin } = useLogin()
 
   const state = reactive({
     columnNum: 2,

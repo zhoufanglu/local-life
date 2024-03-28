@@ -5,6 +5,9 @@
       ref="headerPanelRef"
       @handleTabChange="handleTabChange"
     ></HeaderPanel>
+    <button open-type="getPhoneNumber" @getphonenumber="onGetPhoneNumber"
+      >唤起授权</button
+    >
     <!--?主体-->
     <div
       class="inner-content"
@@ -37,6 +40,9 @@
   import waterFallList from '@/components/plaza/WaterFallList/WaterFallList.vue'
   import Foods from '@/components/plaza/Foods.vue'
   import GoodsList from '@/components/plaza/GoodsList.vue'
+  import { useLogin } from '@/hooks/useLogin'
+
+  const { onGetPhoneNumber } = useLogin()
 
   // import { showToast } from 'vant'
   const { statusBarHeight } = getBoundInfo()
@@ -113,7 +119,7 @@
     curPanel.value = options.curType || 'follow'
     onMounted(() => {
       // ?测试test
-      curPanel.value = 'resell'
+      curPanel.value = 'follow'
       headerPanelRef.value.setCurrent(curPanel.value)
     })
   })

@@ -1,7 +1,8 @@
 import logout from '@/utils/logout'
 // import { showNotify } from 'vant'
+import { BASE_URL } from '@/config/config'
 
-const BASE_URL = import.meta.env.VITE_APP_WEB_URL
+// const BASE_URL = import.meta.env.VITE_APP_WEB_URL
 
 const DATA_TYPE = {
   form: {
@@ -42,9 +43,10 @@ const http = ({
   url,
   data = {},
   method = 'get',
-  json = 'form',
+  json = 'json',
   header = {
-    'content-type': 'application/x-www-form-urlencoded',
+    // 'content-type': 'application/x-www-form-urlencoded',
+    'content-type': 'application/json',
   },
 }) => {
   if (!url) return
