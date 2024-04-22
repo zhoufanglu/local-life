@@ -5,6 +5,8 @@
   import { getBoundInfo } from '@/utils/index.js'
   import { onLoad } from '@dcloudio/uni-app'
   import { ref, reactive, watch } from 'vue'
+  import { plazaTypes2 } from '@/enums'
+  import { createTrend } from '@/api/modules/social'
 
   const { boundTop } = getBoundInfo()
   /**
@@ -74,7 +76,26 @@
     { deep: true },
   )
 
-  const handleSubmit = () => {}
+  const handleSubmit = () => {
+    const params = {
+      title: form.title,
+      content: form.description,
+      type: plazaTypes2[curType.value],
+      coverImage:
+        'https://cnbj1-new.fds.api.xiaomi.com/proretail/2531946392_52a873ab-7a1c-4aa1-8bdb-af36f0fef2eb.jpg',
+    }
+    if (curType.value === 'dynamicState') {
+      uni.showLoading({
+        title: '创建中..',
+        mask: true,
+      })
+      createTrend(params).then(({ data }) => {
+        console.log(89, data)
+        uni.hideLoading()
+        uni.$u.toast('创建成功')
+      })
+    }
+  }
 
   // 删除图片
   const deletePic = (event) => {

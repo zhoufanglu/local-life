@@ -18,14 +18,14 @@
     minHeightColNum: 1,
     columnData: {},
     totalList: [],
-    loading: false,
+    status: 'loadmore', // loadmore loading nomore
     pages: {
       page: 1,
       pageSize: 10,
     },
   })
   onMounted(() => {
-    // console.log('mounted')
+    console.log('mounted----------')
     setDefaultData()
     getData()
   })
@@ -37,16 +37,25 @@
 
   // 模拟获取数据
   function getData() {
-    state.loading = true
+    state.status = 'loading'
+    console.log(41, props.type)
+    if (state.pages.page === 1) setDefaultData()
     getTrends({
-      page: state.pages.page,
+      pageNo: state.pages.page,
       pageSize: state.pages.pageSize,
       type: plazaTypes2[props.type],
-    }).then(({ data }) => {
-      // console.log(43, data.list)
-      state.totalList.push(...data.list)
+      // type: 'undefined',
     })
-    if (state.pages.page === 1) setDefaultData()
+      .then(({ data }) => {
+        //console.log(43, data.list)
+        state.totalList.push(...data.list)
+        loadNextItem()
+        state.status = data.list.length ? 'loadmore' : 'nomore'
+      })
+      .finally(() => {
+        // state.status = 'loading'
+      })
+    return false
     return new Promise((resolve) => {
       setTimeout(() => {
         state.totalList.push(...data)
@@ -101,6 +110,7 @@
       .map((item, i) => {
         state.columnData[i + 1] = []
       })
+    console.log(105, state.totalList)
   }
 
   /** @封装[jvideo](https://v.ixigua.com/iNQLjWJS/)查询DOM **/
@@ -200,7 +210,8 @@
           </view>
         </view>
       </view>
-      <loading-com v-show="state.loading"></loading-com>
+      <up-loadmore :status="state.status" />
+      <!--      <loading-com v-show="state.loading"></loading-com>-->
     </scroll-view>
   </view>
 </template>

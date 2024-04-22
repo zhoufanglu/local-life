@@ -60,8 +60,15 @@ const http = ({
         ...DATA_TYPE[json].headers,
       },
       success: (res) => {
+        /*const data = res.data
+        console.log(64, data)*/
         if (res.statusCode === 200) {
-          resolve(res.data)
+          if (res.data.code !== 0) {
+            uni.$u.toast(res.data.msg || '网络错误')
+            reject(res)
+          } else {
+            resolve(res.data)
+          }
         } else {
           // showNotify({ type: 'danger', message: '请求出错' })
           reject(res)

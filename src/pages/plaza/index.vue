@@ -11,7 +11,7 @@
       :style="{ height: `calc(100% - ${statusBarHeight * 2 + 204 + 100}rpx)` }"
     >
       <!--关注-->
-      <waterFallList type="follow" v-if="curPanel === 'follow'"></waterFallList>
+      <!--      <waterFallList type="follow" v-if="curPanel === 'follow'"></waterFallList>-->
       <!--动态-->
       <waterFallList
         type="dynamicState"
