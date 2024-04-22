@@ -5,9 +5,6 @@
       ref="headerPanelRef"
       @handleTabChange="handleTabChange"
     ></HeaderPanel>
-    <button open-type="getPhoneNumber" @getphonenumber="onGetPhoneNumber"
-      >唤起授权</button
-    >
     <!--?主体-->
     <div
       class="inner-content"
@@ -42,8 +39,6 @@
   import GoodsList from '@/components/plaza/GoodsList.vue'
   import { useLogin } from '@/hooks/useLogin'
 
-  const { onGetPhoneNumber } = useLogin()
-
   // import { showToast } from 'vant'
   const { statusBarHeight } = getBoundInfo()
 
@@ -63,7 +58,7 @@
     getRequest()
   }*/
   const curPanel = ref('follow')
-  let list = ref([])
+  /*let list = ref([])
   //?test
   list.value = [
     {
@@ -109,7 +104,7 @@
         'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
       bg: 'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
     },
-  ]
+  ]*/
 
   const headerPanelRef = ref(null)
   /**
@@ -119,7 +114,7 @@
     curPanel.value = options.curType || 'follow'
     onMounted(() => {
       // ?测试test
-      curPanel.value = 'follow'
+      curPanel.value = 'dynamicState'
       headerPanelRef.value.setCurrent(curPanel.value)
     })
   })

@@ -3,7 +3,7 @@
 </script>
 <template>
   <tab-bar></tab-bar>
-  <div class=""> message??22? </div>
+  <div class=""> messageD </div>
 </template>
 
 <style scoped lang="scss">

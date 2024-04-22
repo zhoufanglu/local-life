@@ -1,8 +1,11 @@
 import useStore from '@/store/app.js'
 import { BASE_URL } from '@/config/config'
-import { loginByWx } from '@/api/modules/login.js'
+import { loginByWx, logoutApi } from '@/api/modules/user.js'
 
-const useLogin = () => {
+/**
+ * @param from 来自哪个页面 login = 登录
+ */
+const useLogin = (from = 'login') => {
   const appStore = useStore()
   console.log(5, appStore.token, BASE_URL)
   const handleLogin = () => {
@@ -28,10 +31,19 @@ const useLogin = () => {
     })
   }
 
-  const handleLogout = () => {}
+  const handleLogout = () => {
+    logoutApi({}).then((res) => {
+      console.log(33, res)
+    })
+  }
 
   const onGetPhoneNumber = (e) => {
     console.log(34, e.detail)
+    if (from === 'login') {
+      uni.navigateTo({
+        url: `/pages/plaza/index`,
+      })
+    }
   }
 
   return {

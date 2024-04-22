@@ -7,6 +7,8 @@
   // type = follow, dynamicState
   const props = defineProps(['type'])
   import { useLogin } from '@/hooks/useLogin'
+  import { getTrends } from '@/api/modules/social'
+  import { plazaTypes2 } from '@/enums'
   // import { WXBizDataCrypt } from '@/utils/WXBizDataCrypt'
 
   const { handleLogin } = useLogin()
@@ -36,6 +38,14 @@
   // 模拟获取数据
   function getData() {
     state.loading = true
+    getTrends({
+      page: state.pages.page,
+      pageSize: state.pages.pageSize,
+      type: plazaTypes2[props.type],
+    }).then(({ data }) => {
+      // console.log(43, data.list)
+      state.totalList.push(...data.list)
+    })
     if (state.pages.page === 1) setDefaultData()
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -152,25 +162,25 @@
             @click="goDetail(item)"
           >
             <div class="item">
-              <img class="pic" :src="item.imgUrl" mode="widthFix" />
+              <img class="pic" :src="item.coverImage" mode="widthFix" />
               <div class="info">
-                <text>{{ i }}{{ item.desc }}</text>
+                <text>{{ i }}{{ item.content }}</text>
                 <div class="end-row">
                   <div class="left" @click="goUserInfo">
                     <u-image
                       class="avatar"
-                      :src="item.imgUrl"
+                      :src="item.coverImage"
                       shape="circle"
                       width="50rpx"
                       height="50rpx"
                       @load="imageLoad"
                       @error="imageLoad"
                     ></u-image>
-                    <span class="username">用户名</span>
+                    <span class="username">{{ item.nickname }}</span>
                   </div>
                   <div
                     class="right"
-                    @click="handleLikeClick(colIndex, i, item.isLike)"
+                    @click.stop="handleLikeClick(colIndex, i, item.isLike)"
                   >
                     <image
                       v-show="!item.isLike"
@@ -182,7 +192,7 @@
                       src="@/static/plaza/like_active.png"
                       alt=""
                     />
-                    <span class="count">{{ item.likes }}</span>
+                    <span class="count">{{ item.likeCount }}</span>
                   </div>
                 </div>
               </div>

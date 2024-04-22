@@ -1,14 +1,13 @@
-<script setup lang="js">
+<script setup>
   import { useLogin } from '@/hooks/useLogin'
 
-  const { onGetPhoneNumber } = useLogin()
+  const { onGetPhoneNumber } = useLogin('login')
 </script>
 <template>
   <view class="p-login-page">
-    <!--    <button open-type="getPhoneNumber" @getphonenumber="onGetPhoneNumber"
-      >唤起授权222</button
-    >-->
-    dsddd
+    <button open-type="getPhoneNumber" @getphonenumber="onGetPhoneNumber"
+      >唤起授权</button
+    >
   </view>
 </template>
 

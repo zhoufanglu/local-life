@@ -65,7 +65,7 @@
       "path": "pages/message-list/index"
     },
     {
-      "path": "pages/login-page/index"
+      "path": "pages/login/index"
     },
     {
       "path": "pages/create/index",

@@ -56,7 +56,7 @@ const http = ({
       method,
       data,
       header: {
-        refresh_token: uni.getStorageSync('token'),
+        Authorization: uni.getStorageSync('token'),
         ...DATA_TYPE[json].headers,
       },
       success: (res) => {

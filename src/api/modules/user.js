@@ -8,3 +8,12 @@ export function loginByWx(data) {
     json: 'json',
   })
 }
+
+export function logoutApi(data) {
+  return http({
+    method: 'POST',
+    url: '/app-api/member/auth/logout',
+    data,
+    json: 'json',
+  })
+}
