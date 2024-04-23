@@ -1,15 +1,37 @@
 <script setup>
-  import { ref } from 'vue'
+  import { ref, reactive } from 'vue'
   import { data } from '@/components/plaza/WaterFallList/data.js'
   import { sleep } from '@/utils'
   import loadingCom from '@/components/loading.vue'
+  import { getTrends } from '@/api/modules/social'
+  import { plazaTypes2 } from '@/enums'
   const foods = ref([...data])
-  const loading = ref(false)
+  const variables = reactive({
+    pageNo: 1,
+    pageSize: 10,
+    status: 'loadmore', // loadmore loading nomore
+  })
+
+  const getFoods = () => {
+    console.log('xx')
+    getTrends({
+      pageNo: variables.pageNo,
+      pageSize: variables.pageSize,
+      type: 2,
+    })
+      .then(({ data }) => {
+        console.log(22, data)
+        variables.status = data.list.length ? 'loadmore' : 'nomore'
+      })
+      .finally(() => {
+        // state.status = 'loading'
+      })
+  }
+  getFoods()
+
   const loadMore = () => {
-    loading.value = true
     sleep(2000).then(() => {
       foods.value.push(...data)
-      loading.value = false
     })
   }
   const goFoodsDetail = (food) => {
@@ -79,7 +101,8 @@
           </view>
         </view>
       </view>
-      <loading-com v-show="loading"></loading-com>
+      <up-loadmore :status="variables.status" />
+      <!--      <loading-com v-show="loading"></loading-com>-->
     </scroll-view>
   </view>
 </template>
