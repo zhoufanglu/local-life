@@ -21,7 +21,9 @@ const DATA_TYPE = {
     },
   },
   file: {
-    headers: {},
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
   },
   json: {
     headers: {

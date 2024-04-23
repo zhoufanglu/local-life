@@ -7,6 +7,8 @@
   import { ref, reactive, watch } from 'vue'
   import { plazaTypes2 } from '@/enums'
   import { createTrend } from '@/api/modules/social'
+  import { uploadFile } from '@/api/modules/file'
+  import { BASE_URL } from '@/config/config'
 
   const { boundTop } = getBoundInfo()
   /**
@@ -35,8 +37,8 @@
    * resell
    */
   const form = reactive({
-    title: '',
-    description: '',
+    title: '1',
+    description: '1',
     partTimeJob: {
       price: 25,
       date: '每时',
@@ -76,57 +78,40 @@
     { deep: true },
   )
 
-  const handleSubmit = () => {
-    const params = {
+  const handleSubmit = async () => {
+    // ? 1、上传文件，拿到url,放入imgList
+    const imgList = []
+    for (const file of fileList.value) {
+      const formData = new FormData()
+      formData.append('file', file)
+      const { data } = await uni.uploadFile({
+        url: `${BASE_URL}/admin-api/infra/file/upload`, //仅为示例，非真实的接口地址
+        name: 'file',
+        formData: formData,
+        header: {
+          Authorization: uni.getStorageSync('token'),
+        },
+      })
+      imgList.push(JSON.parse(data).data)
+    }
+    const commonParams = {
       title: form.title,
       content: form.description,
+      imgList,
       type: plazaTypes2[curType.value],
-      coverImage:
-        'https://cnbj1-new.fds.api.xiaomi.com/proretail/2531946392_52a873ab-7a1c-4aa1-8bdb-af36f0fef2eb.jpg',
+      coverImage: imgList && imgList[0],
     }
     if (curType.value === 'dynamicState') {
       uni.showLoading({
         title: '创建中..',
         mask: true,
       })
-      createTrend(params).then(({ data }) => {
+      createTrend(commonParams).then(({ data }) => {
         console.log(89, data)
         uni.hideLoading()
         uni.$u.toast('创建成功')
       })
     }
-  }
-
-  // 删除图片
-  const deletePic = (event) => {
-    fileList.value.splice(event.index, 1)
-  }
-
-  // 新增图片
-  const afterRead = async (event) => {
-    console.log(34, event)
-    // 当设置 mutiple 为 true 时, file 为数组格式，否则为对象格式
-    let lists = [].concat(event.file)
-    let fileListLen = fileList.value.length
-    lists.map((item) => {
-      fileList.value.push({
-        ...item,
-        // status: 'uploading',
-        // message: '上传中',
-      })
-    })
-    for (let i = 0; i < lists.length; i++) {
-      // const result = await uploadFilePromise(lists[i].url)
-      let item = fileList.value[fileListLen]
-      fileList.value.splice(fileListLen, 1, {
-        ...item,
-        status: 'success',
-        message: '',
-        // url: result,
-      })
-      fileListLen++
-    }
-    console.log(55, fileList.value)
   }
 
   const handlePosition = () => {
@@ -137,6 +122,14 @@
     uni.redirectTo({
       url: '/pages/plaza/index',
     })
+  }
+
+  /**********************文件上传***********************/
+  const handleFileSelect = (value) => {
+    fileList.value.push(...value.tempFiles)
+  }
+  const handleFileDelete = (value) => {
+    fileList.value.splice(value.index, 1)
   }
 </script>
 <script>
@@ -158,8 +151,16 @@
         marginTop: boundTop + 44 + 'px',
       }"
     >
+      <uni-file-picker
+        v-model="fileList"
+        limit="5"
+        title="最多选择5张图片"
+        @select="handleFileSelect"
+        @delete="handleFileDelete"
+      ></uni-file-picker>
       <!--?文件-->
       <!--视频预览组件https://ext.dcloud.net.cn/plugin?id=11560-->
+      <!--
       <u-upload
         :fileList="fileList"
         accept="media,image"
@@ -178,6 +179,7 @@
           style="width: 192rpx; height: 192px"
         ></image>
       </u-upload>
+-->
       <!--?内容-->
       <view class="submit-form">
         <!--!标题-->
@@ -241,7 +243,7 @@
     <!--?发布-->
     <view class="submit-panel">
       <up-button
-        :disabled="!isSubmit"
+        :disabled="!(form.description && form.title)"
         type="primary"
         shape="circle"
         @click="handleSubmit"
