@@ -1,4 +1,6 @@
 <script setup>
+  import { getTrends } from '@/api/modules/social'
+
   const props = defineProps({
     type: {
       type: String,
@@ -9,8 +11,31 @@
   import { data } from '@/components/plaza/WaterFallList/data.js'
   import { sleep } from '@/utils'
   import loadingCom from '@/components/loading.vue'
-  const goods = ref([...data])
+  import { plazaTypes2 } from '@/enums'
+  const goods = ref([])
   const loading = ref(false)
+  const variables = reactive({
+    pageNo: 1,
+    pageSize: 10,
+    status: 'loadmore', // loadmore loading nomore
+  })
+  const getGoods = () => {
+    getTrends({
+      pageNo: variables.pageNo,
+      pageSize: variables.pageSize,
+      type: plazaTypes2[props.type],
+    })
+      .then(({ data }) => {
+        // console.log(22, data.list)
+        goods.value.push(...data.list)
+        console.log(32, goods.value)
+        variables.status = data.list.length >= 10 ? 'loadmore' : 'nomore'
+      })
+      .finally(() => {
+        // state.status = 'loading'
+      })
+  }
+  getGoods()
   /**********************过滤项***********************/
   const filterOptions = reactive({
     pickerVisible: false,
@@ -30,16 +55,15 @@
   watch(
     () => props.type,
     (newValue) => {
-      console.log(16, newValue)
+      goods.value = []
+      variables.pageNo = 1
+      getGoods()
     },
   )
 
   const loadMore = () => {
-    loading.value = true
-    sleep(2000).then(() => {
-      goods.value.push(...data)
-      loading.value = false
-    })
+    variables.pageNo++
+    getGoods()
   }
   //?picker确认事件
   const handleFilterConfirm = (e) => {
@@ -66,6 +90,14 @@
     uni.navigateTo({
       url: `/pages/detail/index?type=${props.type}&row=${JSON.stringify(item)}`,
     })
+  }
+  const getPrice = (i) => {
+    const propEnum = {
+      partTimeJob: 'partJobPrice',
+      tenement: 'rentPrice',
+      resell: 'resalePrice',
+    }
+    return i[propEnum[props.type]] || '-'
   }
 </script>
 <script>
@@ -112,31 +144,30 @@
     >
       <view
         class="item"
-        v-for="(food, index) in goods"
+        v-for="(i, index) in goods"
         :key="index"
         @click="goDetail"
       >
         <up-image
           class="cover"
           :show-loading="true"
-          :src="food.imgUrl"
+          :src="i.coverImage"
           width="202rpx"
           height="158rpx"
         ></up-image>
         <view class="info">
-          <view class="top">
-            CHINA
-            TOWN蜜雪冰城招聘兼职啦!!!!每周周末一天6小时，每每周周末一天6小时，每.
-          </view>
+          <view class="top"> {{ i.content }} </view>
           <view class="bottom">
-            <view class="location"
-              >城招聘兼职啦!!!!每周周末一城招聘兼职啦!!!!每周周末一</view
+            <view class="location">-</view>
+            <view class="price"
+              ><text>¥{{ getPrice(i) }}</text
+              >/小时</view
             >
-            <view class="price"><text>¥25</text>/小时</view>
           </view>
         </view>
       </view>
-      <loading-com v-show="loading"></loading-com>
+      <up-loadmore :status="variables.status" />
+      <!--      <loading-com v-show="loading"></loading-com>-->
     </scroll-view>
     <u-picker
       @cancel="filterOptions.pickerVisible = false"
@@ -211,6 +242,8 @@
           justify-content: space-between;
           height: 157rpx;
           margin-left: 24rpx;
+          // border: solid 1px red;
+          width: 100%;
           .top {
             @include ellipsis(2);
             font-size: 28rpx;
@@ -220,6 +253,8 @@
           .bottom {
             @include vertical-center;
             justify-content: space-between;
+            // border: solid 1px red;
+            width: 100%;
             .location {
               font-size: 20rpx;
               color: #666666;

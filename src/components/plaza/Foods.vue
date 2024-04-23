@@ -13,7 +13,6 @@
   })
 
   const getFoods = () => {
-    console.log('xx')
     getTrends({
       pageNo: variables.pageNo,
       pageSize: variables.pageSize,
