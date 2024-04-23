@@ -25,14 +25,14 @@
     },
   })
   onMounted(() => {
-    console.log('mounted----------')
+    // console.log('mounted')
     setDefaultData()
     getData()
   })
 
   /*onLoad(() => {
-  setDefaultData()
-  getData()
+setDefaultData()
+getData()
 })*/
 
   // 模拟获取数据
@@ -47,8 +47,14 @@
       // type: 'undefined',
     })
       .then(({ data }) => {
-        //console.log(43, data.list)
+        // 初始化封面
+        /*data.list.forEach((i) => {
+          i.coverImage =
+            i.coverImage ||
+            'https://www.logosc.cn/uploads/resources/2023/03/17/1679045108_thumb.jpg'
+        })*/
         state.totalList.push(...data.list)
+        console.log(57, data.list)
         loadNextItem()
         state.status = data.list.length ? 'loadmore' : 'nomore'
       })
@@ -56,6 +62,8 @@
         // state.status = 'loading'
       })
     return false
+    state.loading = true
+    if (state.pages.page === 1) setDefaultData()
     return new Promise((resolve) => {
       setTimeout(() => {
         state.totalList.push(...data)
@@ -84,6 +92,7 @@
     const totalLength = Object.values(state.columnData).flat().length
     if (totalLength == state.totalList.length) return
     state.columnData[state.minHeightColNum].push(state.totalList[totalLength])
+    // console.log(68, state.columnData)
   }
 
   /** @获取最小列数 **/
@@ -110,7 +119,6 @@
       .map((item, i) => {
         state.columnData[i + 1] = []
       })
-    console.log(105, state.totalList)
   }
 
   /** @封装[jvideo](https://v.ixigua.com/iNQLjWJS/)查询DOM **/
@@ -172,9 +180,15 @@
             @click="goDetail(item)"
           >
             <div class="item">
-              <img class="pic" :src="item.coverImage" mode="widthFix" />
+              <img
+                @load="imageLoad"
+                @error="imageLoad"
+                class="pic"
+                :src="item.coverImage"
+                mode="widthFix"
+              />
               <div class="info">
-                <text>{{ i }}{{ item.content }}</text>
+                <text>{{ i }}---{{ item.content }}</text>
                 <div class="end-row">
                   <div class="left" @click="goUserInfo">
                     <u-image
@@ -183,8 +197,6 @@
                       shape="circle"
                       width="50rpx"
                       height="50rpx"
-                      @load="imageLoad"
-                      @error="imageLoad"
                     ></u-image>
                     <span class="username">{{ item.nickname }}</span>
                   </div>
