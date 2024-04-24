@@ -5,7 +5,14 @@
   import { getBoundInfo } from '@/utils/index.js'
   import { onLoad } from '@dcloudio/uni-app'
   import { ref, reactive, watch } from 'vue'
-  import { plazaTypes2 } from '@/enums'
+  import {
+    getEnumKeyByValue,
+    plazaTypes2,
+    rentRoomTypes,
+    rentTimeUnits,
+    rentTypes,
+    reversedEnums,
+  } from '@/enums'
   import { createTrend } from '@/api/modules/social'
   import { uploadFile } from '@/api/modules/file'
   import { BASE_URL } from '@/config/config'
@@ -30,7 +37,8 @@
     fileList: [],
   })*/
   const isSubmit = ref(false)
-  const fileList = ref([])
+  const fileList = ref([]) // 存文件列表
+  const filePathList = ref([]) // 存文件路径列表
   /**
    * partTimeJob 属性 -> date:时间 price:价格
    * tenement
@@ -44,9 +52,9 @@
       date: '每时',
     },
     tenement: {
-      tenementArea: '',
-      tenementType: '',
-      tenementHouseType: '',
+      tenementArea: '北京',
+      tenementType: '整租',
+      tenementHouseType: '一居',
       price: 25,
       date: '每时',
     },
@@ -54,7 +62,7 @@
       price: 25,
       type: '#二手好车',
     },
-    position: {},
+    position: '-',
   })
   const rules = reactive({
     title: [{ required: true, message: '请输入标题', trigger: 'blur' }],
@@ -79,15 +87,18 @@
   )
 
   const handleSubmit = async () => {
+    uni.showLoading({
+      title: '创建中..',
+      mask: true,
+    })
     // ? 1、上传文件，拿到url,放入imgList
     const imgList = []
-    for (const file of fileList.value) {
-      const formData = new FormData()
-      formData.append('file', file)
+    for (const [index, file] of fileList.value.entries()) {
       const { data } = await uni.uploadFile({
         url: `${BASE_URL}/admin-api/infra/file/upload`, //仅为示例，非真实的接口地址
         name: 'file',
-        formData: formData,
+        filePath: filePathList.value[index],
+        formData: { file },
         header: {
           Authorization: uni.getStorageSync('token'),
         },
@@ -101,17 +112,49 @@
       type: plazaTypes2[curType.value],
       coverImage: imgList && imgList[0],
     }
+    let params = {}
+    // !参数分流, 动态、兼职、租房、转卖
     if (curType.value === 'dynamicState') {
-      uni.showLoading({
-        title: '创建中..',
-        mask: true,
-      })
-      createTrend(commonParams).then(({ data }) => {
-        console.log(89, data)
-        uni.hideLoading()
-        uni.$u.toast('创建成功')
-      })
+      params = commonParams
+    } else if (curType.value === 'partTimeJob') {
+      params = {
+        ...commonParams,
+        partjobTimeunit: getEnumKeyByValue(
+          rentTimeUnits,
+          form.partTimeJob.date,
+        ),
+        partjobPrice: form.partTimeJob.price,
+      }
+    } else if (curType.value === 'tenement') {
+      params = {
+        ...commonParams,
+        rentZone: '上海', //租房区域
+        rentType: getEnumKeyByValue(rentTypes, form.tenement.tenementType), // 租房方式
+        rentRoomType: getEnumKeyByValue(
+          rentRoomTypes,
+          form.tenement.tenementHouseType,
+        ), // 房屋类型
+        rentTimeunit: getEnumKeyByValue(rentTimeUnits, form.tenement.date), // 租房时间单位
+        rentPrice: form.tenement.price, // 租房价格
+        address: form.position,
+      }
+    } else if (curType.value === 'resell') {
+      console.log(142, form.resell.price)
+      if (!form.resell.price) {
+        uni.$u.toast('请输入价格')
+        return
+      }
+      // 转卖
+      params = {
+        ...commonParams,
+        resaleCategory: form.resell.type,
+        resalePrice: form.resell.price,
+      }
     }
+    createTrend(params).then(({ data }) => {
+      uni.hideLoading()
+      uni.$u.toast('创建成功')
+    })
   }
 
   const handlePosition = () => {
@@ -126,10 +169,14 @@
 
   /**********************文件上传***********************/
   const handleFileSelect = (value) => {
-    fileList.value.push(...value.tempFiles)
+    // console.log(153, value.tempFilePaths)
+    const { tempFilePaths, tempFiles } = value
+    fileList.value.push(...tempFiles)
+    filePathList.value.push(...tempFilePaths)
   }
   const handleFileDelete = (value) => {
     fileList.value.splice(value.index, 1)
+    filePathList.value.splice(value.index, 1)
   }
 </script>
 <script>
@@ -222,7 +269,7 @@
             v-model:type="form.resell.type"
           ></resell-filter>
           <!--*定位-->
-          <u-cell
+          <!--          <u-cell
             class="position-cell"
             :isLink="true"
             @click="handlePosition"
@@ -236,7 +283,7 @@
                 style="height: 41rpx; width: 35rpx; margin-right: 10rpx"
               ></image>
             </template>
-          </u-cell>
+          </u-cell>-->
         </u-cell-group>
       </view>
     </view>

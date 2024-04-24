@@ -3,19 +3,19 @@
 
   const pickers = reactive({
     tenementArea: {
-      columns: ['每时11', '每天', '每周', '每月'],
+      columns: ['上海', '北京', '广州'],
     },
     tenementType: {
-      columns: [20, 40, 60, 80, 100, 120, 140, 160, 180, 200],
+      columns: ['整租', '合租'],
     },
     tenementHouseType: {
-      columns: [20, 40, 60, 80, 100, 120, 140, 160, 180, 200],
+      columns: ['一居室', '两居室', '三居室', '四居室'],
     },
     price: {
       columns: [20, 40, 60, 80, 100, 120, 140, 160, 180, 200],
     },
     date: {
-      columns: [20, 40, 60, 80, 100, 120, 140, 160, 180, 200],
+      columns: ['每时', '每天'],
     },
   })
 

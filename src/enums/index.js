@@ -1,3 +1,4 @@
+/**********************plaza***********************/
 //?1动态，2兼职，3租房，4转卖
 export const plazaTypes = {
   1: '动态',
@@ -10,4 +11,30 @@ export const plazaTypes2 = {
   partTimeJob: 2,
   tenement: 3,
   resell: 4,
+}
+// 租房类型
+export const rentTypes = {
+  1: '整租',
+  2: '合租',
+}
+
+// 租房房屋类型
+export const rentRoomTypes = {
+  1: '一居',
+  2: '二居',
+  3: '三居',
+  4: '四居',
+}
+
+//rentTimeunit;
+export const rentTimeUnits = {
+  1: '每时',
+  2: '每天',
+}
+/**********************工具函数***********************/
+export const reversedEnums = (obj) =>
+  Object.fromEntries(Object.entries(obj).map(([key, value]) => [value, key]))
+
+export const getEnumKeyByValue = (obj, value) => {
+  return Number(Object.keys(obj).find((key) => obj[key] === value))
 }

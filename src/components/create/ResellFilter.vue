@@ -1,5 +1,5 @@
 <script setup>
-  import { reactive } from 'vue'
+  import { reactive, ref } from 'vue'
 
   const pickers = reactive({
     type: {
@@ -58,12 +58,22 @@
     <template #value>
       <view class="price-input-panel">
         <text>¥</text>
-        <up-input
+
+        <uni-easyinput
+          style="color: #a26c38; font-size: 16px; font-weight: 600"
+          type="number"
+          :inputBorder="false"
+          :clearable="false"
+          :value="props.price"
+          @input="handelPriceChange"
+        ></uni-easyinput>
+        <!--        <up-input
+          :value="value"
           placeholder=""
           type="number"
           border="surround"
           @change="handelPriceChange"
-        ></up-input>
+        ></up-input>-->
       </view>
     </template>
   </u-cell>

@@ -11,7 +11,7 @@
   import { data } from '@/components/plaza/WaterFallList/data.js'
   import { sleep } from '@/utils'
   import loadingCom from '@/components/loading.vue'
-  import { plazaTypes2 } from '@/enums'
+  import { plazaTypes2, rentTimeUnits } from '@/enums'
   const goods = ref([])
   const loading = ref(false)
   const variables = reactive({
@@ -93,11 +93,19 @@
   }
   const getPrice = (i) => {
     const propEnum = {
-      partTimeJob: 'partJobPrice',
+      partTimeJob: 'partjobPrice',
       tenement: 'rentPrice',
       resell: 'resalePrice',
     }
     return i[propEnum[props.type]] || '-'
+  }
+  const getUnit = (i) => {
+    const propEnum = {
+      partTimeJob: 'partjobTimeunit',
+      tenement: 'rentTimeunit',
+      // resell: 'resalePrice',
+    }
+    return rentTimeUnits[i[propEnum[props.type]] || 1]
   }
 </script>
 <script>
@@ -161,7 +169,7 @@
             <view class="location">-</view>
             <view class="price"
               ><text>¥{{ getPrice(i) }}</text
-              >/小时</view
+              >/{{ getUnit(i) }}</view
             >
           </view>
         </view>

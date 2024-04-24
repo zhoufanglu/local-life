@@ -28,3 +28,13 @@ export function createTrend(data) {
     json: 'json',
   })
 }
+
+// ?动态详情
+export function getTrendDetail(data) {
+  return http({
+    method: 'GET',
+    url: '/app-api/social/trends/get',
+    data,
+    json: 'json',
+  })
+}
