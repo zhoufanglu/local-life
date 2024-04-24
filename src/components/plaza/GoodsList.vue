@@ -12,6 +12,7 @@
   import { sleep } from '@/utils'
   import loadingCom from '@/components/loading.vue'
   import { plazaTypes2, rentTimeUnits } from '@/enums'
+  import { useEnums } from '@/hooks/useEnums'
   const goods = ref([])
   const loading = ref(false)
   const variables = reactive({
@@ -91,7 +92,8 @@
       url: `/pages/detail/index?type=${props.type}&row=${JSON.stringify(item)}`,
     })
   }
-  const getPrice = (i) => {
+  const { getPrice, getUnit } = useEnums(props.type)
+  /*const getPrice = (i) => {
     const propEnum = {
       partTimeJob: 'partjobPrice',
       tenement: 'rentPrice',
@@ -106,7 +108,7 @@
       // resell: 'resalePrice',
     }
     return rentTimeUnits[i[propEnum[props.type]] || 1]
-  }
+  }*/
 </script>
 <script>
   export default {
@@ -167,10 +169,12 @@
           <view class="top"> {{ i.content }} </view>
           <view class="bottom">
             <view class="location">-</view>
-            <view class="price"
-              ><text>¥{{ getPrice(i) }}</text
-              >/{{ getUnit(i) }}</view
-            >
+            <view class="price">
+              <text>¥{{ getPrice(i, props.type) }} </text>
+              <text v-if="props.type !== 'resell'">
+                /{{ getUnit(i, props.type) }}</text
+              >
+            </view>
           </view>
         </view>
       </view>

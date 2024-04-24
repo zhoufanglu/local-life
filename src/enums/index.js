@@ -31,6 +31,11 @@ export const rentTimeUnits = {
   1: '每时',
   2: '每天',
 }
+
+export const resellType = {
+  1: '闲置好物',
+  2: '二手好车',
+}
 /**********************工具函数***********************/
 export const reversedEnums = (obj) =>
   Object.fromEntries(Object.entries(obj).map(([key, value]) => [value, key]))

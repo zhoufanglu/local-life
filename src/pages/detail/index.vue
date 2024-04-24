@@ -4,6 +4,8 @@
   import CComment from '@/components/cc-comment/index.vue'
   const { boundTop, boundWidth } = getBoundInfo()
   import { onLoad } from '@dcloudio/uni-app'
+  import { getTrendDetail as getTrendDetailApi } from '@/api/modules/social'
+  import { useEnums } from '@/hooks/useEnums'
   const props = defineProps({
     type: {
       // ? 兼职、租房、转卖, 动态，关注, 这几个界面公用
@@ -16,23 +18,32 @@
   const variables = reactive({
     topRowHeight: 0,
     data: {
-      list: [
-        'https://cdn.uviewui.com/uview/swiper/swiper3.png',
-        'https://cdn.uviewui.com/uview/swiper/swiper2.png',
-        'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-      ],
-      title: '大萨达撒迪士',
-      content:
-        '威少：扣篮王威少的暴力扣篮不仅让球迷们大呼过瘾，更是在全联盟都有所名气。他拥有出色的身威少：扣篮王威少的暴力扣篮不仅让球迷们大呼过瘾，更是在全联盟都有所名气。他拥有出色的身体素质和爆发力，总能在比赛中奉献出令人震体素质和爆发力，总能在比赛中奉献出令人震威少：扣篮王威少的暴力扣篮不仅让球迷们大呼过瘾，更是在全联盟都有所名气。他拥有出色的身威少：扣篮王威少的暴力扣篮不仅让球迷们大呼过瘾，更是在全联盟都有所名气。他拥有出色的身体素质和爆发力，总能在比赛中奉献出令人震体素质和爆发力，总能在比赛中奉献出令人震',
-      date: '2021-08-12',
+      imageList: [],
+      isFan: 1,
     },
   })
 
+  const { getPrice, getUnit } = useEnums(props.type)
+  /**
+   *
+   * @param type partTimeJob, tenement, resell, dynamicState, follow
+   * @param row
+   */
+  const getTrendDetail = (type, row) => {
+    getTrendDetailApi({ id: row.id }).then((res) => {
+      variables.data = res.data
+      console.log(39, variables.data)
+      console.log(40, variables.data.isFan)
+    })
+  }
+
   onLoad((options) => {
+    console.log(40, options)
     const type = options.type
     const row = JSON.parse(options.row)
     console.log(34, type)
     console.log(35, row)
+    getTrendDetail(type, row)
   })
   onMounted(() => {
     getElRectAsync('.top-row').then((res) => {
@@ -171,6 +182,10 @@
     },
   ]) // 评论表
 
+  const handleFollow = () => {
+    console.log(186, variables.data.isFan)
+  }
+
   const go = () => {
     uni.navigateBack({
       delta: 1,
@@ -195,13 +210,20 @@
     >
       <u-icon @click="go()" name="arrow-left" color="black" size="28"></u-icon>
       <view class="user-info">
-        <up-avatar
-          :size="30"
-          src="https://cdn.uviewui.com/uview/swiper/swiper3.png"
-        ></up-avatar>
-        <text>钟爱放飞</text>
-        <view class="follow">关注</view>
-        <view class="followed">已关注</view>
+        <up-avatar :size="30" :src="variables.data.avatar"></up-avatar>
+        <text>{{ variables.data.nickname }}</text>
+        <view
+          @click="handleFollow"
+          class="follow"
+          v-if="variables.data.isFan !== 1"
+          >关注</view
+        >
+        <view
+          @click="handleFollow"
+          class="followed"
+          v-if="variables.data.isFan === 1"
+          >已关注</view
+        >
       </view>
     </view>
     <!--?主体-->
@@ -212,23 +234,32 @@
       }"
     >
       <u-swiper
+        v-if="
+          variables.data.imageList.length !== 0 && variables.data.imageList[0]
+        "
         height="732rpx"
         class="detail-swiper"
-        :list="variables.data.list"
+        :list="variables.data.imageList"
         imgMode=""
         indicator
         indicatorMode="line"
         circular
       ></u-swiper>
       <view class="article-panel">
-        <view class="price"><text>¥25</text>/小时</view>
+        <!--?价格 兼职、租房、转卖、才有-->
+        <view
+          class="price"
+          v-if="['partTimeJob', 'tenement', 'resell'].includes(props.type)"
+          ><text>¥{{ getPrice(variables.data, props.type) }}</text
+          >/{{ getUnit(variables.data, props.type) }}</view
+        >
         <text class="title">{{ variables.data.title }}</text>
         <text class="article-content">{{ variables.data.content }}</text>
         <text class="date">{{ variables.data.date }}</text>
-        <view class="position">
+        <!--        <view class="position">
           <img src="@/static/detail/position.png" alt="" />
           <text>12.3Km 洛杉矶快船主场篮球馆3232</text>
-        </view>
+        </view>-->
       </view>
       <u-divider style="width: 95%; margin: 0 auto"></u-divider>
       <!--?评论-->

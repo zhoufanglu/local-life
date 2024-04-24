@@ -26,7 +26,7 @@
   // 2、注册事件，改变绑定的值
   const emit = defineEmits(['update:type', 'update:price'])
 
-  const list = ['#二手好车', '#闲置好物']
+  const list = ['二手好车', '闲置好物']
 
   const handleType = (val) => {
     emit(`update:type`, val)
@@ -49,7 +49,7 @@
           v-for="i in list"
           :key="i"
           @click="handleType(i)"
-          >{{ i }}</text
+          >#{{ i }}</text
         >
       </view>
     </template>

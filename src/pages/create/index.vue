@@ -11,6 +11,7 @@
     rentRoomTypes,
     rentTimeUnits,
     rentTypes,
+    resellType,
     reversedEnums,
   } from '@/enums'
   import { createTrend } from '@/api/modules/social'
@@ -60,7 +61,7 @@
     },
     resell: {
       price: 25,
-      type: '#二手好车',
+      type: '二手好车',
     },
     position: '-',
   })
@@ -108,7 +109,7 @@
     const commonParams = {
       title: form.title,
       content: form.description,
-      imgList,
+      imageList: imgList,
       type: plazaTypes2[curType.value],
       coverImage: imgList && imgList[0],
     }
@@ -147,7 +148,8 @@
       // 转卖
       params = {
         ...commonParams,
-        resaleCategory: form.resell.type,
+        // resaleCategory: resellType[form.resell.type],
+        resaleCategory: getEnumKeyByValue(resellType, form.resell.type),
         resalePrice: form.resell.price,
       }
     }

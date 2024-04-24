@@ -24,4 +24,7 @@
     height: 100%;
     background-color: #f4f4f4;
   }
+  view[hidden] {
+    display: none;
+  }
 </style>
