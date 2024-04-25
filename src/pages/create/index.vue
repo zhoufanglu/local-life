@@ -14,7 +14,7 @@
     resellType,
     reversedEnums,
   } from '@/enums'
-  import { createTrend } from '@/api/modules/social'
+  import { createTrend, getAreaTree } from '@/api/modules/social'
   import { uploadFile } from '@/api/modules/file'
   import { BASE_URL } from '@/config/config'
 
@@ -34,9 +34,6 @@
   })
 
   /**********************主体内容***********************/
-  /*const variables = reactive({
-    fileList: [],
-  })*/
   const isSubmit = ref(false)
   const fileList = ref([]) // 存文件列表
   const filePathList = ref([]) // 存文件路径列表
@@ -53,7 +50,7 @@
       date: '每时',
     },
     tenement: {
-      tenementArea: '北京',
+      tenementArea: '北京市/市辖区/东城区',
       tenementType: '整租',
       tenementHouseType: '一居',
       price: 25,
@@ -129,7 +126,7 @@
     } else if (curType.value === 'tenement') {
       params = {
         ...commonParams,
-        rentZone: '上海', //租房区域
+        rentZone: form.tenement.tenementArea, //租房区域
         rentType: getEnumKeyByValue(rentTypes, form.tenement.tenementType), // 租房方式
         rentRoomType: getEnumKeyByValue(
           rentRoomTypes,

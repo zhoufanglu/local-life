@@ -1,6 +1,13 @@
 <script setup>
-  import { reactive } from 'vue'
-
+  import { reactive, ref } from 'vue'
+  import { getAreaTree } from '@/api/modules/social'
+  import { areaTree } from './area.js'
+  /*const areaTree = ref([])
+  getAreaTree().then(({ data }) => {
+    console.log(23, data)
+    areaTree.value = data
+  })*/
+  const testValue = ref('110101000000')
   const pickers = reactive({
     tenementArea: {
       columns: ['上海', '北京', '广州'],
@@ -60,21 +67,48 @@
     const index = Number(e.detail.value)
     emit(`update:${type}`, pickers[type].columns[index])
   }
+
+  const onAreaChange = (e) => {
+    const value = e.detail.value
+    const text = value.map((v) => v.text).join('/')
+    emit(`update:tenementArea`, text)
+  }
+  const onAreaNodeClick = (node) => {
+    // console.log(74, node)
+  }
+</script>
+<script>
+  export default {
+    options: { styleIsolation: 'shared' },
+  }
 </script>
 <template>
-  <picker
+  <!--  <picker
     mode="selector"
     :value="tenementArea"
     @change="handlePicker($event, 'tenementArea')"
     :range="pickers.tenementArea.columns"
     row-key="value"
-  >
-    <u-cell title="租房区域:" :isLink="true">
-      <template #value>
-        <view class="uni-input">{{ tenementArea }}</view>
-      </template>
-    </u-cell>
-  </picker>
+  >-->
+  <u-cell title="租房区域:" :isLink="true">
+    <template #value>
+      <uni-data-picker
+        v-model="testValue"
+        class="area-picker"
+        :border="false"
+        placeholder=" "
+        v-if="areaTree.length"
+        :localdata="areaTree"
+        popup-title="请选择地区"
+        @change="onAreaChange"
+        @nodeclick="onAreaNodeClick"
+        :clear-icon="false"
+      >
+      </uni-data-picker>
+      <!--        <view class="uni-input">{{ tenementArea }}</view>-->
+    </template>
+  </u-cell>
+  <!--  </picker>-->
   <picker
     mode="selector"
     :value="tenementType"
@@ -132,7 +166,11 @@
   </picker>
 </template>
 
-<style scoped lang="scss">
-  .test {
+<style lang="scss">
+  .area-picker {
+    .arrow-area {
+      display: none !important;
+    }
+    // border: solid 1px red;
   }
 </style>

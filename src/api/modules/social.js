@@ -58,3 +58,13 @@ export function likeUpdate(data) {
     json: 'json',
   })
 }
+
+// ?获取地区树
+export function getAreaTree(data) {
+  return http({
+    method: 'GET',
+    url: '/admin-api/system/area/tree',
+    data,
+    json: 'json',
+  })
+}

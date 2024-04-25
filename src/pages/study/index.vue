@@ -3,11 +3,19 @@
   import { getBoundInfo } from '@/utils/index.js'
   import { ref, reactive } from 'vue'
   import waterFallList from '@/components/study/WaterFallList/WaterFallList.vue'
+  import { getGoodsType as getGoodsTypeApi } from '@/api/modules/mall'
   const { boundTop, boundWidth } = getBoundInfo()
 
   const { statusBarHeight } = getBoundInfo()
 
   const searchVal = ref('')
+
+  getGoodsType()
+  function getGoodsType() {
+    getGoodsTypeApi().then((res) => {
+      console.log(16, res)
+    })
+  }
 
   const tabs = reactive({
     current: 0,
