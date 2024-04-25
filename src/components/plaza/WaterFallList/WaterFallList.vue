@@ -7,7 +7,7 @@
   // type = follow, dynamicState
   const props = defineProps(['type'])
   import { useLogin } from '@/hooks/useLogin'
-  import { getTrends } from '@/api/modules/social'
+  import { getTrends, likeUpdate } from '@/api/modules/social'
   import { plazaTypes2 } from '@/enums'
   // import { WXBizDataCrypt } from '@/utils/WXBizDataCrypt'
 
@@ -140,9 +140,18 @@ getData()
   }
 
   const handleLikeClick = (colIndex, index, isLike) => {
-    state.columnData[colIndex + 1][index].isLike = !isLike
-    let likes = state.columnData[colIndex + 1][index].likes
-    state.columnData[colIndex + 1][index].likes = !isLike ? ++likes : --likes
+    // ?触发接口
+    likeUpdate({
+      refId: state.columnData[colIndex + 1][index].id,
+      // isLike: isLike === 0 ? 1 : 0,
+      type: 10,
+    }).then((res) => {
+      // ?前端改变状态
+      state.columnData[colIndex + 1][index].isLike = isLike === 0 ? 1 : 0
+      let likeCount = state.columnData[colIndex + 1][index].likeCount
+      state.columnData[colIndex + 1][index].likeCount =
+        isLike === 0 ? ++likeCount : --likeCount
+    })
   }
   const goDetail = (item) => {
     console.log(114, item)
@@ -205,12 +214,12 @@ getData()
                     @click.stop="handleLikeClick(colIndex, i, item.isLike)"
                   >
                     <image
-                      v-show="!item.isLike"
+                      v-if="item.isLike === 0"
                       src="@/static/plaza/like.png"
                       alt=""
                     />
                     <image
-                      v-show="item.isLike"
+                      v-if="item.isLike === 1"
                       src="@/static/plaza/like_active.png"
                       alt=""
                     />

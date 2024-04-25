@@ -38,3 +38,23 @@ export function getTrendDetail(data) {
     json: 'json',
   })
 }
+
+// ?关注
+export function handleFollowUser(data) {
+  return http({
+    method: 'POST',
+    url: '/app-api/social/fans/follow',
+    data,
+    json: 'json',
+  })
+}
+
+// ?点赞
+export function likeUpdate(data) {
+  return http({
+    method: 'POST',
+    url: '/app-api/social/like/likeOrCancel',
+    data,
+    json: 'json',
+  })
+}

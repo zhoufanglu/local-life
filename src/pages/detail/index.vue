@@ -4,7 +4,10 @@
   import CComment from '@/components/cc-comment/index.vue'
   const { boundTop, boundWidth } = getBoundInfo()
   import { onLoad } from '@dcloudio/uni-app'
-  import { getTrendDetail as getTrendDetailApi } from '@/api/modules/social'
+  import {
+    getTrendDetail as getTrendDetailApi,
+    handleFollowUser,
+  } from '@/api/modules/social'
   import { useEnums } from '@/hooks/useEnums'
   const props = defineProps({
     type: {
@@ -183,6 +186,9 @@
   ]) // 评论表
 
   const handleFollow = () => {
+    handleFollowUser({ fansUserId: variables.data.publisher }).then((res) => {
+      variables.data.isFan = variables.data.isFan === 1 ? 0 : 1
+    })
     console.log(186, variables.data.isFan)
   }
 
