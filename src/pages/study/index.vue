@@ -2,7 +2,6 @@
   import TabBar from '@/components/TabBar.vue'
   import { getBoundInfo } from '@/utils/index.js'
   import { ref, reactive } from 'vue'
-  import waterFallList from '@/components/study/WaterFallList/WaterFallList.vue'
   import {
     getGoodsType as getGoodsTypeApi,
     getGoods as getGoodsApi,

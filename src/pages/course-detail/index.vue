@@ -1,30 +1,45 @@
 <script setup>
   import { getBoundInfo, getElRectAsync } from '@/utils/index.js'
   import { onMounted, reactive } from 'vue'
+  import { onLoad } from '@dcloudio/uni-app'
+  import { getGoodDetail } from '@/api/modules/mall'
+  import { BASE_URL } from '@/config/config'
 
   const { boundTop, boundHeight } = getBoundInfo()
 
   const variables = reactive({
-    data: {
-      list: [
-        'https://cdn.uviewui.com/uview/swiper/swiper3.png',
-        'https://cdn.uviewui.com/uview/swiper/swiper2.png',
-        'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-      ],
-      title: '大萨达撒迪士',
-      content:
-        '威少：扣篮王威少的暴力扣篮不仅让球迷们大呼过瘾，更是在全联盟都有所名气。他拥有出色的身威少：扣篮王威少的暴力扣篮不仅让球迷们大呼过瘾，更是在全联盟都有所名气。他拥有出色的身体素质和爆发力，总能在比赛中奉献出令人震体素质和爆发力，总能在比赛中奉献出令人震威少：扣篮王威少的暴力扣篮不仅让球迷们大呼过瘾，更是在全联盟都有所名气。他拥有出色的身威少：扣篮王威少的暴力扣篮不仅让球迷们大呼过瘾，更是在全联盟都有所名气。他拥有出色的身体素质和爆发力，总能在比赛中奉献出令人震体素质和爆发力，总能在比赛中奉献出令人震',
-      date: '2021-08-12',
-    },
+    data: {},
+    curData: {},
+    curType: '基础课程',
   })
 
   onMounted(() => {})
+
+  onLoad((options) => {
+    const spuId = +options?.spuId
+    getGoodDetail({ spuId }).then((res) => {
+      variables.data = res.data
+      setCurData()
+      console.log(34, variables.curData)
+    })
+  })
 
   const handleBack = () => {
     uni.navigateBack({
       delta: 1,
     })
   }
+  const handleTypeChange = (type) => {
+    variables.curType = type
+    setCurData()
+  }
+  const setCurData = () => {
+    variables.curData = variables.data.skuList.find(
+      (item) => item.goodsName === variables.curType,
+    )
+    console.log(40, variables.curData)
+  }
+
   const handleCart = () => {}
   const handleBuyNow = () => {
     uni.navigateTo({
@@ -54,10 +69,15 @@
       ></u-icon>
     </view>
     <view class="course-content">
+      <!--      <img
+        src="http://124.223.32.35:48080/admin-api/infra/file/4/get/c1f26a1478517a085875791545dbebb5c777ac0e21d29fafc62785304be2627d.jpg"
+        alt=""
+        style="width: 100px; height: 100px"
+      />-->
       <u-swiper
         height="700rpx"
         class="detail-swiper"
-        :list="variables.data.list"
+        :list="variables.data.skuImageList"
         imgMode=""
         indicator
         indicatorMode="line"
@@ -65,18 +85,31 @@
       ></u-swiper>
       <view class="course-info">
         <view class="row-1">
-          <text>雅思冲刺30天！</text>
-          <text>已售¥{{ 100 }}件</text>
+          <text>{{ variables.curData.goodsName }}</text>
+          <text>已售 {{ variables.curData.saleNum }} 件</text>
         </view>
-        <text class="info"
-          >线下1对3小班教学，每天两个小时！详细咨询：0012313145</text
-        >
-        <text class="course-price">¥999</text>
+        <text class="info">{{ variables.curData.goodsDesc }}</text>
+        <text class="course-price">¥{{ variables.curData.goodsPrice }}</text>
       </view>
       <u-divider style="width: 90%; margin: 0 auto"></u-divider>
       <view class="version">
         <text>版本</text>
-        <view class="version-item"> 基础课程 </view>
+        <view class="panel">
+          <view
+            class="version-item"
+            :class="variables.curType === '基础课程' ? 'active' : ''"
+            @click="handleTypeChange('基础课程')"
+          >
+            基础课程
+          </view>
+          <view
+            class="version-item"
+            :class="variables.curType === '高级课程' ? 'active' : ''"
+            @click="handleTypeChange('高级课程')"
+          >
+            高级课程
+          </view>
+        </view>
       </view>
     </view>
     <view class="footer-content">
@@ -142,14 +175,22 @@
           color: #333;
           font-size: 30rpx;
         }
-        .version-item {
+        .panel {
+          display: flex;
           margin-top: 30rpx;
+        }
+        .version-item {
           width: 154rpx;
           height: 54rpx;
           @include vertical-center;
+          color: #999;
+          border: solid 1px #999;
+          font-size: 26rpx;
+          margin-right: 40rpx;
+        }
+        .active {
           color: #000;
           border: solid 1px #000;
-          font-size: 26rpx;
         }
       }
     }
