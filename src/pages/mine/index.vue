@@ -3,11 +3,20 @@
   import GoodsList from '@/components/mine/GoodsList.vue'
   import OrderList from '@/components/mine/OrderList.vue'
   import { reactive } from 'vue'
+  import { getUserInfo as getUserInfoApi } from '@/api/modules/user'
   const variables = reactive({
     bgUrl: 'https://cdn.uviewui.com/uview/swiper/swiper3.png',
     gender: '男',
     username: '张三',
   })
+
+  const getUserInfo = () => {
+    getUserInfoApi().then((res) => {
+      console.log(33, res)
+    })
+  }
+
+  getUserInfo()
 
   const tabs = reactive({
     current: 0,

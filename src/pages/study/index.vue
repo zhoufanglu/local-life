@@ -3,47 +3,61 @@
   import { getBoundInfo } from '@/utils/index.js'
   import { ref, reactive } from 'vue'
   import waterFallList from '@/components/study/WaterFallList/WaterFallList.vue'
-  import { getGoodsType as getGoodsTypeApi } from '@/api/modules/mall'
+  import {
+    getGoodsType as getGoodsTypeApi,
+    getGoods as getGoodsApi,
+  } from '@/api/modules/mall'
   const { boundTop, boundWidth } = getBoundInfo()
 
   const { statusBarHeight } = getBoundInfo()
+  const status = ref('loading') // loadmore loading nomore
 
   const searchVal = ref('')
 
   getGoodsType()
   function getGoodsType() {
     getGoodsTypeApi().then((res) => {
-      console.log(16, res)
+      tabs.list = res.data.list.map((item, index) => {
+        return { name: item.name, value: item.typeId, index }
+      })
+      getGoods()
+    })
+  }
+
+  function getGoods() {
+    getGoodsApi({
+      // typeId: tabs.list[tabs.current].value,
+      typeId: 1,
+      page: 1, // 当前页面
+      pageNum: 1000, // 页长
+    }).then((res) => {
+      // console.log(33, res.data.list)
+      course.value = res.data.list
+      status.value = course.value.length <= 10 ? 'nomore' : 'loadmore'
     })
   }
 
   const tabs = reactive({
     current: 0,
-    list: [
-      { name: '英语', value: 'english', index: 0 },
-      { name: '数学', value: 'math', index: 1 },
-      { name: '音乐', value: 'music', index: 2 },
-      { name: '建筑', value: 'architecture', index: 3 },
-      { name: '管理', value: 'management', index: 4 },
-      { name: '金融', value: 'financial', index: 5 },
-    ],
+    list: [],
   })
 
-  const course = ref([1, 2, 3, 4, 5, 6, 77, 8, 8, 8, 88, 8, , 8, 8, 8, 8])
+  const course = ref()
 
   const onSearch = () => {}
 
   const handleTabClick = (item) => {
     tabs.current = item.index
+    getGoods()
   }
 
   const goCart = () => {
     console.log('goCart')
   }
   const goDetail = (item) => {
-    console.log('goDetail', item)
+    console.log('goDetail', item.spuId)
     uni.navigateTo({
-      url: `/pages/course-detail/index?`,
+      url: `/pages/course-detail/index?spuId=${item.spuId}`,
     })
   }
   const loadMore = () => {
@@ -97,7 +111,7 @@
           lineColor="#333"
           lineWidth="60rpx"
           lineHeight="2"
-          :scrollable="false"
+          :scrollable="true"
           :activeStyle="{
             color: '#333',
             fontWeight: 'bold',
@@ -127,6 +141,7 @@
             <view class="btn" @click="goDetail(i)">课程详情</view>
           </view>
         </view>
+        <up-loadmore :status="status" />
       </scroll-view>
     </view>
     <tab-bar></tab-bar>

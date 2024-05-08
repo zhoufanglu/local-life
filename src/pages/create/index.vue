@@ -43,8 +43,8 @@
    * resell
    */
   const form = reactive({
-    title: '1',
-    description: '1',
+    title: '',
+    description: '',
     partTimeJob: {
       price: 25,
       date: '每时',

@@ -17,3 +17,12 @@ export function logoutApi(data) {
     json: 'json',
   })
 }
+
+export function getUserInfo(data) {
+  return http({
+    method: 'POST',
+    url: '/app-api/member/user/get',
+    data,
+    json: 'form',
+  })
+}
