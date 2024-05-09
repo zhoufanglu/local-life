@@ -38,3 +38,39 @@ export function getGoodDetail(data) {
     json: 'json',
   })
 }
+
+/**********************购物车***********************/
+export function createCart(data) {
+  return http({
+    method: 'POST',
+    url: '/app-api/mall/cart/create',
+    data,
+    json: 'json',
+  })
+}
+export function addGoodInCart(data) {
+  return http({
+    method: 'POST',
+    url: '/app-api/mall/cart/add',
+    data,
+    json: 'json',
+  })
+}
+
+export function delGoodInCart(data) {
+  return http({
+    method: 'POST',
+    url: '/app-api/mall/cart/del',
+    data,
+    json: 'json',
+  })
+}
+
+export function queryCart(data) {
+  return http({
+    method: 'POST',
+    url: '/app-api/mall/cart/query',
+    data,
+    json: 'json',
+  })
+}

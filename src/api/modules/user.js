@@ -20,7 +20,7 @@ export function logoutApi(data) {
 
 export function getUserInfo(data) {
   return http({
-    method: 'POST',
+    method: 'GET',
     url: '/app-api/member/user/get',
     data,
     json: 'form',

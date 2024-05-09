@@ -39,11 +39,52 @@ const useLogin = (from = 'login') => {
 
   const onGetPhoneNumber = (e) => {
     console.log(34, e.detail)
-    if (from === 'login') {
+    if (!e.detail.code) {
+      return
+    }
+    const phoneCode = e.detail.code // wx.getPhoneNumber 获取的 code, phoneCode
+
+    uni.showLoading({
+      title: '授权中...',
+      mask: true,
+    })
+    wx.login({
+      success(res) {
+        if (res.code) {
+          console.log(50, res)
+          //发起网络请求
+          const loginCode = res.code
+          // 进行调用
+          loginByWx({
+            phoneCode,
+            loginCode,
+          })
+            .then((res) => {
+              console.log(54, res.data)
+              // t设置token
+              uni.setStorageSync('token', `Bearer ` + res.data.accessToken)
+              uni.setStorageSync('userNo', res.data.userId)
+              uni.$u.toast('登录成功')
+              uni.hideLoading()
+              uni.navigateTo({
+                url: '/pages/plaza/index',
+              })
+            })
+            .catch((err) => {
+              uni.hideLoading()
+              console.log(60, err)
+            })
+        } else {
+          uni.hideLoading()
+          console.log('登录失败！' + res.errMsg)
+        }
+      },
+    })
+    /*if (from === 'login') {
       uni.navigateTo({
         url: `/pages/plaza/index`,
       })
-    }
+    }*/
   }
 
   return {

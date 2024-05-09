@@ -1,23 +1,18 @@
 <script setup>
   import { ref } from 'vue'
   import { getBoundInfo } from '@/utils'
+  import {
+    queryCart,
+    createCart,
+    addGoodInCart,
+    delGoodInCart,
+  } from '@/api/modules/mall'
+  import ccNumbox from '@/components/cc-number/cc-numbox.vue'
   const { boundTop } = getBoundInfo()
 
-  const list = ref([
-    'https://cdn.uviewui.com/uview/swiper/swiper3.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper2.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-  ])
+  const status = ref('loading') // 'loadmore' | 'loading' | 'nomore' = 'loadmore'
+
+  const list = ref([])
 
   const cartChecks = ref([])
   const isCheckAll = ref(false)
@@ -34,6 +29,41 @@
   const handelDel = (index) => {
     console.log(35, index)
   }
+  // ?1 获取购物车id
+  createCart({
+    userNo: uni.getStorageSync('userNo'),
+  }).then((res) => {
+    const { cartId } = JSON.parse(res.data)
+    // ?2 查询购物车
+    queryCart({
+      cartId: cartId,
+    })
+      .then(({ data }) => {
+        list.value = data.cartGoodsInfos
+        console.log(52, list.value)
+      })
+      .finally(() => {
+        status.value = 'nomore'
+      })
+  })
+
+  const handleNumChange = (num, index) => {
+    const params = {
+      cartId: list.value[index].cartId,
+      skuId: list.value[index].skuId,
+      goodsName: list.value[index].goodsName,
+      num: 1,
+    }
+    if (list.value[index].num > num) {
+      // 删除
+      console.log('删除')
+      delGoodInCart(params)
+    } else {
+      //增加
+      addGoodInCart(params)
+    }
+    list.value[index].num = num
+  }
 </script>
 <script>
   export default {
@@ -45,7 +75,7 @@
   <view class="p-shopping-cart">
     <u-navbar
       bgColor="#A26D37"
-      :border="none"
+      border="none"
       :autoBack="true"
       title="购物车"
       leftIconColor="#fff"
@@ -94,11 +124,18 @@
             </view>
             <view class="bottom">
               <text>¥{{ 999 }}</text>
-              <text></text>
+              <text>
+                <cc-numbox
+                  :value="i.num"
+                  maxNum="20"
+                  @change="handleNumChange($event, index)"
+                ></cc-numbox>
+              </text>
             </view>
           </div>
         </div>
       </u-checkbox-group>
+      <up-loadmore :status="status" />
     </scroll-view>
     <view class="cart-footer">
       <view class="add-cart">

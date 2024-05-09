@@ -51,7 +51,9 @@
   }
 
   const goCart = () => {
-    console.log('goCart')
+    uni.navigateTo({
+      url: `/pages/shopping-cart/index`,
+    })
   }
   const goDetail = (item) => {
     console.log('goDetail', item.spuId)

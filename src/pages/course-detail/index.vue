@@ -2,8 +2,7 @@
   import { getBoundInfo, getElRectAsync } from '@/utils/index.js'
   import { onMounted, reactive } from 'vue'
   import { onLoad } from '@dcloudio/uni-app'
-  import { getGoodDetail } from '@/api/modules/mall'
-  import { BASE_URL } from '@/config/config'
+  import { addGoodInCart, createCart, getGoodDetail } from '@/api/modules/mall'
 
   const { boundTop, boundHeight } = getBoundInfo()
 
@@ -37,11 +36,29 @@
     variables.curData = variables.data.skuList.find(
       (item) => item.goodsName === variables.curType,
     )
-    console.log(40, variables.curData)
   }
 
-  const handleCart = () => {}
+  const handleCart = () => {
+    // ?1 获取购物车id
+    createCart({
+      userNo: uni.getStorageSync('userNo'),
+    }).then((res) => {
+      const { cartId } = JSON.parse(res.data)
+      // ?2 添加物品到购物车
+      addGoodInCart({
+        cartId: cartId,
+        skuId: variables.curData.spuId,
+        goodsName: variables.curData.goodsName,
+        num: 1,
+      }).then((res) => {
+        uni.$u.toast('加入成功')
+        console.log(49, res)
+      })
+    })
+  }
   const handleBuyNow = () => {
+    console.log(45, variables.curData)
+
     uni.navigateTo({
       url: '/pages/shopping-cart/index',
     })

@@ -11,8 +11,10 @@
   })
 
   const getUserInfo = () => {
-    getUserInfoApi().then((res) => {
-      console.log(33, res)
+    getUserInfoApi().then(({ data }) => {
+      variables.avatar = data.avatar
+      variables.nickname = data.nickname
+      console.log(17, data.avatar)
     })
   }
 
@@ -40,6 +42,13 @@
       url: `/pages/mine-list/index?type=${type}`,
     })
   }
+  const openConsole = () => {
+    // const vConsole = new VConsole()
+    // 打开调试
+    uni.setEnableDebug({
+      enableDebug: true,
+    })
+  }
 </script>
 <template>
   <tab-bar></tab-bar>
@@ -51,13 +60,11 @@
         :style="{ backgroundImage: `url(${variables.bgUrl})` }"
       >
         <view class="avatar-row">
-          <up-avatar
-            :size="60"
-            src="https://cdn.uviewui.com/uview/swiper/swiper3.png"
-          ></up-avatar>
+          <!--          <img class="user_avatar" :src="variables.avatar" alt="" />-->
+          <up-avatar :size="60" :src="variables.avatar"></up-avatar>
           <view class="btn" @click="goEditProfile">编辑资料</view>
         </view>
-        <view class="username">{{ variables.username }}</view>
+        <view class="username">{{ variables.nickname }}</view>
         <view class="follow-and-fans">
           <view @click="goMineList('follow')">
             <text>0</text>
@@ -68,7 +75,9 @@
             <text>粉丝</text>
           </view>
         </view>
-        <view class="signature"> 这个人很懒,什么都没有留下。 </view>
+        <view class="signature" @click="openConsole()">
+          这个人很懒,什么都没有留下。
+        </view>
       </view>
       <!--?内容-->
       <view class="mine-tabs">
@@ -123,6 +132,12 @@
           align-items: center;
           justify-content: space-between;
           display: flex;
+          .user_avatar {
+            width: 68rpx;
+            height: 68rpx;
+            border-radius: 50%;
+            margin-right: 12rpx;
+          }
           .btn {
             @include vertical-center;
             width: 140rpx;

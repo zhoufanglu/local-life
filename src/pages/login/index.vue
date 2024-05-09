@@ -6,7 +6,7 @@
 <template>
   <view class="p-login-page">
     <button open-type="getPhoneNumber" @getphonenumber="onGetPhoneNumber"
-      >唤起授权</button
+      >授权手机</button
     >
   </view>
 </template>
