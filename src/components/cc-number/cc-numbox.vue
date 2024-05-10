@@ -22,7 +22,9 @@
         num: 1,
       }
     },
-    created() {},
+    created() {
+      console.log('xx')
+    },
 
     methods: {
       minus() {
@@ -83,6 +85,7 @@
   .ccMyNum {
     clear: both;
     margin: 0 30rpx;
+    //border: solid 1px red;
   }
 
   .numBox {

@@ -1,11 +1,14 @@
 <script setup>
-  import { ref } from 'vue'
+  import { ref, computed } from 'vue'
   import { getBoundInfo } from '@/utils'
   import {
     queryCart,
     createCart,
     addGoodInCart,
     delGoodInCart,
+    createOrderBySku,
+    createOrderByCartId,
+    payApi,
   } from '@/api/modules/mall'
   import ccNumbox from '@/components/cc-number/cc-numbox.vue'
   const { boundTop } = getBoundInfo()
@@ -17,7 +20,41 @@
   const cartChecks = ref([])
   const isCheckAll = ref(false)
 
-  const handleBuy = () => {}
+  const allPrice = computed(() => {
+    return list.value
+      .filter((i, index) => cartChecks.value.includes(index))
+      .reduce((pre, cur) => {
+        return pre + cur.price * cur.num
+      }, 0)
+  })
+  const btnLoading = ref(false)
+  const handleBuy = () => {
+    if (allPrice.value === 0) {
+      uni.$u.toast('请选择商品')
+    } else {
+      btnLoading.value = true
+      createOrderByCartId({
+        userNo: uni.getStorageSync('userNo'),
+        cartId: cartId.value,
+        skuIds: cartChecks.value.map((i) => list.value[i].skuId),
+      })
+        .then(({ data }) => {
+          const { orderNo } = JSON.parse(data)
+          console.log(orderNo)
+          payApi({
+            orderNo,
+            userNo: uni.getStorageSync('userNo'),
+            payMode: '010',
+          }).then((res) => {
+            btnLoading.value = false
+            console.log(res)
+          })
+        })
+        .finally(() => {
+          // btnLoading.value = false
+        })
+    }
+  }
 
   const handleCheckAll = (val) => {
     if (val) {
@@ -26,26 +63,28 @@
       cartChecks.value = []
     }
   }
-  const handelDel = (index) => {
-    console.log(35, index)
-  }
   // ?1 获取购物车id
-  createCart({
-    userNo: uni.getStorageSync('userNo'),
-  }).then((res) => {
-    const { cartId } = JSON.parse(res.data)
-    // ?2 查询购物车
-    queryCart({
-      cartId: cartId,
+  const cartId = ref(-1)
+  const getGoodsInCart = () => {
+    createCart({
+      userNo: uni.getStorageSync('userNo'),
+    }).then((res) => {
+      cartId.value = JSON.parse(res.data).cartId
+      // ?2 查询购物车
+      queryCart({
+        cartId: cartId.value,
+      })
+        .then(({ data }) => {
+          list.value = data.cartGoodsInfos
+          console.log(52, list.value)
+        })
+        .finally(() => {
+          status.value = 'nomore'
+        })
     })
-      .then(({ data }) => {
-        list.value = data.cartGoodsInfos
-        console.log(52, list.value)
-      })
-      .finally(() => {
-        status.value = 'nomore'
-      })
-  })
+  }
+
+  getGoodsInCart()
 
   const handleNumChange = (num, index) => {
     const params = {
@@ -63,6 +102,17 @@
       addGoodInCart(params)
     }
     list.value[index].num = num
+  }
+
+  const handelDel = (i, index) => {
+    const params = {
+      cartId: i.cartId,
+      skuId: i.skuId,
+      goodsName: i.goodsName,
+    }
+    delGoodInCart(params).then((res) => {
+      getGoodsInCart()
+    })
   }
 </script>
 <script>
@@ -99,38 +149,34 @@
               activeColor="#A26D37"
               shape="circle"
             ></u-checkbox>
-            <img
-              class="pic"
-              src="https://cdn.uviewui.com/uview/swiper/swiper2.png"
-              mode="widthFix"
-            />
+            <img class="pic" :src="i.mainImg" mode="widthFix" />
           </view>
 
           <div class="info">
             <view class="top">
               <view class="title">
-                <text>爆炸积极{{ index }}</text>
+                <text>{{ i.goodsName }}</text>
                 <u-icon
                   name="trash"
                   size="28"
                   color="#A26D37"
-                  @click="handelDel(index)"
+                  @click="handelDel(i, index)"
                 ></u-icon>
               </view>
               <view class="insert-info">
-                <text>已售: {{ 100 }}件</text>
-                <text>版本: 高级版本</text>
+                <text>已售: {{ i.saleNum }} 件</text>
+                <text>版本: {{ i.spuName }}</text>
               </view>
             </view>
             <view class="bottom">
-              <text>¥{{ 999 }}</text>
-              <text>
+              <text>¥{{ i.price }}</text>
+              <view>
                 <cc-numbox
                   :value="i.num"
                   maxNum="20"
                   @change="handleNumChange($event, index)"
                 ></cc-numbox>
-              </text>
+              </view>
             </view>
           </div>
         </div>
@@ -148,8 +194,16 @@
             label="全选"
           ></u-checkbox>
         </u-checkbox-group>
+        <text class="price" v-if="allPrice">¥ {{ allPrice }}</text>
       </view>
-      <view class="btn" @click="handleBuy" :isCheckAll="isCheckAll">结算</view>
+      <view
+        v-if="!btnLoading"
+        class="btn"
+        @click="handleBuy"
+        :isCheckAll="isCheckAll"
+        >结算</view
+      >
+      <up-loading-icon v-else></up-loading-icon>
     </view>
   </view>
 </template>
@@ -265,7 +319,7 @@
     .cart-footer {
       // border: solid 1px red;
       background: white;
-      height: 98rpx;
+      height: 120rpx;
       position: fixed;
       bottom: 0;
       @include vertical-center;
@@ -273,6 +327,16 @@
       width: 100%;
       padding-left: 40rpx;
       box-sizing: border-box;
+      .add-cart {
+        @include vertical-center;
+        justify-content: space-between;
+        width: calc(100% - 200rpx);
+        box-sizing: border-box;
+        padding-right: 40rpx;
+        .price {
+          font-size: 40rpx;
+        }
+      }
       .btn {
         height: 100%;
         width: 200rpx;

@@ -36,6 +36,7 @@
     variables.curData = variables.data.skuList.find(
       (item) => item.goodsName === variables.curType,
     )
+    console.log(39, variables.curData)
   }
 
   const handleCart = () => {
@@ -47,7 +48,7 @@
       // ?2 添加物品到购物车
       addGoodInCart({
         cartId: cartId,
-        skuId: variables.curData.spuId,
+        skuId: variables.curData.skuId,
         goodsName: variables.curData.goodsName,
         num: 1,
       }).then((res) => {

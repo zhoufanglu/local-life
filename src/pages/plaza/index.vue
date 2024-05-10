@@ -8,7 +8,7 @@
     <!--?主体-->
     <div
       class="inner-content"
-      :style="{ height: `calc(100% - ${statusBarHeight * 2 + 204 + 100}rpx)` }"
+      :style="{ height: `calc(100% - ${statusBarHeight * 2 + 204 + 116}rpx)` }"
     >
       <!--关注-->
       <!--      <waterFallList type="follow" v-if="curPanel === 'follow'"></waterFallList>-->

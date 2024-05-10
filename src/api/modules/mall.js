@@ -74,3 +74,49 @@ export function queryCart(data) {
     json: 'json',
   })
 }
+
+/**********************订单***********************/
+export function getOrders(data) {
+  return http({
+    method: 'POST',
+    url: '/app-api/mall/order/list',
+    data,
+    json: 'json',
+  })
+}
+export function getOrderDetail(data) {
+  return http({
+    method: 'POST',
+    url: '/app-api/mall/order/detail',
+    data,
+    json: 'json',
+  })
+}
+
+export function createOrderBySku(data) {
+  return http({
+    method: 'POST',
+    url: '/app-api/mall/order/createBySku',
+    data,
+    json: 'json',
+  })
+}
+
+export function createOrderByCartId(data) {
+  return http({
+    method: 'POST',
+    url: '/app-api/mall/order/createByCartId',
+    data,
+    json: 'json',
+  })
+}
+
+/**********************支付***********************/
+export function payApi(data) {
+  return http({
+    method: 'POST',
+    url: '/app-api/pay/trans',
+    data,
+    json: 'json',
+  })
+}

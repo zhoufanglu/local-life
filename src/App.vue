@@ -2,8 +2,8 @@
   export default {
     onLaunch: function () {
       // test
-      uni.setStorageSync('token', 'Bearer test1')
-      uni.setStorageSync('userNo', '123')
+      /*uni.setStorageSync('token', 'Bearer test1')
+      uni.setStorageSync('userNo', '123')*/
       // console.log('App Launch')
       // uni.hideTabBar()
     },

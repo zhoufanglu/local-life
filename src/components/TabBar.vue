@@ -106,9 +106,18 @@
 </template>
 
 <style lang="scss">
+  .tab-bar {
+  }
+  .u-tabbar__content__item-wrapper {
+    // border: solid 1px red;
+    // box-sizing: border-box;
+    padding-bottom: 16rpx;
+    // padding-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS 设备 */
+    //padding-bottom: env(safe-area-inset-bottom); /* 兼容 iPhone X 及以上设备 */
+  }
   .u-page__item__slot-icon {
     // border: solid 1px red;
-    width: 48rpx;
-    height: 48rpx;
+    width: 40rpx;
+    height: 40rpx;
   }
 </style>
