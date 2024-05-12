@@ -1,23 +1,16 @@
 <script setup>
   import { ref } from 'vue'
   import { getBoundInfo } from '@/utils'
+  import { onLoad } from '@dcloudio/uni-app'
+  import { getFoodDetail } from '@/api/modules/social'
   const { boundTop } = getBoundInfo()
-
-  const list = ref([
-    'https://cdn.uviewui.com/uview/swiper/swiper3.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper2.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-  ])
+  const foodsMenus = ref([])
+  onLoad((options) => {
+    const id = +options?.id
+    getFoodDetail({ id }).then(({ data }) => {
+      foodsMenus.value = data.foodItemDOPageResult.list
+    })
+  })
 </script>
 <script>
   export default {
@@ -34,17 +27,13 @@
         marginTop: boundTop + 44 + 'px',
       }"
     >
-      <div class="item" v-for="(i, index) in list" :key="i">
-        <img
-          class="pic"
-          src="https://cdn.uviewui.com/uview/swiper/swiper2.png"
-          mode="widthFix"
-        />
+      <div class="item" v-for="i in foodsMenus" :key="i">
+        <img class="pic" :src="i.coverImage" mode="widthFix" />
         <div class="info">
-          <text class="title">爆炸积极{{ index }}</text>
+          <text class="title">{{ i.title }}</text>
           <view class="bottom">
-            <text>周一-周五</text>
-            <text>¥ 24</text>
+            <text>{{ i.foodOpenTime }}</text>
+            <text>¥ {{ i.price }}</text>
           </view>
         </div>
       </div>

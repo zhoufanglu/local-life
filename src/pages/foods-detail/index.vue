@@ -1,22 +1,22 @@
 <script setup>
   import comment from '@/components/foods-detail/Comment.vue'
   import { getBoundInfo, getElRectAsync } from '@/utils/index.js'
-  import { onMounted, reactive } from 'vue'
+  import { onMounted, reactive, ref } from 'vue'
+  import { onLoad } from '@dcloudio/uni-app'
+  import { getFoodDetail } from '@/api/modules/social'
 
   const { boundTop } = getBoundInfo()
+  const foodId = ref(-1)
+  onLoad((options) => {
+    const id = +options?.id
+    foodId.value = id
+    getFoodDetail({ id }).then(({ data }) => {
+      variables.data = data
+    })
+  })
 
   const variables = reactive({
-    data: {
-      list: [
-        'https://cdn.uviewui.com/uview/swiper/swiper3.png',
-        'https://cdn.uviewui.com/uview/swiper/swiper2.png',
-        'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-      ],
-      title: '大萨达撒迪士',
-      content:
-        '威少：扣篮王威少的暴力扣篮不仅让球迷们大呼过瘾，更是在全联盟都有所名气。他拥有出色的身威少：扣篮王威少的暴力扣篮不仅让球迷们大呼过瘾，更是在全联盟都有所名气。他拥有出色的身体素质和爆发力，总能在比赛中奉献出令人震体素质和爆发力，总能在比赛中奉献出令人震威少：扣篮王威少的暴力扣篮不仅让球迷们大呼过瘾，更是在全联盟都有所名气。他拥有出色的身威少：扣篮王威少的暴力扣篮不仅让球迷们大呼过瘾，更是在全联盟都有所名气。他拥有出色的身体素质和爆发力，总能在比赛中奉献出令人震体素质和爆发力，总能在比赛中奉献出令人震',
-      date: '2021-08-12',
-    },
+    data: {},
   })
 
   onMounted(() => {})
@@ -29,7 +29,13 @@
 
   const goAllGoods = () => {
     uni.navigateTo({
-      url: '/pages/all-foods/index',
+      url: `/pages/all-foods/index?id=${foodId.value}`,
+    })
+  }
+
+  const refreshData = () => {
+    getFoodDetail({ id: foodId.value }).then(({ data }) => {
+      variables.data = data
     })
   }
 </script>
@@ -65,20 +71,25 @@
       <view class="foods-panel">
         <text class="title">{{ variables.data.title }}</text>
         <view class="info">
-          <view>中餐{{ '  ' }} 营业时间: 15:55:32</view>
+          <view
+            >{{ variables.data.foodCategory }}{{ '  ' }} 营业时间:
+            {{ variables.data.foodOpenTime }}</view
+          >
           <view>
             <view>
               <text>地址:{{ '  ' }} </text>
-              <text class="address"
-                >撒旦撒大大大撒大声地阿是多爽啊 撒啊迪士</text
-              >
+              <text class="address">{{ variables.data.foodAddress }}</text>
             </view>
-            <text>(1条评论)</text>
+            <text
+              >({{
+                variables.data?.commentRespVOPageResult?.total
+              }}条评论)</text
+            >
           </view>
         </view>
         <view class="position">
           <img src="@/static/detail/position.png" alt="" />
-          <text>12.3Km 洛杉矶快船主场篮球馆3232</text>
+          <text>{{ variables.data.foodAddress }}</text>
         </view>
       </view>
     </view>
@@ -91,24 +102,27 @@
           <u-icon color="#666" size="18" name="arrow-right-double"></u-icon>
         </view>
       </view>
-      <div class="item" v-for="i in variables.data.list" :key="i">
-        <img
-          class="pic"
-          src="https://cdn.uviewui.com/uview/swiper/swiper2.png"
-          mode="widthFix"
-        />
+      <div
+        class="item"
+        v-for="i in variables?.data?.foodItemDOPageResult?.list"
+        :key="i"
+      >
+        <img class="pic" :src="i.coverImage" mode="widthFix" />
         <div class="info">
-          <text class="title">爆炸积极</text>
+          <text class="title">{{ i.title }}</text>
           <view class="bottom">
-            <text>周一-周五</text>
-            <text>¥ 24</text>
+            <text>{{ i.foodOpenTime }}</text>
+            <text>¥ {{ i.price }}</text>
           </view>
         </div>
       </div>
     </view>
     <!--?评论-->
     <view class="comment-panel">
-      <comment></comment>
+      <comment
+        :data="variables.data.commentRespVOPageResult"
+        @refreshData="refreshData"
+      ></comment>
     </view>
   </view>
 </template>

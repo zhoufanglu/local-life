@@ -68,3 +68,31 @@ export function getAreaTree(data) {
     json: 'json',
   })
 }
+/**********************美食***********************/
+export function getFoodsList(data) {
+  return http({
+    method: 'GET',
+    url: '/app-api/social/food/applist',
+    data,
+    json: 'json',
+  })
+}
+
+export function getFoodDetail(data) {
+  return http({
+    method: 'GET',
+    url: '/app-api/social/food/appdetail',
+    data,
+    json: 'json',
+  })
+}
+
+// 评论
+export function creatComment(data) {
+  return http({
+    method: 'POST',
+    url: '/app-api/social/comment/create',
+    data,
+    json: 'json',
+  })
+}

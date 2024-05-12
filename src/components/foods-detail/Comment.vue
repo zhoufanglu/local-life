@@ -1,15 +1,20 @@
 <script setup>
-  import { ref } from 'vue'
-  const comments = ref([
-    {
-      id: 120, // 评论id
-      user_name: 'ikun', // 用户名
-      user_avatar:
-        'https://pic1.zhimg.com/80/v2-a79071a705f55c5d88f6c74e6111fe84_720w.webp', // 评论者头像地址
-      user_content: '唱,跳,rap,篮球', // 评论内容
-      create_time: '2024-01-01 09:16', // 创建时间
+  import { ref, watch } from 'vue'
+  import { creatComment } from '@/api/modules/social'
+  const comments = ref([])
+  const props = defineProps(['data'])
+
+  const total = ref('')
+
+  watch(
+    () => props.data,
+    (newVal) => {
+      total.value = newVal.total
+      // 过滤出第一层评论， 美食只有一层评论
+      comments.value = newVal.list.filter((i) => i.parentId === 0)
     },
-  ])
+  )
+
   const loadMore = () => {
     console.log('loadmore')
     comments.value.push(comments.value[0])
@@ -34,10 +39,24 @@
   }
 
   // 发送评论
+  const emit = defineEmits(['refreshData'])
   function sendClick() {
-    console.log('submit')
-    cPopupRef.value.close()
-    comments.value.push(comments.value[0])
+    creatComment({
+      content: commentValue.value,
+      parentId: 0,
+      trendsId: 1,
+      foodId: props.data.id,
+      userId: uni.getStorageSync('userNo'),
+    }).then((res) => {
+      uni.showToast({
+        title: '评论成功',
+        icon: 'success',
+        duration: 2000,
+      })
+      cPopupRef.value.close()
+      emit('refreshData')
+      // comments.value.push(comments.value[0])
+    })
   }
 </script>
 <script>
@@ -49,33 +68,33 @@
   <view class="foods-comment">
     <view class="title-row">
       <text>评论</text>
-      <text>（共 123 条评论）</text>
+      <text>（共 {{ total }} 条评论）</text>
     </view>
     <view class="item" v-for="(i, index) in comments" :key="index">
       <view class="top-row">
         <view>
           <u-avatar
             class="avatar"
-            :src="i.user_avatar"
+            :src="i.avatar"
             :size="38"
             :border="false"
           ></u-avatar>
-          <text>{{ i.user_name }}</text>
+          <text>{{ i.nickname }}</text>
         </view>
-        <view>{{ i.create_time }}</view>
+        <view>{{ i.createTime }}</view>
       </view>
-      <view class="content">{{ i.user_content }}</view>
+      <view class="content">{{ i.content }}</view>
     </view>
-    <u-loadmore
+    <!--    <u-loadmore
       status="loadmore"
       @loadmore="loadMore"
       @click="loadMore"
       :marginTop="40"
-      loadmoreText="展开更多 ∨  "
+      loadmoreText="展开更多 ↓  "
       color="#333"
       lineColor="#EEE"
       line
-    />
+    />-->
     <img
       class="btn"
       src="@/static/detail/commentBtn.png"
@@ -217,7 +236,7 @@
         border-radius: 20rpx;
         font-size: 28rpx;
         color: white;
-        background-color: #5386ed;
+        background-color: $theme;
         margin-right: 20rpx;
         margin-left: 10rpx;
       }

@@ -454,7 +454,7 @@
         border-radius: 20rpx;
         font-size: 28rpx;
         color: white;
-        background-color: #5386ed;
+        background-color: $theme;
         margin-right: 20rpx;
       }
     }

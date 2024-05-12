@@ -3,9 +3,9 @@
   import { data } from '@/components/plaza/WaterFallList/data.js'
   import { sleep } from '@/utils'
   import loadingCom from '@/components/loading.vue'
-  import { getTrends } from '@/api/modules/social'
+  import { getTrends, getFoodsList } from '@/api/modules/social'
   import { plazaTypes2 } from '@/enums'
-  const foods = ref([...data])
+  const foods = ref([])
   const variables = reactive({
     pageNo: 1,
     pageSize: 10,
@@ -13,14 +13,19 @@
   })
 
   const getFoods = () => {
-    getTrends({
+    getFoodsList({
       pageNo: variables.pageNo,
       pageSize: variables.pageSize,
-      type: 2,
     })
       .then(({ data }) => {
-        console.log(22, data)
-        variables.status = data.list.length ? 'loadmore' : 'nomore'
+        foods.value = data.list
+        /*foods.value = foods.value.forEach((i) => {
+          /!*console.log(22, i.images)
+          console.log(23, JSON.parse(i.images))*!/
+          //  i.images = JSON.parse(i.images)
+        })*/
+        console.log(25, foods.value)
+        variables.status = data.list.length === 10 ? 'loadmore' : 'nomore'
       })
       .finally(() => {
         // state.status = 'loading'
@@ -35,7 +40,7 @@
   }
   const goFoodsDetail = (food) => {
     uni.navigateTo({
-      url: `/pages/foods-detail/index?id=${22}`,
+      url: `/pages/foods-detail/index?id=${food.id}`,
     })
   }
 </script>
@@ -61,16 +66,16 @@
         <up-image
           class="cover"
           :show-loading="true"
-          :src="food.imgUrl"
+          :src="food.coverImage"
           width="248rpx"
           height="248rpx"
           radius="24rpx"
         ></up-image>
         <view class="info">
           <view class="top">
-            <view class="title">Mina Park餐厅</view>
-            <text> 美式简餐 WENTWORTH STREET </text>
-            <text>营业时间：14:00—22:00</text>
+            <view class="title">{{ food.title }}</view>
+            <text> {{ food.content }} </text>
+            <text>营业时间：{{ food.foodOpenTime }}</text>
           </view>
           <view class="img-list">
             <up-image
