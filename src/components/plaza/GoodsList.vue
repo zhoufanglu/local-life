@@ -27,9 +27,8 @@
       type: plazaTypes2[props.type],
     })
       .then(({ data }) => {
-        // console.log(22, data.list)
+        // console.log(22, data)
         goods.value.push(...data.list)
-        console.log(32, goods.value)
         variables.status = data.list.length >= 10 ? 'loadmore' : 'nomore'
       })
       .finally(() => {
@@ -156,7 +155,7 @@
         class="item"
         v-for="(i, index) in goods"
         :key="index"
-        @click="goDetail"
+        @click="goDetail(i)"
       >
         <up-image
           class="cover"
@@ -279,6 +278,7 @@
               width: 150rpx;
               text-align: right;
               text {
+                white-space: nowrap;
                 font-size: 30rpx;
                 color: #a26d37;
               }

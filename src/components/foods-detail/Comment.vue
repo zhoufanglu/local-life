@@ -2,7 +2,7 @@
   import { ref, watch } from 'vue'
   import { creatComment } from '@/api/modules/social'
   const comments = ref([])
-  const props = defineProps(['data'])
+  const props = defineProps(['data', 'trendsId'])
 
   const total = ref('')
 
@@ -44,7 +44,7 @@
     creatComment({
       content: commentValue.value,
       parentId: 0,
-      trendsId: 1,
+      trendsId: props.trendsId,
       foodId: props.data.id,
       userId: uni.getStorageSync('userNo'),
     }).then((res) => {

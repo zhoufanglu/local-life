@@ -19,12 +19,6 @@
     })
       .then(({ data }) => {
         foods.value = data.list
-        /*foods.value = foods.value.forEach((i) => {
-          /!*console.log(22, i.images)
-          console.log(23, JSON.parse(i.images))*!/
-          //  i.images = JSON.parse(i.images)
-        })*/
-        console.log(25, foods.value)
         variables.status = data.list.length === 10 ? 'loadmore' : 'nomore'
       })
       .finally(() => {
@@ -81,7 +75,8 @@
             <up-image
               class="cover"
               :show-loading="true"
-              :src="food.imgUrl"
+              v-if="food.imageList[0]"
+              :src="food.imageList[0]"
               width="106rpx"
               height="106rpx"
               radius="20rpx"
@@ -89,15 +84,17 @@
             <up-image
               class="cover"
               :show-loading="true"
-              :src="food.imgUrl"
+              v-if="food.imageList[1]"
+              :src="food.imageList[1]"
               width="106rpx"
               height="106rpx"
               radius="20rpx"
             ></up-image>
             <up-image
               class="cover"
+              v-if="food.imageList[2]"
+              :src="food.imageList[2]"
               :show-loading="true"
-              :src="food.imgUrl"
               width="106rpx"
               height="106rpx"
               radius="20rpx"
@@ -138,6 +135,7 @@
           justify-content: space-between;
           height: 248rpx;
           margin-left: 24rpx;
+          width: 100%;
           .top {
             display: flex;
             flex-direction: column;
@@ -156,8 +154,10 @@
             }
           }
           .img-list {
+            // border: solid 1px red;
+            width: 100%;
             display: flex;
-            justify-content: space-between;
+            justify-content: space-around;
           }
         }
       }

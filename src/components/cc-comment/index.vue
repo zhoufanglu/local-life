@@ -103,6 +103,10 @@
       type: Object,
       default: () => {},
     },
+    commentData: {
+      type: Object,
+      default: () => {},
+    },
     /** 评论列表
      *    id: number // 评论id
      *    parent_id: number // 父级评论id
@@ -147,10 +151,20 @@
     (newVal) => {
       if (newVal.length !== dataList.value.length) {
         let temp = props.tableData
-        dataList.value = treeTransForm(temp)
+        /*dataList.value = treeTransForm(temp)
+        console.log(155, dataList.value)*/
       }
     },
     { deep: true, immediate: true },
+  )
+
+  watch(
+    () => props.commentData,
+    (newVal) => {
+      const data = treeTransForm2(newVal)
+      console.log(166, data)
+      dataList.value = data
+    },
   )
 
   // 数据转换
@@ -164,6 +178,28 @@
     })
     newData.forEach((item) => {
       let parent = map[item.parent_id]
+      if (parent) {
+        ;(parent.children || (parent.children = [])).push(item) // 所有回复
+        if (parent.children.length === 1) {
+          ;(parent.childrenShow = []).push(item) // 显示的回复
+        }
+      } else {
+        result.push(item)
+      }
+    })
+    return result
+  }
+
+  function treeTransForm2(data) {
+    let newData = JSON.parse(JSON.stringify(data))
+    let result = []
+    let map = {}
+    newData.forEach((item, i) => {
+      item.owner = item.userId === uni.getStorageSync('userNo') // 是否为所有者 所有者可以进行删除 不能回复
+      map[item.userId] = item
+    })
+    newData.forEach((item) => {
+      let parent = map[item.parentId]
       if (parent) {
         ;(parent.children || (parent.children = [])).push(item) // 所有回复
         if (parent.children.length === 1) {

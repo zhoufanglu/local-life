@@ -35,17 +35,14 @@
   const getTrendDetail = (type, row) => {
     getTrendDetailApi({ id: row.id }).then((res) => {
       variables.data = res.data
-      console.log(39, variables.data)
+      console.log(39, variables.data.commentRespVOPageResult)
       console.log(40, variables.data.isFan)
     })
   }
 
   onLoad((options) => {
-    console.log(40, options)
     const type = options.type
     const row = JSON.parse(options.row)
-    console.log(34, type)
-    console.log(35, row)
     getTrendDetail(type, row)
   })
   onMounted(() => {
@@ -197,6 +194,9 @@
       delta: 1,
     })
   }
+  const handleFocus = () => {
+    console.log('开启评论弹窗')
+  }
 </script>
 <script>
   export default {
@@ -239,7 +239,7 @@
         height: `calc(100% - ${variables.topRowHeight}px)`,
       }"
     >
-      <u-swiper
+      <!--      <u-swiper
         v-if="
           variables.data.imageList.length !== 0 && variables.data.imageList[0]
         "
@@ -252,7 +252,7 @@
         circular
       ></u-swiper>
       <view class="article-panel">
-        <!--?价格 兼职、租房、转卖、才有-->
+        &lt;!&ndash;?价格 兼职、租房、转卖、才有&ndash;&gt;
         <view
           class="price"
           v-if="['partTimeJob', 'tenement', 'resell'].includes(props.type)"
@@ -262,18 +262,19 @@
         <text class="title">{{ variables.data.title }}</text>
         <text class="article-content">{{ variables.data.content }}</text>
         <text class="date">{{ variables.data.date }}</text>
-        <!--        <view class="position">
+        &lt;!&ndash;        <view class="position">
           <img src="@/static/detail/position.png" alt="" />
           <text>12.3Km 洛杉矶快船主场篮球馆3232</text>
-        </view>-->
+        </view>&ndash;&gt;
       </view>
-      <u-divider style="width: 95%; margin: 0 auto"></u-divider>
+      <u-divider style="width: 95%; margin: 0 auto"></u-divider>-->
       <!--?评论-->
       <CComment
         ref="ccRef"
         v-model:userInfo="userInfo"
         v-model:tableData="tableData"
         v-model:tableTotal="tableTotal"
+        :comment-data="variables.data?.commentRespVOPageResult?.list"
         @likeFun="likeFun"
         @replyFun="replyFun"
         @deleteFun="deleteFun"
@@ -282,6 +283,7 @@
       <view class="fix-comment">
         <u-search
           searchIcon=""
+          @focus="handleFocus"
           :showAction="false"
           placeholder="说点什么"
           @tap="openComment"

@@ -62,7 +62,7 @@
       <u-swiper
         height="370rpx"
         class="detail-swiper"
-        :list="variables.data.list"
+        :list="variables.data.imageList"
         imgMode=""
         indicator
         indicatorMode="line"
@@ -122,6 +122,7 @@
       <comment
         :data="variables.data.commentRespVOPageResult"
         @refreshData="refreshData"
+        :trendsId="variables.data.id"
       ></comment>
     </view>
   </view>
