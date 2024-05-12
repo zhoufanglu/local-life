@@ -26,3 +26,12 @@ export function getUserInfo(data) {
     json: 'form',
   })
 }
+
+export function getFansAndFollow(data) {
+  return http({
+    method: 'GET',
+    url: '/app-api/social/fans/page',
+    data,
+    json: 'form',
+  })
+}

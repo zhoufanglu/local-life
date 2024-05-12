@@ -3,25 +3,51 @@
   import GoodsList from '@/components/mine/GoodsList.vue'
   import OrderList from '@/components/mine/OrderList.vue'
   import { reactive, ref } from 'vue'
-  import { getUserInfo as getUserInfoApi } from '@/api/modules/user'
+  import {
+    getUserInfo as getUserInfoApi,
+    getFansAndFollow as getFansAndFollowApi,
+  } from '@/api/modules/user'
   import { createCart, getOrders } from '@/api/modules/mall'
   const variables = reactive({
     bgUrl: 'https://cdn.uviewui.com/uview/swiper/swiper3.png',
     gender: '男',
     username: '张三',
+    mark: '这个人很懒，什么都没留下',
+    fansList: [],
+    followList: [],
   })
   // ?获取用户信息
   const getUserInfo = () => {
     getUserInfoApi().then(({ data }) => {
       variables.avatar = data.avatar
       variables.nickname = data.nickname
-      variables.bgUrl = '/static/mine/bg.jpeg'
-      console.log(17, data.avatar)
+      variables.bgUrl = data.background || '/static/mine/bg.jpeg'
+      variables.mark = data.mark || "'这个人很懒，什么都没留下'"
     })
   }
+  // ?获得粉丝&关注 0=粉丝  1=关注
+  const getFansAndFollow = () => {
+    const params = {
+      pageNo: 1,
+      pageSize: 100,
+    }
+    getFansAndFollowApi({
+      ...params,
+      type: 0,
+    }).then(({ data }) => {
+      variables.fansList = data.list
+    })
+    getFansAndFollowApi({
+      ...params,
+      type: 1,
+    }).then(({ data }) => {
+      variables.followList = data.list
+    })
+  }
+
   // ?获取订单信息
   const orders = ref([])
-  createCart({
+  /*createCart({
     userNo: uni.getStorageSync('userNo'),
   }).then((res) => {
     const cartId = JSON.parse(res.data).cartId
@@ -31,12 +57,17 @@
     }).then(({ data }) => {
       orders.value = data.list
     })
-  })
+  })*/
 
-  getUserInfo()
+  // ?load
+  const load = () => {
+    getUserInfo()
+    getFansAndFollow()
+  }
+  load()
 
   const tabs = reactive({
-    current: 2,
+    current: 0,
     list: [
       { name: '动态', value: 'dynamicState', index: 0 },
       { name: '点赞', value: 'like', index: 1 },
@@ -82,16 +113,16 @@
         <view class="username">{{ variables.nickname }}</view>
         <view class="follow-and-fans">
           <view @click="goMineList('follow')">
-            <text>0</text>
+            <text>{{ variables.followList.length }}</text>
             <text>关注</text>
           </view>
           <view @click="goMineList('fans')">
-            <text>0</text>
+            <text>{{ variables.fansList.length }}</text>
             <text>粉丝</text>
           </view>
         </view>
         <view class="signature" @click="openConsole()">
-          这个人很懒,什么都没有留下。
+          {{ variables.mark }}
         </view>
       </view>
       <!--?内容-->

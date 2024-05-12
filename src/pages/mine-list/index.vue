@@ -3,20 +3,29 @@
   import { ref } from 'vue'
   import { getBoundInfo } from '@/utils'
   import { onLoad } from '@dcloudio/uni-app'
+  import { getFansAndFollow as getFansAndFollowApi } from '@/api/modules/user'
   const { boundTop } = getBoundInfo()
 
-  const list = ref([
-    'https://cdn.uviewui.com/uview/swiper/swiper3.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper2.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-  ])
+  const list = ref([])
 
   let curType = ref('follow') // follow: 关注列表, fans: 粉丝列表
+
+  const getFansAndFollow = () => {
+    const params = {
+      pageNo: 1,
+      pageSize: 100,
+    }
+    getFansAndFollowApi({
+      ...params,
+      type: curType.value === 'follow' ? 1 : 0,
+    }).then(({ data }) => {
+      list.value = data.list
+    })
+  }
+
   onLoad((options) => {
     curType.value = options.type || 'follow'
+    getFansAndFollow()
   })
 
   const goUserDetail = () => {
@@ -55,11 +64,11 @@
         <view class="pic-left" @click="goUserDetail">
           <u-avatar
             class="avatar"
-            :src="item"
+            :src="item.avatar"
             :size="50"
             :border="false"
           ></u-avatar>
-          <text>沃尔什</text>
+          <text>{{ item.nickname }}</text>
         </view>
         <view class="right">
           <view class="followed" v-if="curType === 'follow'">已关注</view>
