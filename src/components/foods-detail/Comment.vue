@@ -1,6 +1,6 @@
 <script setup>
   import { ref, watch } from 'vue'
-  import { creatComment } from '@/api/modules/social'
+  import { createComment } from '@/api/modules/social'
   const comments = ref([])
   const props = defineProps(['data', 'trendsId'])
 
@@ -41,7 +41,7 @@
   // 发送评论
   const emit = defineEmits(['refreshData'])
   function sendClick() {
-    creatComment({
+    createComment({
       content: commentValue.value,
       parentId: 0,
       trendsId: props.trendsId,

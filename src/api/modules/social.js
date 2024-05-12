@@ -88,7 +88,7 @@ export function getFoodDetail(data) {
 }
 
 // 评论
-export function creatComment(data) {
+export function createComment(data) {
   return http({
     method: 'POST',
     url: '/app-api/social/comment/create',

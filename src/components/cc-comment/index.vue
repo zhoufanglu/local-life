@@ -41,20 +41,25 @@
   <view class="empty_box" v-else>
     <uni-icons type="chatboxes" size="36" color="#c0c0c0"></uni-icons>
     <view>
-      <span class="txt"> 这里是一片荒草地, </span>
-      <span class="txt click" @click="() => newCommentFun()">说点什么...</span>
+      <span class="txt"> 暂无评论 </span>
+      <!--      <span class="txt click" @click="() => newCommentFun()">说点什么...</span>-->
     </view>
   </view>
   <!-- 评论弹窗 -->
-  <uni-popup ref="cPopupRef" type="bottom" @change="popChange">
+  <uni-popup
+    ref="cPopupRef"
+    class="comment-popup"
+    type="bottom"
+    @change="popChange"
+  >
     <view class="c_popup_box">
       <view class="reply_text">
         <template v-if="Object.keys(replyTemp).length">
           <span class="text_aid">回复给</span>
           <span class="text_main">{{
             replyTemp.item2
-              ? replyTemp.item2.user_name
-              : replyTemp.item1.user_name
+              ? replyTemp.item2.nickname
+              : replyTemp.item1.nickname
           }}</span>
         </template>
         <span v-else class="text_main">发表新评论</span>
@@ -66,7 +71,6 @@
             type="textarea"
             v-model="commentValue"
             :placeholder="commentPlaceholder"
-            :focus="focus"
             trim
             autoHeight
             maxlength="300"
@@ -92,6 +96,7 @@
 <script setup>
   import CommonComp from './componets/common'
   import { reactive, ref, watch, computed } from 'vue'
+  import { createComment } from '@/api/modules/social'
 
   const props = defineProps({
     /** 用户信息
@@ -106,6 +111,14 @@
     commentData: {
       type: Object,
       default: () => {},
+    },
+    publisher: {
+      type: Number,
+      default: -1,
+    },
+    trendsId: {
+      type: Number,
+      default: -1,
     },
     /** 评论列表
      *    id: number // 评论id
@@ -142,6 +155,7 @@
     'likeFun', // 点赞事件
     'replyFun', // 回复事件
     'deleteFun', // 删除事件
+    'refreshData',
   ])
 
   // 渲染数据(前端的格式)
@@ -234,6 +248,10 @@
     cPopupRef.value.open()
   }
 
+  /*setTimeout(() => {
+    cPopupRef.value.open()
+  }, 1000)*/
+
   // 发起新评论
   let isNewComment = ref(false) // 是否为新评论
   defineExpose({ newCommentFun })
@@ -260,6 +278,23 @@
   function sendClick({ item1, index1, item2, index2 } = replyTemp) {
     let item = item2 || item1
     let params = {}
+    console.log(263, item)
+    console.log(264, commentValue.value)
+    // ? 按道理只要知道 当前评论作者id, 当前评论的id，
+    const paramsTemp = {
+      userId: uni.getStorageSync('userNo'), // 当前用户
+      publisher: props.publisher, // 帖子发布人id
+      trendsId: props.trendsId, // 帖子id
+      replyId: item.id, // 被评论的id
+      replyUserId: item.replyUserId, // 被评论人id
+      content: commentValue.value, // 内容
+    }
+    createComment(paramsTemp).then((res) => {
+      console.log(271, res)
+      cPopupRef.value.close()
+      emit('refreshData')
+    })
+    return false
     // 新评论
     if (isNewComment.value) {
       params = {

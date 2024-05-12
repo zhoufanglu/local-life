@@ -82,7 +82,8 @@
     "backgroundColor": "#F8F8F8",
     "navigationStyle": "custom",//自定义导航
     "app-plus": {
-      "animationType": "none"
+      "animationType": "none",
+      "softinputMode": "adjustResize",
     }
 /*"usingComponents": {
       "van-image": "./wxcomponents/vant/image/index",

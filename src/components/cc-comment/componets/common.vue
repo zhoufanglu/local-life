@@ -2,7 +2,7 @@
   <view class="comment_item">
     <view class="top">
       <view class="top_left">
-        <img class="user_avatar" :src="props.data.user_avatar" />
+        <img class="user_avatar" :src="props.data.avatar" />
         <!--        <uni-tag
           v-if="props.data.owner"
           class="tag"
@@ -12,21 +12,21 @@
           size="mini"
           circle
         />-->
-        <span class="user_name">{{ props.data.user_name }}</span>
+        <span class="user_name">{{ props.data.nickname }}</span>
         <span class="user_name">{{ cReplyName }}</span>
       </view>
       <view class="top_right" @tap="likeClick(props.data)">
-        <span :class="[props.data.is_like ? 'active' : '', 'like_count']">{{
+        <span :class="[props.data.isLike ? 'active' : '', 'like_count']">{{
           cLikeCount
         }}</span>
         <uni-icons
-          v-show="props.data.is_like"
+          v-show="props.data.isLike"
           type="hand-up-filled"
           size="24"
           color="#A26D37"
         ></uni-icons>
         <uni-icons
-          v-show="!props.data.is_like"
+          v-show="!props.data.isLike"
           type="hand-up"
           size="24"
           color="#999"
@@ -38,12 +38,12 @@
       <span
         class="shrink"
         v-if="isShrink"
-        @tap.stop="expandContentFun(props.data.user_content)"
+        @tap.stop="expandContentFun(props.data.content)"
         >...展开</span
       >
     </view>
     <view class="bottom">
-      <span class="create_time">{{ props.data.create_time }}</span>
+      <span class="create_time">{{ props.data.createTimeStr }}</span>
       <!--      <span
         v-if="props.data.owner"
         class="delete"
@@ -75,22 +75,22 @@
 
   // 被回复人名称
   const cReplyName = computed(() => {
-    return props.data?.reply_name ? ` ▸ ` + props.data?.reply_name : ''
+    return props.data?.nicknameRelay ? ` ▸ ` + props.data?.nicknameRelay : ''
   })
 
   // 点赞数显示
   const cLikeCount = computed(() => {
-    return props.data.like_count === 0
+    return props.data.likeCount === 0
       ? ''
-      : props.data.like_count > 99
+      : props.data.likeCount > 99
         ? `99+`
-        : props.data.like_count
+        : props.data.likeCount
   })
 
   // 评论过长处理
   let contentShowLength = 70 // 默认显示评论字符
 
-  let user_content = props.data.user_content
+  let user_content = props.data.content
   let isShrink = ref(user_content.length > contentShowLength) // 是否收缩评论
   let c_content = ref('')
   watch(
@@ -106,7 +106,7 @@
   )
   // 删除变更显示定制
   watch(
-    () => props.data.user_content,
+    () => props.data.content,
     (newVal, oldVal) => {
       if (newVal !== oldVal) {
         c_content.value = newVal

@@ -123,6 +123,7 @@
         :data="variables.data.commentRespVOPageResult"
         @refreshData="refreshData"
         :trendsId="variables.data.id"
+        :publisher="variables.data.publisher"
       ></comment>
     </view>
   </view>

@@ -39,10 +39,15 @@
       console.log(40, variables.data.isFan)
     })
   }
-
+  const queryParams = reactive({
+    type: '',
+    row: {},
+  })
   onLoad((options) => {
     const type = options.type
     const row = JSON.parse(options.row)
+    queryParams.type = type
+    queryParams.row = row
     getTrendDetail(type, row)
   })
   onMounted(() => {
@@ -197,6 +202,9 @@
   const handleFocus = () => {
     console.log('开启评论弹窗')
   }
+  const refreshData = () => {
+    getTrendDetail(queryParams.type, queryParams.row)
+  }
 </script>
 <script>
   export default {
@@ -275,19 +283,24 @@
         v-model:tableData="tableData"
         v-model:tableTotal="tableTotal"
         :comment-data="variables.data?.commentRespVOPageResult?.list"
+        @refreshData="refreshData"
+        :trendsId="variables.data.id"
+        :publisher="variables.data.publisher"
         @likeFun="likeFun"
         @replyFun="replyFun"
         @deleteFun="deleteFun"
         :deleteMode="deleteMode"
       ></CComment>
-      <view class="fix-comment">
-        <u-search
+      <view class="fix-comment" @click="openComment">
+        <view class="com-info">说点什么</view>
+        <!--        <u-search
+          :disabled="false"
           searchIcon=""
-          @focus="handleFocus"
+          :focus="false"
           :showAction="false"
           placeholder="说点什么"
           @tap="openComment"
-        ></u-search>
+        ></u-search>-->
       </view>
 
       <!--      <view class="btn" @tap="openComment">说点什么</view>-->
@@ -404,5 +417,16 @@
     box-sizing: border-box;
     padding: 0 50rpx;
     width: 100%;
+    .com-info {
+      width: 90%;
+      // border: solid 1px red;
+      border-radius: 30px;
+      height: 60rpx;
+      font-size: 26rpx;
+      @include vertical-center;
+      justify-content: flex-start;
+      background-color: #eee;
+      padding-left: 20rpx;
+    }
   }
 </style>

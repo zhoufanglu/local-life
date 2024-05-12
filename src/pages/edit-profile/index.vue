@@ -91,6 +91,10 @@
   }
 
   function updateUserInfo() {
+    uni.showLoading({
+      title: '修改中',
+      mask: true,
+    })
     updateUserInfoApi({
       nickname: userInfo.nickname,
       avatar: userInfo.avatar,
@@ -105,6 +109,7 @@
         icon: 'success',
         duration: 2000,
       })
+      uni.hideLoading()
     })
   }
   /**********************弹出层***********************/
