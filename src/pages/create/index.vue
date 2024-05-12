@@ -93,7 +93,7 @@
     const imgList = []
     for (const [index, file] of fileList.value.entries()) {
       const { data } = await uni.uploadFile({
-        url: `${BASE_URL}/admin-api/infra/file/upload`, //仅为示例，非真实的接口地址
+        url: `${BASE_URL}/admin-api/infra/file/upload`,
         name: 'file',
         filePath: filePathList.value[index],
         formData: { file },

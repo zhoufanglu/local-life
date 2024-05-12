@@ -13,8 +13,8 @@
     gender: '男',
     username: '张三',
     mark: '这个人很懒，什么都没留下',
-    fansList: [],
-    followList: [],
+    fansList: [], // 粉丝列表
+    followList: [], // 关注列表
   })
   // ?获取用户信息
   const getUserInfo = () => {
@@ -150,7 +150,8 @@
         ></u-tabs>
         <u-divider style="width: 95%; margin: 0 auto"></u-divider>
         <view class="tab-inner-panel">
-          <goods-list v-if="tabs.current !== 2"></goods-list>
+          <goods-list v-if="tabs.current === 0" :type="0"></goods-list>
+          <goods-list v-if="tabs.current === 1" :type="1"></goods-list>
           <order-list v-if="tabs.current === 2" :orders="orders"></order-list>
         </view>
       </view>

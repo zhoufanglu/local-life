@@ -1,5 +1,5 @@
 /**********************plaza***********************/
-//?1动态，2兼职，3租房，4转卖
+//?1动态，2兼职，3租房，4转卖, 美食单独调用
 export const plazaTypes = {
   1: '动态',
   2: '兼职',
@@ -40,6 +40,12 @@ export const resellType = {
 export const likeTypes = {
   10: '动态',
   20: '评论',
+}
+// ?性别
+export const genderTypes = {
+  1: '男',
+  2: '女',
+  0: '未知',
 }
 /**********************购物车***********************/
 export const payState = {

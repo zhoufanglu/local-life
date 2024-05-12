@@ -1,23 +1,33 @@
 <script setup>
   import { ref } from 'vue'
-  /*const props = defineProps({
-    list: {
-      type: Array,
-      default: () => [],
+  import { getPublishLikePage as getPublishLikePageApi } from '@/api/modules/user'
+
+  const props = defineProps({
+    type: {
+      type: Number,
+      default: () => 0, // 0=动态， 1=点赞
     },
-  })*/
+  })
+
   const list = ref([])
-  // 模拟10个list
-  for (let i = 0; i < 8; i++) {
-    list.value.push({
-      id: i + 3,
-      name: `商品${i + 3}`,
-      price: 100 + i * 10,
-      count: i + 3,
-      imgUrl: 'https://cdn.uviewui.com/uview/swiper/swiper3.png',
+  const isNoData = ref(false)
+
+  //?获取社交点赞/动态, 0=动态， 1=点赞
+  const getPublishLikePage = () => {
+    getPublishLikePageApi({
+      pageNo: 1,
+      pageSize: 100,
+      type: props.type,
+    }).then(({ data }) => {
+      list.value = data.list
+      isNoData.value = !data.list.length
     })
   }
+
+  getPublishLikePage()
+
   const goDetail = (item) => {
+    // 去动态详情
     console.log(item.target)
   }
 </script>
@@ -25,30 +35,28 @@
   <view class="panel">
     <view
       class="item"
-      v-for="(food, index) in list"
+      v-for="(i, index) in list"
       :key="index"
       @click="goDetail"
     >
       <up-image
         class="cover"
         :show-loading="true"
-        :src="food.imgUrl"
+        :src="i.coverImage"
         width="202rpx"
         height="158rpx"
       ></up-image>
       <view class="info">
         <view class="top">
-          CHINA
-          TOWN蜜雪冰城招聘兼职啦!!!!每周周末一天6小时，每每周周末一天6小时，每.
+          {{ i.content }}
         </view>
         <view class="bottom">
-          <view class="location"
-            >城招聘兼职啦!!!!每周周末一城招聘兼职啦!!!!每周周末一</view
-          >
-          <view class="price"><text>¥25</text>/小时</view>
+          <view class="location">-</view>
+          <!--          <view class="price"><text>¥25</text>/小时</view>-->
         </view>
       </view>
     </view>
+    <up-empty v-if="isNoData" mode="data" style="margin-top: 40rpx"> </up-empty>
   </view>
 </template>
 
