@@ -49,11 +49,13 @@
       default: '每周',
     },
     price: {
-      type: String,
+      type: Number,
       required: true,
       default: 25,
     },
   })
+  const priceModel = ref(props.price)
+  const priceFocus = ref(false)
   // 2、注册事件，改变绑定的值
   const emit = defineEmits([
     'update:tenementArea',
@@ -75,6 +77,10 @@
   }
   const onAreaNodeClick = (node) => {
     // console.log(74, node)
+  }
+  const handleInput = (e) => {
+    priceModel.value = e.target.value
+    emit('update:price', e.target.value)
   }
 </script>
 <script>
@@ -148,6 +154,26 @@
       </template>
     </u-cell>
   </picker>
+  <u-cell title="价格:" :isLink="true">
+    <template #value>
+      <view
+        class="price-select-row"
+        style="color: #a26d37"
+        @click="priceFocus = true"
+      >
+        <view
+          >¥
+          <input
+            :focus="priceFocus"
+            class="price-input"
+            type="number"
+            v-model="priceModel"
+            @input="handleInput"
+          /> </view
+      ></view>
+    </template>
+  </u-cell>
+  <!--
   <picker
     mode="selector"
     :value="price"
@@ -164,7 +190,7 @@
       </template>
     </u-cell>
   </picker>
-</template>
+--></template>
 
 <style lang="scss">
   .area-picker {
@@ -172,5 +198,17 @@
       display: none !important;
     }
     // border: solid 1px red;
+  }
+  .price-select-row {
+    display: flex;
+    align-items: center;
+    > view {
+      display: flex;
+      align-items: center;
+    }
+    .price-input {
+      text-align: right;
+      width: 100rpx;
+    }
   }
 </style>

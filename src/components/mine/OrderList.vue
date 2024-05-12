@@ -1,5 +1,6 @@
 <script setup>
-  import { ref } from 'vue'
+  import { ref, watch } from 'vue'
+  const props = defineProps(['orders'])
   /*const props = defineProps({
     list: {
       type: Array,
@@ -23,9 +24,10 @@
 </script>
 <template>
   <view class="order-list">
+    {{ orders }}
     <view
       class="order-item"
-      v-for="(order, index) in list"
+      v-for="(order, index) in orders"
       :key="index"
       @click="goDetail"
     >

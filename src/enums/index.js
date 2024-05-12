@@ -41,6 +41,13 @@ export const likeTypes = {
   10: '动态',
   20: '评论',
 }
+/**********************购物车***********************/
+export const payState = {
+  '010': '待支付',
+  '020': '支付成功',
+  '030': '支付失败',
+}
+
 /**********************工具函数***********************/
 export const reversedEnums = (obj) =>
   Object.fromEntries(Object.entries(obj).map(([key, value]) => [value, key]))

@@ -120,4 +120,8 @@
     width: 40rpx;
     height: 40rpx;
   }
+  .u-tabs__wrapper__nav__line {
+    // border: solid 1px red;
+    height: 6rpx !important;
+  }
 </style>

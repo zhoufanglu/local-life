@@ -268,7 +268,7 @@
             v-model:type="form.resell.type"
           ></resell-filter>
           <!--*定位-->
-          <!--          <u-cell
+          <u-cell
             class="position-cell"
             :isLink="true"
             @click="handlePosition"
@@ -282,7 +282,7 @@
                 style="height: 41rpx; width: 35rpx; margin-right: 10rpx"
               ></image>
             </template>
-          </u-cell>-->
+          </u-cell>
         </u-cell-group>
       </view>
     </view>
@@ -292,6 +292,7 @@
         :disabled="!(form.description && form.title)"
         type="primary"
         shape="circle"
+        color="#A26D37"
         @click="handleSubmit"
         >发布</up-button
       >
@@ -359,5 +360,8 @@
   .u-upload__wrap__preview__other {
     width: 192rpx !important;
     height: 192rpx !important;
+  }
+  .file-picker__box-content {
+    border-radius: 8px !important;
   }
 </style>

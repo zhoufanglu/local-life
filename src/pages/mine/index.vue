@@ -2,26 +2,41 @@
   import TabBar from '@/components/TabBar.vue'
   import GoodsList from '@/components/mine/GoodsList.vue'
   import OrderList from '@/components/mine/OrderList.vue'
-  import { reactive } from 'vue'
+  import { reactive, ref } from 'vue'
   import { getUserInfo as getUserInfoApi } from '@/api/modules/user'
+  import { createCart, getOrders } from '@/api/modules/mall'
   const variables = reactive({
     bgUrl: 'https://cdn.uviewui.com/uview/swiper/swiper3.png',
     gender: '男',
     username: '张三',
   })
-
+  // ?获取用户信息
   const getUserInfo = () => {
     getUserInfoApi().then(({ data }) => {
       variables.avatar = data.avatar
       variables.nickname = data.nickname
+      variables.bgUrl = '/static/mine/bg.jpeg'
       console.log(17, data.avatar)
     })
   }
+  // ?获取订单信息
+  const orders = ref([])
+  createCart({
+    userNo: uni.getStorageSync('userNo'),
+  }).then((res) => {
+    const cartId = JSON.parse(res.data).cartId
+    getOrders({
+      cartId: cartId,
+      userNo: uni.getStorageSync('userNo'),
+    }).then(({ data }) => {
+      orders.value = data.list
+    })
+  })
 
   getUserInfo()
 
   const tabs = reactive({
-    current: 0,
+    current: 2,
     list: [
       { name: '动态', value: 'dynamicState', index: 0 },
       { name: '点赞', value: 'like', index: 1 },
@@ -104,8 +119,8 @@
         ></u-tabs>
         <u-divider style="width: 95%; margin: 0 auto"></u-divider>
         <view class="tab-inner-panel">
-          <goods-list v-show="tabs.current !== 2"></goods-list>
-          <order-list v-show="tabs.current === 2"></order-list>
+          <goods-list v-if="tabs.current !== 2"></goods-list>
+          <order-list v-if="tabs.current === 2" :orders="orders"></order-list>
         </view>
       </view>
     </view>
@@ -122,6 +137,7 @@
       .mine-top {
         // no-repeat center center;
         background-size: cover;
+        // background: 100% 100% no-repeat;
         height: 543rpx !important;
         padding: 30rpx;
         box-sizing: border-box;
