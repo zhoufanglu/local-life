@@ -16,7 +16,7 @@
       columns: ['整租', '合租'],
     },
     tenementHouseType: {
-      columns: ['一居室', '两居室', '三居室', '四居室'],
+      columns: ['一居', '两居', '三居', '四居'],
     },
     price: {
       columns: [20, 40, 60, 80, 100, 120, 140, 160, 180, 200],
@@ -67,6 +67,7 @@
 
   const handlePicker = (e, type) => {
     const index = Number(e.detail.value)
+    console.log(70, type, pickers[type].columns[index])
     emit(`update:${type}`, pickers[type].columns[index])
   }
 

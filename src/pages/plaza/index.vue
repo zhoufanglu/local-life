@@ -114,7 +114,7 @@
     curPanel.value = options.curType || 'follow'
     onMounted(() => {
       // ?测试test
-      curPanel.value = 'foods'
+      curPanel.value = 'tenement'
       headerPanelRef.value.setCurrent(curPanel.value)
     })
   })

@@ -67,6 +67,8 @@
       <view class="content">
         <view class="text_area">
           <uni-easyinput
+            cursor-spacing="50"
+            :always-embed="true"
             class="text_area"
             type="textarea"
             v-model="commentValue"

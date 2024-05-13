@@ -14,12 +14,14 @@ export const plazaTypes2 = {
 }
 // 租房类型
 export const rentTypes = {
+  '': '租房类型',
   1: '整租',
   2: '合租',
 }
 
 // 租房房屋类型
 export const rentRoomTypes = {
+  '': '房屋类型',
   1: '一居',
   2: '二居',
   3: '三居',

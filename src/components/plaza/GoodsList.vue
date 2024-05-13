@@ -1,5 +1,8 @@
 <script setup>
   import { getTrends } from '@/api/modules/social'
+  import { ref, watch, reactive, computed } from 'vue'
+  import { plazaTypes2, rentTimeUnits, rentTypes, rentRoomTypes } from '@/enums'
+  import { useEnums } from '@/hooks/useEnums'
 
   const props = defineProps({
     type: {
@@ -7,12 +10,6 @@
       default: 'partTimeJob', //'partTimeJob', 'tenement', 'resell'
     },
   })
-  import { ref, watch, reactive } from 'vue'
-  import { data } from '@/components/plaza/WaterFallList/data.js'
-  import { sleep } from '@/utils'
-  import loadingCom from '@/components/loading.vue'
-  import { plazaTypes2, rentTimeUnits } from '@/enums'
-  import { useEnums } from '@/hooks/useEnums'
   const goods = ref([])
   const loading = ref(false)
   const variables = reactive({
@@ -20,15 +17,66 @@
     pageSize: 10,
     status: 'loadmore', // loadmore loading nomore
   })
-  const getGoods = () => {
+  /**********************过滤项***********************/
+  const filterOptions = reactive({
+    pickerVisible: false,
+    pickerType: '区域',
+    options: [
+      [
+        { label: '全部', id: '' },
+        { label: '中国', id: 'china' },
+        { label: '美国', id: 'china' },
+      ],
+    ],
+    resaleCategory: 2,
+    rentZone: '', // 租房区域
+    rentType: '', // 租房类型  1整租，2合租
+    rentRoomType: '', // 租房房屋类型，1一居，2两居，3三居，4四居
+  })
+  // 过滤项名字
+  const rentTypeName = computed(() => {
+    return rentTypes[filterOptions.rentType]
+  })
+  const rentRoomName = computed(() => {
+    return rentRoomTypes[filterOptions.rentRoomType]
+  })
+  // 如果是过滤的话，就是重新获取数据
+  const getGoods = (isFilter = false) => {
+    /**********************处理入参***********************/
+    //? 在不同的界面，过滤项不同, 这三个：兼职, 租房, 转卖，'partTimeJob', 'tenement', 'resell'
+    let separateParams = {}
+    if (props.type === 'partTimeJob') {
+      separateParams = {}
+    } else if (props.type === 'tenement') {
+      // ''空字符串代表全部
+      separateParams = {
+        rentZone: filterOptions.rentZone, // 租房区域
+        rentType: filterOptions.rentType, // 租房类型  1整租，2合租
+        rentRoomType: filterOptions.rentRoomType, // 租房房屋类型，1一居，2两居，3三居，4四居
+      }
+    } else if (props.type === 'resell') {
+      separateParams = {
+        resaleCategory: filterOptions.resaleCategory, // 租房的过滤项 1闲置好物，2二手好车
+      }
+    }
+    /**********************调用***********************/
+    if (isFilter) {
+      variables.pageNo = 1
+    }
     getTrends({
       pageNo: variables.pageNo,
       pageSize: variables.pageSize,
       type: plazaTypes2[props.type],
+      ...separateParams,
     })
       .then(({ data }) => {
         // console.log(22, data)
-        goods.value.push(...data.list)
+        if (isFilter) {
+          goods.value = data.list
+        } else {
+          goods.value.push(...data.list)
+        }
+
         variables.status = data.list.length >= 10 ? 'loadmore' : 'nomore'
       })
       .finally(() => {
@@ -36,21 +84,6 @@
       })
   }
   getGoods()
-  /**********************过滤项***********************/
-  const filterOptions = reactive({
-    pickerVisible: false,
-    pickerType: '区域',
-    area: {
-      options: [
-        [
-          { label: '全部', id: '' },
-          { label: '中国', id: 'china' },
-          { label: '美国', id: 'china' },
-        ],
-      ],
-      curTab: '',
-    },
-  })
 
   watch(
     () => props.type,
@@ -65,24 +98,51 @@
     variables.pageNo++
     getGoods()
   }
-  //?picker确认事件
+  //?picker确认事件 [整租， 房屋类型]
   const handleFilterConfirm = (e) => {
     const curSelectObj = e.value[0]
+    console.log(104, filterOptions.pickerType, curSelectObj)
     filterOptions.pickerVisible = false
-    filterOptions.area.curTab = curSelectObj.label
+    if (filterOptions.pickerType === '整租') {
+      filterOptions.rentType = curSelectObj.id
+    } else if (filterOptions.pickerType === '房屋类型') {
+      filterOptions.rentRoomType = curSelectObj.id
+    }
+    getGoods(true)
   }
   /**
    *
    * @param type 区域 整租 房屋类型
    */
   const openPicker = (type) => {
+    if (type === '区域') {
+    } else if (type === '整租') {
+      filterOptions.options = [
+        [
+          { label: '全部', id: '' },
+          { label: '整租', id: 1 },
+          { label: '合租', id: 2 },
+        ],
+      ]
+    } else if (type === '房屋类型') {
+      filterOptions.options = [
+        [
+          { label: '全部', id: '' },
+          { label: '一居', id: 1 },
+          { label: '二居', id: 2 },
+          { label: '三居', id: 3 },
+          { label: '四居', id: 4 },
+        ],
+      ]
+    }
     filterOptions.pickerType = type
     filterOptions.pickerVisible = true
   }
 
   //? 闲置好物
   const handleTabChange = (val) => {
-    filterOptions.curTab = val
+    filterOptions.resaleCategory = val
+    getGoods(true)
   }
   //?详情页面  兼职、租房、转卖 这3个通用
   const goDetail = (item) => {
@@ -119,29 +179,29 @@
     <!--?租房项-->
     <view v-if="type === 'tenement'" class="pickers">
       <view class="item" @click="openPicker('区域')">
-        {{ filterOptions.area.curTab || '区域' }}
+        {{ filterOptions.rentZone || '区域' }}
 
         <image src="@/static/plaza/triangle.png" />
       </view>
       <view class="left-line right-line item" @click="openPicker('整租')"
-        >整租<image src="@/static/plaza/triangle.png"
+        >{{ rentTypeName }}<image src="@/static/plaza/triangle.png"
       /></view>
       <view class="item" @click="openPicker('房屋类型')"
-        >房屋类型<image src="@/static/plaza/triangle.png"
+        >{{ rentRoomName }}<image src="@/static/plaza/triangle.png"
       /></view>
     </view>
     <!--?转卖-->
     <view v-if="type === 'resell'" class="pickers">
       <view
-        @click="handleTabChange(0)"
+        @click="handleTabChange(2)"
         class="right-line item"
-        :class="filterOptions.curTab === 0 ? 'active' : null"
+        :class="filterOptions.resaleCategory === 2 ? 'active' : null"
         >二手好车
       </view>
       <view
         @click="handleTabChange(1)"
         class="item"
-        :class="filterOptions.curTab === 1 ? 'active' : null"
+        :class="filterOptions.resaleCategory === 1 ? 'active' : null"
         >闲置好物</view
       >
     </view>
@@ -184,7 +244,7 @@
       @cancel="filterOptions.pickerVisible = false"
       @confirm="handleFilterConfirm"
       :show="filterOptions.pickerVisible"
-      :columns="filterOptions.area.options"
+      :columns="filterOptions.options"
       keyName="label"
       :closeOnClickOverlay="true"
       @close="filterOptions.pickerVisible = false"

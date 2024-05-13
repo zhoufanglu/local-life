@@ -186,7 +186,7 @@
             bottom: 54rpx;
             background-color: $theme;
             color: #fff;
-            font-size: 44rpx;
+            font-size: 36rpx !important;
             width: 260rpx;
             height: 90rpx;
             @include vertical-center;

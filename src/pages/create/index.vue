@@ -153,11 +153,23 @@
     createTrend(params).then(({ data }) => {
       uni.hideLoading()
       uni.$u.toast('创建成功')
+      setTimeout(() => {
+        uni.navigateBack({
+          delta: 1,
+        })
+      }, 500)
     })
   }
 
   const handlePosition = () => {
-    console.log('position')
+    uni.getLocation({
+      type: 'wgs84',
+      geocode: true,
+      success: function (res) {
+        console.log('当前位置的经度：' + res.longitude)
+        console.log('当前位置的纬度：' + res.latitude)
+      },
+    })
   }
 
   const handleBack = () => {
