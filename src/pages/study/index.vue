@@ -25,8 +25,8 @@
 
   function getGoods() {
     getGoodsApi({
-      // typeId: tabs.list[tabs.current].value,
-      typeId: 1,
+      typeId: tabs.list[tabs.current].value,
+      // typeId: 1,
       page: 1, // 当前页面
       pageNum: 1000, // 页长
     }).then((res) => {

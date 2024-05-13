@@ -252,7 +252,7 @@
         height: `calc(100% - ${variables.topRowHeight}px)`,
       }"
     >
-      <!--      <u-swiper
+      <u-swiper
         v-if="
           variables.data.imageList.length !== 0 && variables.data.imageList[0]
         "
@@ -265,7 +265,7 @@
         circular
       ></u-swiper>
       <view class="article-panel">
-        &lt;!&ndash;?价格 兼职、租房、转卖、才有&ndash;&gt;
+        <!--?价格 兼职、租房、转卖、才有-->
         <view
           class="price"
           v-if="['partTimeJob', 'tenement', 'resell'].includes(props.type)"
@@ -275,12 +275,12 @@
         <text class="title">{{ variables.data.title }}</text>
         <text class="article-content">{{ variables.data.content }}</text>
         <text class="date">{{ variables.data.date }}</text>
-        &lt;!&ndash;        <view class="position">
+        <!--        <view class="position">
           <img src="@/static/detail/position.png" alt="" />
           <text>12.3Km 洛杉矶快船主场篮球馆3232</text>
-        </view>&ndash;&gt;
+        </view>-->
       </view>
-      <u-divider style="width: 95%; margin: 0 auto"></u-divider>-->
+      <u-divider style="width: 95%; margin: 0 auto"></u-divider>
       <!--?评论-->
       <CComment
         ref="ccRef"

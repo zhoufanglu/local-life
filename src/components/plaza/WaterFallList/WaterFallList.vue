@@ -44,7 +44,7 @@ getData()
       pageNo: state.pages.page,
       pageSize: state.pages.pageSize,
       type: plazaTypes2[props.type],
-      // type: 'undefined',
+      follow: props.type === 'follow' ? 1 : 0,
     })
       .then(({ data }) => {
         // 初始化封面
@@ -56,7 +56,7 @@ getData()
         state.totalList.push(...data.list)
         console.log(57, data.list)
         loadNextItem()
-        state.status = data.list.length ? 'loadmore' : 'nomore'
+        state.status = data.list.length >= 10 ? 'loadmore' : 'nomore'
       })
       .finally(() => {
         // state.status = 'loading'

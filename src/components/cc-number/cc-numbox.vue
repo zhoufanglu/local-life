@@ -85,7 +85,7 @@
   .ccMyNum {
     clear: both;
     margin: 0 30rpx;
-    //border: solid 1px red;
+    border: none !important;
   }
 
   .numBox {

@@ -11,7 +11,7 @@
       :style="{ height: `calc(100% - ${statusBarHeight * 2 + 204 + 116}rpx)` }"
     >
       <!--关注-->
-      <!--      <waterFallList type="follow" v-if="curPanel === 'follow'"></waterFallList>-->
+      <waterFallList type="follow" v-if="curPanel === 'follow'"></waterFallList>
       <!--动态-->
       <waterFallList
         type="dynamicState"
@@ -114,7 +114,7 @@
     curPanel.value = options.curType || 'follow'
     onMounted(() => {
       // ?测试test
-      curPanel.value = 'tenement'
+      curPanel.value = 'follow'
       headerPanelRef.value.setCurrent(curPanel.value)
     })
   })

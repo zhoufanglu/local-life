@@ -182,7 +182,6 @@
   watch(
     () => props.commentData,
     (newVal) => {
-      console.log(180, JSON.stringify(newVal))
       /*newVal = [
         {
           id: 120, // 评论id
@@ -240,6 +239,23 @@
       ]*/
       const data = treeTransForm2(newVal)
       console.log(166, data)
+      // console.log(167, JSON.stringify(data))
+      // 目前评论一般都是两层，我这边把两层意外的序列化下
+
+      // 处理第二层的 children 属性，将其扁平化为一层
+      // console.log(246, flattenChildren(data))
+      /*flattenChildren(data)
+      function flattenChildren(data) {
+        data.forEach((i) => {
+          console.log(250, i.content)
+          if (i.children && Array.isArray(i.children)) {
+            i.children.forEach((j) => {
+              console.log(253, j.content)
+            })
+          }
+        })
+      }*/
+      console.log(262, data)
       dataList.value = data
     },
   )
@@ -353,7 +369,17 @@
   function sendClick({ item1, index1, item2, index2 } = replyTemp) {
     let item = item2 || item1
     let params = {}
-    console.log(263, item)
+    // console.log(263, item)
+    /*// 定义下parentId
+    let parentId = 0
+    // 如果是直接回复
+    if (!item) {
+      parentId = 0
+    } else if (item.parentId !== 0) {
+      // 如果是第一层回复
+      parentId = item.parentId
+    }
+    return*/
     console.log(264, commentValue.value)
     // ? 按道理只要知道 当前评论作者id, 当前评论的id，
     let paramsTemp = {}
@@ -362,7 +388,7 @@
       paramsTemp = {
         userId: uni.getStorageSync('userNo'), // 当前用户
         publisher: props.publisher, // 帖子发布人id
-        parentId: item.id, // 父级评论id
+        parentId: item.parentId, // 父级评论id
         trendsId: props.trendsId, // 帖子id
         replyId: item.id, // 被评论的id = 评论id
         replyUserId: item.userId, // 被评论人id
