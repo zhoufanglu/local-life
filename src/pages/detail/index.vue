@@ -33,8 +33,13 @@
    * @param row
    */
   const getTrendDetail = (type, row) => {
+    uni.showLoading({
+      title: '加载中...',
+      mask: true,
+    })
     getTrendDetailApi({ id: row.id }).then((res) => {
       variables.data = res.data
+      uni.hideLoading()
       console.log(39, variables.data.commentRespVOPageResult)
       console.log(40, variables.data.isFan)
     })
@@ -282,6 +287,7 @@
         v-model:userInfo="userInfo"
         v-model:tableData="tableData"
         v-model:tableTotal="tableTotal"
+        :total="variables.data?.commentRespVOPageResult?.total"
         :comment-data="variables.data?.commentRespVOPageResult?.list"
         @refreshData="refreshData"
         :trendsId="variables.data.id"

@@ -1,5 +1,5 @@
 <template>
-  <view class="c_total">评论 {{ props.tableTotal }}</view>
+  <view class="c_total">评论 {{ total }}</view>
   <template v-if="dataList && dataList.length">
     <view class="c_comment" v-for="(item1, index1) in dataList" :key="item1.id">
       <!-- 一级评论 -->
@@ -143,6 +143,10 @@
       type: Number,
       default: 0,
     },
+    total: {
+      type: Number,
+      default: 0,
+    },
     // 评论删除模式
     // bind - 当被删除的一级评论存在回复评论, 那么该评论内容变更显示为[当前评论内容已被移除]
     // only - 仅删除当前评论(后端删除相关联的回复评论, 否则总数显示不对)
@@ -169,6 +173,7 @@
         let temp = props.tableData
         /*dataList.value = treeTransForm(temp)
         console.log(155, dataList.value)*/
+        console.log(172, treeTransForm(temp))
       }
     },
     { deep: true, immediate: true },
@@ -177,6 +182,62 @@
   watch(
     () => props.commentData,
     (newVal) => {
+      console.log(180, JSON.stringify(newVal))
+      /*newVal = [
+        {
+          id: 120, // 评论id
+          parentId: null, // 父级评论id
+          reply_id: null, // 被回复人评论id
+          reply_name: null, // 被回复人名称
+          user_name: 'ikun', // 用户名
+          user_avatar:
+            'https://pic1.zhimg.com/80/v2-a79071a705f55c5d88f6c74e6111fe84_720w.webp', // 评论者头像地址
+          user_content: '唱,跳,rap,篮球', // 评论内容
+          is_like: false, // 是否点赞
+          like_count: 120, // 点赞数统计
+          create_time: '2024-01-01 09:16', // 创建时间
+        },
+        {
+          id: 130,
+          parentId: 120, // 评论的父级id
+          reply_id: 120, // 被回复评论id
+          reply_name: 'ikun', // 被回复人名称
+          user_name: '小黑子', // 用户名
+          user_avatar:
+            'https://pic2.zhimg.com/80/v2-06eade66ec837713d765b1557bf20b25_720w.webp', // 评论者头像地址
+          user_content: '姬霓太美', // 评论内容
+          is_like: false, // 是否点赞
+          like_count: 67, // 点赞数统计
+          create_time: '2024-01-01 17:06', // 创建时间
+        },
+        {
+          id: 140,
+          parentId: 120, // 评论的父级id
+          reply_id: 130, // 被回复评论id
+          reply_name: '小黑子', // 被回复人名称
+          user_name: '守护宗主维护宗门', // 用户名
+          user_avatar:
+            'https://pic3.zhimg.com/80/v2-244696a62fa750b8570cf56bfaa5b26a_720w.webp', // 评论者头像地址
+          user_content: '你露出鸡脚了', // 评论内容
+          is_like: false, // 是否点赞
+          like_count: 16, // 点赞数统计
+          create_time: '2024-01-02 23:08', // 创建时间
+        },
+        {
+          id: 150,
+          parentId: null, // 评论的父级id
+          reply_id: null, // 被回复评论id
+          reply_name: null, // 被回复人名称
+          user_name: '音乐制作人', // 用户名
+          user_avatar:
+            'https://pic2.zhimg.com/80/v2-88ec6f8c6d3305122664dd18a28730e5_720w.webp', // 评论者头像地址
+          user_content:
+            '只因你太美baby 只因你太美baby 只因你实在是太美baby 只因你太美baby 迎面走来的你让我如此蠢蠢欲动 这种感觉我从未有 Cause I got a crush on you who you 你是我的 我是你的 谁 再多一眼看一眼就会爆炸 再近一点靠近点快被融化', // 评论内容
+          is_like: true, // 是否点赞
+          like_count: 8, // 点赞数统计
+          create_time: '2024-01-08 00:45', // 创建时间
+        },
+      ]*/
       const data = treeTransForm2(newVal)
       console.log(166, data)
       dataList.value = data
@@ -207,12 +268,24 @@
   }
 
   function treeTransForm2(data) {
+    /*const tempData = JSON.parse(JSON.stringify(data))
+    return tempData.reduce((prev, cur, index, list) => {
+      const childList = list.filter((i) => cur.id === i.parentId)
+      if (cur.parentId === 0) {
+        prev.push({ ...cur, ...{ children: childList } })
+      } else {
+        cur.children = childList
+      }
+      return prev
+    }, [])
+    return false*/
     let newData = JSON.parse(JSON.stringify(data))
     let result = []
     let map = {}
     newData.forEach((item, i) => {
       item.owner = item.userId === uni.getStorageSync('userNo') // 是否为所有者 所有者可以进行删除 不能回复
-      map[item.userId] = item
+      //item.owner = false
+      map[item.id] = item
     })
     newData.forEach((item) => {
       let parent = map[item.parentId]
@@ -283,13 +356,30 @@
     console.log(263, item)
     console.log(264, commentValue.value)
     // ? 按道理只要知道 当前评论作者id, 当前评论的id，
-    const paramsTemp = {
-      userId: uni.getStorageSync('userNo'), // 当前用户
-      publisher: props.publisher, // 帖子发布人id
-      trendsId: props.trendsId, // 帖子id
-      replyId: item.id, // 被评论的id
-      replyUserId: item.replyUserId, // 被评论人id
-      content: commentValue.value, // 内容
+    let paramsTemp = {}
+    // 非第一层
+    if (item) {
+      paramsTemp = {
+        userId: uni.getStorageSync('userNo'), // 当前用户
+        publisher: props.publisher, // 帖子发布人id
+        parentId: item.id, // 父级评论id
+        trendsId: props.trendsId, // 帖子id
+        replyId: item.id, // 被评论的id = 评论id
+        replyUserId: item.userId, // 被评论人id
+        content: commentValue.value, // 内容
+      }
+    }
+    // 第一层评论
+    else {
+      paramsTemp = {
+        userId: uni.getStorageSync('userNo'), // 当前用户
+        publisher: props.publisher, // 帖子发布人id
+        parentId: 0, // 父级评论id
+        trendsId: props.trendsId, // 帖子id
+        replyId: 0, // 被评论的id = 评论id
+        replyUserId: props.publisher, // 被评论人id
+        content: commentValue.value, // 内容
+      }
     }
     createComment(paramsTemp).then((res) => {
       console.log(271, res)

@@ -13,7 +13,9 @@
           circle
         />-->
         <span class="user_name">{{ props.data.nickname }}</span>
-        <span class="user_name">{{ cReplyName }}</span>
+        <span class="user_name" v-if="props.data.parentId !== 0">{{
+          cReplyName
+        }}</span>
       </view>
       <view class="top_right" @tap="likeClick(props.data)">
         <span :class="[props.data.isLike ? 'active' : '', 'like_count']">{{
