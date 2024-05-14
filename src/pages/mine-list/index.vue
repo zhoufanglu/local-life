@@ -7,9 +7,12 @@
   const { boundTop } = getBoundInfo()
 
   const list = ref([])
-
+  //like comment follow message
   let curType = ref('follow') // follow: 关注列表, fans: 粉丝列表
-
+  uni.showLoading({
+    title: '加载中...',
+    mask: true,
+  })
   const getFansAndFollow = () => {
     const params = {
       pageNo: 1,
@@ -17,21 +20,32 @@
     }
     getFansAndFollowApi({
       ...params,
-      type: curType.value === 'follow' ? 1 : 0,
+      type: curType.value === 'follow' ? 1 : 0, // 0粉丝 1 关注
     }).then(({ data }) => {
       list.value = data.list
+      uni.hideLoading()
     })
   }
 
   onLoad((options) => {
     curType.value = options.type || 'follow'
-    getFansAndFollow()
+    //? 关注 点赞 评论
+    if (
+      curType.value === 'follow' ||
+      curType.value === 'like' ||
+      curType.value === 'comment'
+    ) {
+      getFansAndFollow()
+    }
+    //? 通知
+    if (curType.value === 'comment' || curType.value === 'like') {
+    }
   })
 
   const goUserDetail = () => {
-    uni.navigateTo({
+    /*uni.navigateTo({
       url: '/pages/mine/index',
-    })
+    })*/
   }
 </script>
 <script>

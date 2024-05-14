@@ -4,6 +4,9 @@
   import { getBoundInfo } from '@/utils'
   import { onLoad } from '@dcloudio/uni-app'
   const { boundTop } = getBoundInfo()
+  import followImg from '@/static/message/follow.png'
+  import commentImg from '@/static/message/follow.png'
+  import likeImg from '@/static/message/follow.png'
 
   const list = ref([
     'https://cdn.uviewui.com/uview/swiper/swiper3.png',
@@ -42,9 +45,6 @@
       return '点赞了你，快去看看吧！'
     }
   }
-  import followImg from '@/static/message/follow.png'
-  import commentImg from '@/static/message/follow.png'
-  import likeImg from '@/static/message/follow.png'
   const getUrl = () => {
     if (curType.value === 'follow') {
       return followImg
@@ -73,7 +73,7 @@
     >
     </u-navbar>
     <scroll-view
-      class="u-scroll-view list"
+      class="u-scroll-view list user-message-list"
       :scroll-y="true"
       lower-threshold="100"
       :style="{
