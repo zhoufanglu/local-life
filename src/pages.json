@@ -75,6 +75,11 @@
         }
 }
   ],
+  "requiredPrivateInfos": [
+    "getFuzzyLocation",
+    "choosePoi",
+    "chooseAddress",
+  ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "uni-app",

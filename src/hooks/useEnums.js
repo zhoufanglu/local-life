@@ -19,6 +19,7 @@ export function useEnums() {
       tenement: 'rentTimeunit',
       // resell: 'resalePrice',
     }
+    console.log(22, i, type)
     return rentTimeUnits[i[propEnum[type]] || 1]
   }
 

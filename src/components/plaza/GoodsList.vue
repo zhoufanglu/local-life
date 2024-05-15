@@ -227,7 +227,7 @@
         <view class="info">
           <view class="top"> {{ i.content }} </view>
           <view class="bottom">
-            <view class="location">-</view>
+            <view class="location">{{ i.address }}</view>
             <view class="price">
               <text>¥{{ getPrice(i, props.type) }} </text>
               <text v-if="props.type !== 'resell'">

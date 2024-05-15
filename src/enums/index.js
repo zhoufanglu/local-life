@@ -32,6 +32,8 @@ export const rentRoomTypes = {
 export const rentTimeUnits = {
   1: '每时',
   2: '每天',
+  3: '每月',
+  4: '每年',
 }
 
 export const resellType = {

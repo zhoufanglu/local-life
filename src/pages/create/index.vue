@@ -160,14 +160,43 @@
       }, 500)
     })
   }
-
+  //https://juejin.cn/s/uniapp%E8%8E%B7%E5%8F%96%E4%BD%8D%E7%BD%AE%E4%BF%A1%E6%81%AF
+  // openLocation
   const handlePosition = () => {
-    uni.getLocation({
+    console.log('xx', uni)
+    // isGetLocation()
+    uni.getFuzzyLocation({
       type: 'wgs84',
-      geocode: true,
       success: function (res) {
         console.log('当前位置的经度：' + res.longitude)
         console.log('当前位置的纬度：' + res.latitude)
+      },
+    })
+  }
+  function isGetLocation() {
+    uni.getSetting({
+      success(res) {
+        if (!res.authSetting['scope.userLocation']) {
+          //3.1 每次进入程序判断当前是否获得授权，如果没有就去获得授权，如果获得授权，就直接获取当前地理位置
+          console.log('打开位置授权')
+          uni.getLocation({
+            type: 'gcj02', // 默认值为wgs84；可选值（ 1.wgs84 返回 gps 坐标，2.gcj02 返回可用于 wx.openLocation 的坐标）
+            wgs84: false, // 传入 true 会返回高度信息，由于获取高度需要较高精确度，会减慢接口返回速度
+            sHighAccuracy: false, // 开启高精度定位
+            highAccuracyExpireTime: 3000, //高精度定位超时时间(ms)，指定时间内返回最高精度，该值3000ms以上高精度定位才有效果
+            success: function (res) {
+              console.log('成功获取位置信息', res)
+            },
+            fail: function (error) {
+              console.log('获取当前位置失败', error)
+            },
+            complete: function (com) {
+              // console.log('接口调用结束的回调函数（调用成功、失败都会执行）',com)
+            },
+          })
+        } else {
+          console.log('已经打开位置授权')
+        }
       },
     })
   }

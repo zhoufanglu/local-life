@@ -40,12 +40,16 @@ getData()
     state.status = 'loading'
     console.log(41, props.type)
     if (state.pages.page === 1) setDefaultData()
-    getTrends({
+    const params = {
       pageNo: state.pages.page,
       pageSize: state.pages.pageSize,
       type: plazaTypes2[props.type],
       follow: props.type === 'follow' ? 1 : 0,
-    })
+    }
+    if (props.type === 'follow') {
+      delete params.type
+    }
+    getTrends(params)
       .then(({ data }) => {
         // 初始化封面
         /*data.list.forEach((i) => {

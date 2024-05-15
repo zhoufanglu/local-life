@@ -51,7 +51,7 @@
           {{ i.content }}
         </view>
         <view class="bottom">
-          <view class="location">-</view>
+          <view class="location">{{ i.address }}</view>
           <!--          <view class="price"><text>¥25</text>/小时</view>-->
         </view>
       </view>

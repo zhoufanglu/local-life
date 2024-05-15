@@ -43,6 +43,7 @@
   }
 
   const goSearch = () => {
+    console.log('go-search')
     uni.navigateTo({
       url: '/pages/search/index',
     })
@@ -96,7 +97,7 @@
       ></u-search>-->
 
       <input
-        @click="goSearch"
+        @click.stop="goSearch"
         disabled
         type="text"
         placeholder="搜索你感兴趣的内容"

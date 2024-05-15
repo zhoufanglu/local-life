@@ -3,20 +3,37 @@
   import { getBoundInfo, getElRectAsync } from '@/utils/index.js'
   import useStore from '@/store/app.js'
   import GoodsList from '@/components/plaza/GoodsList.vue'
+  import { getTrends } from '@/api/modules/social'
+  import { useEnums } from '@/hooks/useEnums'
   const { boundTop, boundWidth } = getBoundInfo()
   const appStore = useStore()
   const variables = reactive({
     value: '',
+    list: [],
     pageType: 'search', // search, searchResult
     searchRowHeight: 0,
     isNoData: false,
+    status: 'loading', // loadmore loading nomore
   })
-
+  const { getPrice, getUnit } = useEnums()
   const onSearch = () => {
     appStore.addHistoryRecord(variables.value)
     variables.pageType = 'searchResult'
     console.log(variables.value)
+    variables.status = 'loading'
+    getTrends({
+      pageNo: 1,
+      pageSize: 100,
+      title: variables.value,
+      // title: '22',
+    }).then(({ data }) => {
+      console.log(24, data)
+      variables.list = data.list
+      variables.isNoData = !data.list.length
+      variables.status = 'nomore'
+    })
   }
+  // onSearch()
 
   const clearRecords = () => {
     appStore.clearHistoryRecord()
@@ -40,6 +57,10 @@
       variables.searchRowHeight = res.height
     })
   })
+
+  const goDetail = (i) => {}
+
+  const loadMore = () => {}
 </script>
 <script>
   export default {
@@ -115,7 +136,51 @@
       }"
     >
       <u-empty mode="search" v-if="variables.isNoData"> </u-empty>
-      <goods-list v-else></goods-list>
+      <!--      <goods-list v-else></goods-list>-->
+      <scroll-view
+        v-else
+        class="u-scroll-view"
+        :scroll-y="true"
+        lower-threshold="100"
+        @scrolltolower="loadMore"
+      >
+        <view
+          class="item"
+          v-for="(i, index) in variables.list"
+          :key="index"
+          @click="goDetail(i)"
+        >
+          <up-image
+            class="cover"
+            :show-loading="true"
+            :src="i.coverImage"
+            width="202rpx"
+            height="158rpx"
+          ></up-image>
+          <view class="info">
+            <view class="top"> {{ i.content }} </view>
+            <view class="bottom">
+              <view class="location">{{ i.address }}</view>
+              <!--2兼职,3租房,4转卖, 2,3有单位， 4无单位 -->
+              <!--?兼职-->
+              <view class="price" v-if="i.type === 2">
+                <text>¥{{ i.partjobPrice }} </text>
+                <text> /{{ getUnit(i, 'partTimeJob') }}</text>
+              </view>
+              <!--?租房-->
+              <view class="price" v-if="i.type === 3">
+                <text>¥{{ i.rentPrice }} </text>
+                <text> /{{ getUnit(i, 'tenement') }}</text>
+              </view>
+              <view class="price" v-if="i.type === 4">
+                <text>¥{{ i.resalePrice }} </text>
+                <text></text>
+              </view>
+            </view>
+          </view>
+        </view>
+        <up-loadmore :status="variables.status" />
+      </scroll-view>
     </view>
   </view>
 </template>
@@ -175,6 +240,61 @@
             margin-right: 25rpx;
             margin-bottom: 20rpx;
             @include ellipsis(1);
+          }
+        }
+      }
+    }
+
+    .u-scroll-view {
+      box-sizing: border-box;
+      height: calc(100% - 84rpx);
+      .item {
+        background: #ffffff;
+        //border-radius: 24rpx;
+        //margin-bottom: 24rpx;
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        padding: 20rpx 40rpx 20rpx 40rpx;
+        border-bottom: solid 1px #f3f3f3;
+        .cover {
+        }
+        .info {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          height: 157rpx;
+          margin-left: 24rpx;
+          // border: solid 1px red;
+          width: 100%;
+          .top {
+            @include ellipsis(2);
+            font-size: 28rpx;
+            font-weight: 400;
+            color: #333333;
+          }
+          .bottom {
+            @include vertical-center;
+            justify-content: space-between;
+            // border: solid 1px red;
+            width: 100%;
+            .location {
+              font-size: 20rpx;
+              color: #666666;
+              @include ellipsis(1);
+              width: calc(100% - 150rpx);
+            }
+            .price {
+              font-size: 20rpx;
+              color: #666666;
+              width: 150rpx;
+              text-align: right;
+              text {
+                white-space: nowrap;
+                font-size: 30rpx;
+                color: #a26d37;
+              }
+            }
           }
         }
       }

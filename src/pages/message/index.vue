@@ -74,7 +74,7 @@
           :key="i.title"
           @click="goMineList(i.type)"
         >
-          <up-badge class="dot" :isDot="true" type="error"></up-badge>
+          <up-badge class="dot" :isDot="false" type="error"></up-badge>
           <image :src="i.img" alt="" />
           <text>{{ i.title }}</text>
         </view>
@@ -131,7 +131,7 @@
           align-items: center;
           position: relative;
           .dot {
-            z-index: 999;
+            z-index: 1;
             position: absolute;
             right: 40rpx;
             top: 0;
