@@ -305,13 +305,16 @@ getData()
             image {
               border-radius: 0;
               margin-right: 8rpx;
-              width: 34rpx !important;
-              height: 30rpx !important;
+              width: 44rpx !important;
+              height: 40rpx !important;
             }
           }
-          .username,
+          .username {
+            font-size: 24rpx;
+          }
           .count {
-            font-size: 22rpx;
+            font-size: 26rpx;
+            font-weight: bolder;
           }
         }
       }

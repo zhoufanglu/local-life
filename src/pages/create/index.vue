@@ -153,9 +153,14 @@
     createTrend(params).then(({ data }) => {
       uni.hideLoading()
       uni.$u.toast('创建成功')
+      let pages = getCurrentPages() // 当前页面
+      let beforePage = pages[pages.length - 2] // 上一页
       setTimeout(() => {
         uni.navigateBack({
           delta: 1,
+          success: function () {
+            beforePage.onLoad() // 执行上一页的onLoad方法
+          },
         })
       }, 500)
     })
@@ -230,6 +235,7 @@
       bgColor="#F8F8F8"
       :title="`发布${createEnum[curType]}`"
       @leftClick="handleBack"
+      :titleStyle="{ fontSize: '40rpx', fontWeight: 'bolder' }"
     >
     </u-navbar>
     <view

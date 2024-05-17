@@ -129,7 +129,7 @@
       :autoBack="true"
       title="购物车"
       leftIconColor="#fff"
-      :titleStyle="{ color: '#fff' }"
+      :titleStyle="{ color: '#fff', fontSize: '40rpx', fontWeight: 'bolder' }"
     >
     </u-navbar>
     <scroll-view

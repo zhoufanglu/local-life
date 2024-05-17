@@ -61,7 +61,11 @@ export const payState = {
 /**********************工具函数***********************/
 export const reversedEnums = (obj) =>
   Object.fromEntries(Object.entries(obj).map(([key, value]) => [value, key]))
-
+// key是number类型的
 export const getEnumKeyByValue = (obj, value) => {
   return Number(Object.keys(obj).find((key) => obj[key] === value))
+}
+// key是string
+export const getEnumKeyByValue2 = (obj, value) => {
+  return Object.keys(obj).find((key) => obj[key] === value)
 }

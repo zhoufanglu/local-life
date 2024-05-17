@@ -3,6 +3,7 @@
   import GoodsList from '@/components/mine/GoodsList.vue'
   import OrderList from '@/components/mine/OrderList.vue'
   import { reactive, ref } from 'vue'
+  import { onBackPress, onLoad } from '@dcloudio/uni-app'
   import {
     getUserInfo as getUserInfoApi,
     getFansAndFollow as getFansAndFollowApi,
@@ -64,7 +65,9 @@
     getUserInfo()
     getFansAndFollow()
   }
-  load()
+  onLoad(() => {
+    load()
+  })
 
   const tabs = reactive({
     current: 0,

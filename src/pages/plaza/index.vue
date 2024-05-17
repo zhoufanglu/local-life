@@ -111,11 +111,13 @@
    * route query的方式传输curType, 就能默认设置当前tab
    */
   onLoad((options) => {
-    curPanel.value = options.curType || 'follow'
+    curPanel.value = options?.curType || 'follow'
+    console.log('onload')
     onMounted(() => {
       // ?测试test
-      curPanel.value = 'follow'
-      headerPanelRef.value.setCurrent(curPanel.value)
+      /*curPanel.value = 'follow'
+      console.log(119, headerPanelRef.value)
+      headerPanelRef.value.setCurrent(curPanel.value)*/
     })
   })
   /**********************事件***********************/

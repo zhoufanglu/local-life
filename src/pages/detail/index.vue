@@ -259,7 +259,7 @@
         height="732rpx"
         class="detail-swiper"
         :list="variables.data.imageList"
-        imgMode=""
+        imgMode="aspectFill"
         indicator
         indicatorMode="line"
         circular

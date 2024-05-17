@@ -69,7 +69,7 @@
       :autoBack="true"
       :title="getTitle()"
       leftIconColor="#fff"
-      :titleStyle="{ color: '#fff' }"
+      :titleStyle="{ color: '#fff', fontSize: '40rpx', fontWeight: 'bolder' }"
     >
     </u-navbar>
     <scroll-view

@@ -158,6 +158,16 @@
       })
     })
   }
+
+  const handleBack = () => {
+    let pages = getCurrentPages() // 当前页面
+    let beforePage = pages[pages.length - 2] // 上一页
+    uni.navigateBack({
+      success: function () {
+        beforePage.onLoad() // 执行上一页的onLoad方法
+      },
+    })
+  }
 </script>
 <script>
   export default {
@@ -166,7 +176,13 @@
 </script>
 <template>
   <view class="edit-profile">
-    <u-navbar title="编辑资料" :autoBack="true" bgColor="#F4F4F4"> </u-navbar>
+    <u-navbar
+      title="编辑资料"
+      @leftClick="handleBack"
+      bgColor="#F4F4F4"
+      :titleStyle="{ fontSize: '40rpx', fontWeight: 'bolder' }"
+    >
+    </u-navbar>
     <view
       class="profile-content"
       :style="{

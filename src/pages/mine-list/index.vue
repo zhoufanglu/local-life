@@ -62,7 +62,7 @@
       :autoBack="true"
       :title="curType === 'follow' ? '关注' : '粉丝'"
       leftIconColor="#fff"
-      :titleStyle="{ color: '#fff' }"
+      :titleStyle="{ color: '#fff', fontSize: '40rpx', fontWeight: 'bolder' }"
     >
     </u-navbar>
     <scroll-view

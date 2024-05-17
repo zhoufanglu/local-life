@@ -333,14 +333,14 @@
               width: calc(100% - 150rpx);
             }
             .price {
-              font-size: 20rpx;
               color: #666666;
               width: 150rpx;
               text-align: right;
               text {
                 white-space: nowrap;
-                font-size: 30rpx;
+                font-size: 34rpx;
                 color: #a26d37;
+                font-weight: bolder;
               }
             }
           }

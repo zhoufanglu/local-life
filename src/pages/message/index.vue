@@ -57,7 +57,7 @@
       :autoBack="false"
       title="消息"
       leftIconColor="#A26D37"
-      :titleStyle="{ color: '#fff' }"
+      :titleStyle="{ color: '#fff', fontSize: '40rpx', fontWeight: 'bolder' }"
     >
     </u-navbar>
     <view
