@@ -5,6 +5,7 @@
       <!-- 一级评论 -->
       <CommonComp
         :data="item1"
+        :likeLoading="btnLoading"
         @likeClick="() => likeClick({ item1, index1 })"
         @replyClick="() => replyClick({ item1, index1 })"
         @deleteClick="() => deleteClick({ item1, index1 })"
@@ -15,6 +16,7 @@
       >
         <!-- 二级评论 -->
         <CommonComp
+          :likeLoading="btnLoading"
           v-for="(item2, index2) in item1.childrenShow"
           :key="item2.id"
           :data="item2"
@@ -319,15 +321,19 @@
 
   // 点赞
   let setLike = (item) => {
-    item.is_like = !item.is_like
-    item.like_count = item.is_like ? item.like_count + 1 : item.like_count - 1
+    item.isLike = !item.isLike
+    item.likeCount = item.isLike ? item.likeCount + 1 : item.likeCount - 1
   }
+  const btnLoading = ref(false)
   function likeClick({ item1, index1, item2, index2 }) {
     let item = item2 || item1
-    setLike(item)
-    emit('likeFun', { params: item }, (res) => {
+    btnLoading.value = true
+    console.log(btnLoading.value)
+    emit('likeFun', { params: item }, (isLike) => {
       // 请求后端失败, 重置点赞
       setLike(item)
+      btnLoading.value = false
+      console.log(btnLoading.value)
     })
   }
 

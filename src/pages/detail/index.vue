@@ -7,6 +7,7 @@
   import {
     getTrendDetail as getTrendDetailApi,
     handleFollowUser,
+    likeUpdate,
   } from '@/api/modules/social'
   import { useEnums } from '@/hooks/useEnums'
   const props = defineProps({
@@ -71,6 +72,16 @@
   // 点赞回调事件
   function likeFun({ params }, callback) {
     console.log('likeFun', params)
+    let { isLike, likeCount } = params
+    likeUpdate({
+      refId: params.id,
+      // isLike: isLike === 0 ? 1 : 0,
+      type: 20,
+    })
+      .then(({ data }) => {
+        callback({ isLike, likeCount })
+      })
+      .finally(() => {})
     // 当请求失败, 调用callback重置点赞效果;
     // Demo如下:
     // axios.post("http://xxx/like", { id: params }).then((res) => {

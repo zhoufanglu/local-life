@@ -22,22 +22,26 @@
         }}</span>
       </view>
       <view class="top_right" @tap="likeClick(props.data)">
-        <span :class="[props.data.isLike ? 'active' : '', 'like_count']">{{
-          // cLikeCount
-          props.data.likeCount
-        }}</span>
-        <uni-icons
-          v-if="props.data.isLike"
-          type="hand-up-filled"
-          size="24"
-          color="#A26D37"
-        ></uni-icons>
-        <uni-icons
-          v-if="!props.data.isLike"
-          type="hand-up"
-          size="24"
-          color="#999"
-        ></uni-icons>
+        <view v-if="!likeLoading" style="display: flex; align-items: center">
+          <span :class="[props.data.isLike ? 'active' : '', 'like_count']">{{
+            // cLikeCount
+            props.data.likeCount
+          }}</span>
+          <uni-icons
+            v-if="props.data.isLike"
+            type="hand-up-filled"
+            size="24"
+            color="#A26D37"
+          ></uni-icons>
+          <uni-icons
+            v-if="!props.data.isLike"
+            type="hand-up"
+            size="24"
+            color="#999"
+          ></uni-icons>
+        </view>
+
+        <up-loading-icon v-if="likeLoading"></up-loading-icon>
       </view>
     </view>
     <view class="content" @tap="replyClick(props.data)">
@@ -77,6 +81,10 @@
     pData: {
       type: Object,
       default: () => {},
+    },
+    likeLoading: {
+      type: Boolean,
+      default: false,
     },
   })
 
