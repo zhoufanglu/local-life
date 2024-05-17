@@ -1,5 +1,6 @@
 <script setup>
   import { ref, watch } from 'vue'
+  import { payState } from '@/enums'
   const props = defineProps(['orders'])
   /*const props = defineProps({
     list: {
@@ -24,22 +25,27 @@
 </script>
 <template>
   <view class="order-list">
-    {{ orders }}
     <view
       class="order-item"
       v-for="(order, index) in orders"
       :key="index"
       @click="goDetail"
     >
+      <image
+        mode="widthFix"
+        src="@/static/order/orderBg.png"
+        class="bg-img"
+      ></image>
       <view class="left">
-        <view class="title">课程名称</view>
+        <view class="title">{{ order.orderTitle }}</view>
         <view class="info">
-          <text>高级课程</text>
-          <text>¥999</text>
+          <text>{{ order.skuName }}</text>
+          <text>¥{{ order.goodsPrice }}</text>
         </view>
-        <view class="btn">查看订单</view>
+        <view class="btn" style="opacity: 1">查看订单</view>
       </view>
       <view class="right">
+        <!--        <text>{{ payState[order.orderStauts] }}</text>-->
         <image src="@/static/order/bought.png"></image>
       </view>
     </view>
@@ -51,20 +57,30 @@
     display: flex;
     flex-direction: column;
     .order-item {
-      // border: solid 1px green;
+      border: solid 1px green;
       width: 100%;
       height: 360rpx;
       padding: 27rpx;
       box-sizing: border-box;
+      position: relative;
       /*background: url('https://cdn.uviewui.com/uview/swiper/swiper3.png')
         no-repeat;*/
-      //background: url('@/static/order/orderBg.png') no-repeat;
-      background-size: 100% 100%;
+      /*background: url('@/static/order/orderBg.png') no-repeat;
+      background-size: 100% 100%;*/
       margin-bottom: 20rpx;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      // border-bottom: solid 1px #eee;
+      .bg-img {
+        position: absolute;
+        top: 0;
+        /*width: 100%;
+        height: 100%;*/
+        z-index: 1;
+      }
       .left {
+        z-index: 2;
         // border: solid 1px red;
         height: 100%;
         display: flex;
@@ -102,6 +118,7 @@
         }
       }
       .right {
+        z-index: 2;
         height: 100%;
         @include vertical-center;
         justify-content: flex-end;

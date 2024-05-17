@@ -8,14 +8,26 @@
     getUserInfo as getUserInfoApi,
     getFansAndFollow as getFansAndFollowApi,
   } from '@/api/modules/user'
-  import { createCart, getOrders } from '@/api/modules/mall'
+  import { getMyOrders as getMyOrdersApi } from '@/api/modules/mall'
+
   const variables = reactive({
-    bgUrl: 'https://cdn.uviewui.com/uview/swiper/swiper3.png',
-    gender: '男',
-    username: '张三',
+    bgUrl: '',
+    gender: '',
+    username: '',
     mark: '这个人很懒，什么都没留下',
     fansList: [], // 粉丝列表
     followList: [], // 关注列表
+  })
+
+  const userType = ref('mine') // mine/other
+
+  const tabs = reactive({
+    current: 2,
+    list: [
+      { name: '动态', value: 'dynamicState', index: 0 },
+      { name: '点赞', value: 'like', index: 1 },
+      { name: '订单', value: 'order', index: 2 },
+    ],
   })
   // ?获取用户信息
   const getUserInfo = () => {
@@ -48,6 +60,15 @@
 
   // ?获取订单信息
   const orders = ref([])
+  const getMyOrders = async () => {
+    const { data } = await getMyOrdersApi({
+      userNo: uni.getStorageSync('userNo'),
+      page: 1,
+      pageNum: 100,
+    })
+    orders.value = data.list
+  }
+
   /*createCart({
     userNo: uni.getStorageSync('userNo'),
   }).then((res) => {
@@ -64,18 +85,21 @@
   const load = () => {
     getUserInfo()
     getFansAndFollow()
+    if (userType.value === 'mine') {
+      getMyOrders()
+    }
   }
-  onLoad(() => {
-    load()
-  })
+  /**********************event***********************/
 
-  const tabs = reactive({
-    current: 0,
-    list: [
-      { name: '动态', value: 'dynamicState', index: 0 },
-      { name: '点赞', value: 'like', index: 1 },
-      { name: '订单', value: 'order', index: 2 },
-    ],
+  onLoad((options) => {
+    userType.value = options.userType || 'mine'
+    if (userType.value === 'other') {
+      tabs.list = [
+        { name: '动态', value: 'dynamicState', index: 0 },
+        { name: '点赞', value: 'like', index: 1 },
+      ]
+    }
+    load()
   })
 
   const handleTabClick = (item) => {
@@ -98,9 +122,10 @@
       enableDebug: true,
     })
   }
+  const goUserChat = () => {}
 </script>
 <template>
-  <tab-bar></tab-bar>
+  <tab-bar v-if="userType === 'mine'"></tab-bar>
   <div class="p-mine">
     <view class="mine-content">
       <!--?顶部-->
@@ -111,7 +136,12 @@
         <view class="avatar-row">
           <!--          <img class="user_avatar" :src="variables.avatar" alt="" />-->
           <up-avatar :size="60" :src="variables.avatar"></up-avatar>
-          <view class="btn" @click="goEditProfile">编辑资料</view>
+          <view class="btn" @click="goEditProfile" v-if="userType === 'mine'"
+            >编辑资料</view
+          >
+          <view class="btn" v-if="userType === 'other'" @click="goUserChat"
+            >私信一下</view
+          >
         </view>
         <view class="username">{{ variables.nickname }}</view>
         <view class="follow-and-fans">
@@ -167,6 +197,7 @@
   .p-mine {
     position: relative;
     box-sizing: border-box;
+    // background-color: white;
     .mine-content {
       position: relative;
       .mine-top {
@@ -242,7 +273,12 @@
         position: relative;
         top: -40rpx;
         .mine-tabs-inner {
+          // border: solid 1px red;
           width: 50%;
+          .u-tabs__wrapper__nav__item {
+            /*border: solid 1px red;
+            width: 80rpx;*/
+          }
         }
       }
       .tab-inner-panel {

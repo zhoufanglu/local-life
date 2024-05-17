@@ -1,6 +1,8 @@
 <script setup>
   import { ref } from 'vue'
   import { getPublishLikePage as getPublishLikePageApi } from '@/api/modules/user'
+  import { useGoDetailByItem } from '@/hooks/useGoDetailByItem'
+  const { goDetailByItem } = useGoDetailByItem()
 
   const props = defineProps({
     type: {
@@ -28,7 +30,7 @@
 
   const goDetail = (item) => {
     // 去动态详情
-    console.log(item.target)
+    goDetailByItem(item)
   }
 </script>
 <template>
@@ -37,7 +39,7 @@
       class="item"
       v-for="(i, index) in list"
       :key="index"
-      @click="goDetail"
+      @click="goDetail(i)"
     >
       <up-image
         class="cover"

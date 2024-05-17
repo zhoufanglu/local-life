@@ -111,6 +111,15 @@ export function createOrderByCartId(data) {
   })
 }
 
+export function getMyOrders(data) {
+  return http({
+    method: 'POST',
+    url: '/app-api/mall/order/details',
+    data,
+    json: 'json',
+  })
+}
+
 /**********************支付***********************/
 export function payApi(data) {
   return http({

@@ -1,8 +1,8 @@
 <script setup>
   import TabBar from '@/components/TabBar.vue'
   import followImg from '@/static/message/follow.png'
-  import commentImg from '@/static/message/follow.png'
-  import likeImg from '@/static/message/follow.png'
+  import commentImg from '@/static/message/comment.png'
+  import likeImg from '@/static/message/like.png'
   import message from '@/static/message/message.png'
   import { reactive, ref } from 'vue'
   import { getBoundInfo } from '@/utils'

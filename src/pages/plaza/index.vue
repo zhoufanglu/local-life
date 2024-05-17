@@ -12,9 +12,9 @@
     <view
       class="inner-content"
       :style="{ height: `calc(100% - ${statusBarHeight * 2 + 204 + 116}rpx)` }"
-      @touchStart="touchStart"
-      @touchMove="touchMove"
-      @touchEnd="touchEnd"
+      @touchStart.capture="touchStart"
+      @touchMove.capture="touchMove"
+      @touchEnd.capture="touchEnd"
     >
       <!--关注-->
       <waterFallList type="follow" v-if="curPanel === 'follow'"></waterFallList>
@@ -44,7 +44,7 @@
   import Foods from '@/components/plaza/Foods.vue'
   import GoodsList from '@/components/plaza/GoodsList.vue'
   import { useLogin } from '@/hooks/useLogin'
-  import { useSlipDirection } from '@/hooks/useSlipDirection'
+  import { useSlipDirection } from '@/hooks/useSlipDirection.js'
 
   import { login } from '@/api/api.js'
   import { useRequest } from '@/hooks/useRequest'
@@ -62,7 +62,9 @@
   const handleRequest = () => {
     getRequest()
   }*/
+
   const { statusBarHeight } = getBoundInfo()
+
   const { touchStart, touchMove, touchEnd } = useSlipDirection()
 
   const curPanel = ref('follow')
@@ -154,7 +156,7 @@
     .inner-content {
       box-sizing: border-box;
       overflow-y: auto;
-      border: solid 1px red;
+      // border: solid 1px red;
     }
   }
 </style>
