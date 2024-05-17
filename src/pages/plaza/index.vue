@@ -6,9 +6,15 @@
       @handleTabChange="handleTabChange"
     ></HeaderPanel>
     <!--?主体-->
-    <div
+    <!--    @touchStart.stop.prevent="touchStart"
+    @touchMove.stop.prevent="touchMove"
+    @touchEnd.stop.prevent="touchEnd"-->
+    <view
       class="inner-content"
       :style="{ height: `calc(100% - ${statusBarHeight * 2 + 204 + 116}rpx)` }"
+      @touchStart="touchStart"
+      @touchMove="touchMove"
+      @touchEnd="touchEnd"
     >
       <!--关注-->
       <waterFallList type="follow" v-if="curPanel === 'follow'"></waterFallList>
@@ -24,7 +30,7 @@
         :type="curPanel"
         v-if="['partTimeJob', 'tenement', 'resell'].includes(curPanel)"
       ></goods-list>
-    </div>
+    </view>
     <!--?底部tab-->
     <tab-bar></tab-bar>
   </view>
@@ -38,14 +44,13 @@
   import Foods from '@/components/plaza/Foods.vue'
   import GoodsList from '@/components/plaza/GoodsList.vue'
   import { useLogin } from '@/hooks/useLogin'
-
-  // import { showToast } from 'vant'
-  const { statusBarHeight } = getBoundInfo()
+  import { useSlipDirection } from '@/hooks/useSlipDirection'
 
   import { login } from '@/api/api.js'
   import { useRequest } from '@/hooks/useRequest'
   import { getBoundInfo } from '@/utils'
   import { onLoad } from '@dcloudio/uni-app'
+
   /*const appStore = useStore()
 
   const { requestVariables, getRequest } = useRequest(login, {
@@ -57,6 +62,9 @@
   const handleRequest = () => {
     getRequest()
   }*/
+  const { statusBarHeight } = getBoundInfo()
+  const { touchStart, touchMove, touchEnd } = useSlipDirection()
+
   const curPanel = ref('follow')
   /*let list = ref([])
   //?test
@@ -146,6 +154,7 @@
     .inner-content {
       box-sizing: border-box;
       overflow-y: auto;
+      border: solid 1px red;
     }
   }
 </style>
