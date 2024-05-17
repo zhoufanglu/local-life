@@ -210,6 +210,11 @@
   const refreshData = () => {
     getTrendDetail(queryParams.type, queryParams.row)
   }
+  const goMine = () => {
+    uni.navigateTo({
+      url: '/pages/mine/index?userType=other',
+    })
+  }
 </script>
 <script>
   export default {
@@ -229,7 +234,11 @@
     >
       <u-icon @click="go()" name="arrow-left" color="black" size="28"></u-icon>
       <view class="user-info">
-        <up-avatar :size="30" :src="variables.data.avatar"></up-avatar>
+        <up-avatar
+          :size="30"
+          :src="variables.data.avatar"
+          @click="goMine()"
+        ></up-avatar>
         <text>{{ variables.data.nickname }}</text>
         <view
           @click="handleFollow"

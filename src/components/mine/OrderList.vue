@@ -57,10 +57,10 @@
     display: flex;
     flex-direction: column;
     .order-item {
-      border: solid 1px green;
+      //border: solid 1px green;
       width: 100%;
       height: 360rpx;
-      padding: 27rpx;
+      // padding: 27rpx;
       box-sizing: border-box;
       position: relative;
       /*background: url('https://cdn.uviewui.com/uview/swiper/swiper3.png')
@@ -75,11 +75,13 @@
       .bg-img {
         position: absolute;
         top: 0;
-        /*width: 100%;
-        height: 100%;*/
+        width: 100%;
+        height: 100%;
         z-index: 1;
       }
       .left {
+        padding: 27rpx 0 27rpx 27rpx;
+        box-sizing: border-box;
         z-index: 2;
         // border: solid 1px red;
         height: 100%;
@@ -118,6 +120,8 @@
         }
       }
       .right {
+        padding: 27rpx 0 27rpx 27rpx;
+        box-sizing: border-box;
         z-index: 2;
         height: 100%;
         @include vertical-center;

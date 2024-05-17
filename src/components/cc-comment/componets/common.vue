@@ -2,7 +2,11 @@
   <view class="comment_item">
     <view class="top">
       <view class="top_left">
-        <img class="user_avatar" :src="props.data.avatar" />
+        <img
+          class="user_avatar"
+          :src="props.data.avatar"
+          @click="goMine(props.data)"
+        />
         <!--        <uni-tag
           v-if="props.data.owner"
           class="tag"
@@ -139,6 +143,13 @@
   // 删除
   function deleteClick(item) {
     emit('deleteClick', item)
+  }
+
+  const goMine = (data) => {
+    console.log(145, data)
+    uni.navigateTo({
+      url: `/pages/mine/index?userType=other`,
+    })
   }
 </script>
 

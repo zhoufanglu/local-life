@@ -1,5 +1,5 @@
 <script setup>
-  import { onLoad, onReachBottom } from '@dcloudio/uni-app'
+  import { onLoad, onPageScroll, onReachBottom } from '@dcloudio/uni-app'
   import { data, list } from './data.js'
   import { reactive, getCurrentInstance, onMounted } from 'vue'
   import loadingCom from '@/components/loading.vue'

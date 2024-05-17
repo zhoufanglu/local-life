@@ -30,6 +30,7 @@
         :type="curPanel"
         v-if="['partTimeJob', 'tenement', 'resell'].includes(curPanel)"
       ></goods-list>
+      <up-back-top :scroll-top="scrollTop"></up-back-top>
     </view>
     <!--?底部tab-->
     <tab-bar></tab-bar>
@@ -49,7 +50,7 @@
   import { login } from '@/api/api.js'
   import { useRequest } from '@/hooks/useRequest'
   import { getBoundInfo } from '@/utils'
-  import { onLoad } from '@dcloudio/uni-app'
+  import { onLoad, onPageScroll } from '@dcloudio/uni-app'
 
   /*const appStore = useStore()
 
@@ -145,6 +146,15 @@
 
   const handleTabChange = (tabActive) => {
     curPanel.value = tabActive
+  }
+
+  onPageScroll((e) => {
+    scrollTop.value = e.scrollTop
+  })
+
+  const scrollTop = ref(0)
+  const onScrollTop = (e) => {
+    scrollTop.value = e.scrollTop
   }
 </script>
 
