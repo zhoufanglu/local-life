@@ -92,13 +92,17 @@
   /**********************event***********************/
 
   onLoad((options) => {
-    userType.value = options.userType || 'mine'
+    userType.value = options?.userType || 'mine'
     if (userType.value === 'other') {
       tabs.list = [
         { name: '动态', value: 'dynamicState', index: 0 },
         { name: '点赞', value: 'like', index: 1 },
       ]
     }
+    uni.$on('refreshData', () => {
+      console.log('refresh-userinfo')
+      getUserInfo()
+    })
     load()
   })
 

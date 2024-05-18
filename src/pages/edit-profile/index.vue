@@ -77,6 +77,10 @@
    * @returns {Promise<void>}
    */
   async function uploadFile(filePath, file, type) {
+    uni.showLoading({
+      title: '修改中',
+      mask: true,
+    })
     const { data } = await uni.uploadFile({
       url: `${BASE_URL}/admin-api/infra/file/upload`,
       name: 'file',
@@ -160,13 +164,17 @@
   }
 
   const handleBack = () => {
-    let pages = getCurrentPages() // 当前页面
+    uni.$emit('refreshData')
+    uni.navigateBack({
+      delta: 1,
+    })
+    /*let pages = getCurrentPages() // 当前页面
     let beforePage = pages[pages.length - 2] // 上一页
     uni.navigateBack({
       success: function () {
         beforePage.onLoad() // 执行上一页的onLoad方法
       },
-    })
+    })*/
   }
 </script>
 <script>

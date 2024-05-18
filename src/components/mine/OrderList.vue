@@ -1,6 +1,10 @@
 <script setup>
   import { ref, watch } from 'vue'
   import { payState } from '@/enums'
+  import status010 from '@/static/order/010.png'
+  import status020 from '@/static/order/020.png'
+  import status030 from '@/static/order/030.png'
+
   const props = defineProps(['orders'])
   /*const props = defineProps({
     list: {
@@ -22,6 +26,14 @@
   const goDetail = (item) => {
     console.log(item.target)
   }
+  const getStatusImg = (status) => {
+    const statusMap = {
+      '010': status010,
+      '020': status020,
+      '030': status030,
+    }
+    return statusMap[status]
+  }
 </script>
 <template>
   <view class="order-list">
@@ -37,16 +49,18 @@
         class="bg-img"
       ></image>
       <view class="left">
-        <view class="title">{{ order.orderTitle }}</view>
-        <view class="info">
-          <text>{{ order.skuName }}</text>
-          <text>¥{{ order.goodsPrice }}</text>
+        <view>
+          <view class="title">{{ order.orderTitle }}</view>
+          <view class="info">
+            <text>{{ order.skuName }}</text>
+            <text>¥{{ order.goodsPrice }}</text>
+          </view>
+          <!--          <view class="btn" style="opacity: 0">查看订单</view>-->
         </view>
-        <view class="btn" style="opacity: 1">查看订单</view>
       </view>
       <view class="right">
         <!--        <text>{{ payState[order.orderStauts] }}</text>-->
-        <image src="@/static/order/bought.png"></image>
+        <image :src="getStatusImg(order.orderStauts)"></image>
       </view>
     </view>
   </view>
@@ -87,8 +101,7 @@
         height: 100%;
         display: flex;
         width: calc(100% - 200rpx);
-        flex-direction: column;
-        justify-content: space-between;
+        @include vertical-center;
         .title {
           font-size: 32rpx;
           color: #333;
