@@ -49,72 +49,19 @@
   import { getBoundInfo } from '@/utils'
   import { onLoad, onPageScroll } from '@dcloudio/uni-app'
 
-  /*const appStore = useStore()
-
-  const { requestVariables, getRequest } = useRequest(login, {
-    filterOptions: {
-      username: 'admin',
-    },
-    immediate: false,
-  })
-  const handleRequest = () => {
-    getRequest()
-  }*/
-
   const { statusBarHeight } = getBoundInfo()
 
-  const { touchStart, touchMove, touchEnd } = useSlipDirection()
+  const { touchStart, touchMove, touchEnd } = useSlipDirection(handleTouchMove)
 
   const curPanel = ref('follow')
-  /*let list = ref([])
-  //?test
-  list.value = [
-    {
-      isLike: false,
-      likes: 100,
-      avatar:
-        'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
-      bg: 'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
-    },
-    {
-      isSmall: true,
-      isLike: false,
-      likes: 100,
-      avatar:
-        'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
-      bg: 'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
-    },
-    {
-      isLike: false,
-      likes: 100,
-      avatar:
-        'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
-      bg: 'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
-    },
-    {
-      isLike: false,
-      likes: 100,
-      avatar:
-        'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
-      bg: 'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
-    },
-    {
-      isLike: false,
-      likes: 100,
-      avatar:
-        'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
-      bg: 'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
-    },
-    {
-      isLike: false,
-      likes: 100,
-      avatar:
-        'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
-      bg: 'https://pbs.twimg.com/media/F9NmsLia0AAw49i?format=jpg&name=900x900',
-    },
-  ]*/
 
   const headerPanelRef = ref(null)
+
+  function handleTouchMove(direction) {
+    console.log(61, direction)
+    headerPanelRef.value.setCurrent(direction)
+  }
+
   /**
    * route query的方式传输curType, 就能默认设置当前tab
    */

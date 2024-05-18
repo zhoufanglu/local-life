@@ -178,28 +178,28 @@
   <view class="p-goods-list">
     <!--?租房项-->
     <view v-if="type === 'tenement'" class="pickers">
-      <view class="item" @click="openPicker('区域')">
+      <view class="item" @click.stop="openPicker('区域')">
         {{ filterOptions.rentZone || '区域' }}
 
         <image src="@/static/plaza/triangle.png" />
       </view>
-      <view class="left-line right-line item" @click="openPicker('整租')"
+      <view class="left-line right-line item" @click.stop="openPicker('整租')"
         >{{ rentTypeName }}<image src="@/static/plaza/triangle.png"
       /></view>
-      <view class="item" @click="openPicker('房屋类型')"
+      <view class="item" @click.stop="openPicker('房屋类型')"
         >{{ rentRoomName }}<image src="@/static/plaza/triangle.png"
       /></view>
     </view>
     <!--?转卖-->
     <view v-if="type === 'resell'" class="pickers">
       <view
-        @click="handleTabChange(2)"
+        @click.stop="handleTabChange(2)"
         class="right-line item"
         :class="filterOptions.resaleCategory === 2 ? 'active' : null"
         >二手好车
       </view>
       <view
-        @click="handleTabChange(1)"
+        @click.stop="handleTabChange(1)"
         class="item"
         :class="filterOptions.resaleCategory === 1 ? 'active' : null"
         >闲置好物</view

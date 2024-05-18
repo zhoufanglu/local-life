@@ -51,32 +51,14 @@ getData()
     }
     getTrends(params)
       .then(({ data }) => {
-        // 初始化封面
-        /*data.list.forEach((i) => {
-          i.coverImage =
-            i.coverImage ||
-            'https://www.logosc.cn/uploads/resources/2023/03/17/1679045108_thumb.jpg'
-        })*/
+        console.log(54, data.list)
         state.totalList.push(...data.list)
-        console.log(57, data.list)
         loadNextItem()
         state.status = data.list.length >= 10 ? 'loadmore' : 'nomore'
       })
       .finally(() => {
         // state.status = 'loading'
       })
-    return false
-    state.loading = true
-    if (state.pages.page === 1) setDefaultData()
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        state.totalList.push(...data)
-        // console.log(95, state.totalList)
-        state.loading = false
-        loadNextItem()
-        resolve()
-      }, 500)
-    })
   }
 
   /** @加载更多 **/
@@ -190,7 +172,7 @@ getData()
           <view
             v-for="(item, i) in state.columnData[colNum]"
             :key="i"
-            @click="goDetail(item)"
+            @click.stop="goDetail(item)"
           >
             <div class="item">
               <img
@@ -203,7 +185,7 @@ getData()
               <div class="info">
                 <text>{{ i }}---{{ item.content }}</text>
                 <div class="end-row">
-                  <div class="left" @click="goUserInfo">
+                  <div class="left" @click.stop="goUserInfo">
                     <u-image
                       class="avatar"
                       :src="item.coverImage"

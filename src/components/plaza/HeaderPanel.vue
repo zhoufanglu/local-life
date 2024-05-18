@@ -59,8 +59,14 @@
     console.log('postion')
   }
 
-  const setCurrent = (val) => {
-    current.value = headerTabs.value.findIndex((i) => i.value === val)
+  const setCurrent = (direction) => {
+    if (direction === 'left') {
+      current.value = current.value === 0 ? 0 : current.value - 1
+    } else if (direction === 'right') {
+      current.value = current.value === 5 ? 5 : current.value + 1
+    }
+    const value = headerTabs.value.find((i) => i.index === current.value).value
+    emit('handleTabChange', value)
   }
 
   defineExpose({

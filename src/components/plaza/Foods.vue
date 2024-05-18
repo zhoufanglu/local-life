@@ -55,7 +55,7 @@
         class="item"
         v-for="(food, index) in foods"
         :key="index"
-        @click="goFoodsDetail(food)"
+        @click.stop="goFoodsDetail(food)"
       >
         <up-image
           class="cover"
