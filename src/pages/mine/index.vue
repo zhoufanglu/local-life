@@ -149,7 +149,11 @@
       >
         <view class="avatar-row">
           <!--          <img class="user_avatar" :src="variables.avatar" alt="" />-->
-          <up-avatar :size="60" :src="variables.avatar"></up-avatar>
+          <up-avatar
+            mode="widthFix"
+            :size="60"
+            :src="variables.avatar"
+          ></up-avatar>
           <view class="btn" @click="goEditProfile" v-if="userType === 'mine'"
             >编辑资料</view
           >

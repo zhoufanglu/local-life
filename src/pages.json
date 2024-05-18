@@ -68,6 +68,9 @@
       "path": "pages/login/index"
     },
     {
+      "path": "pages/chat/index"
+    },
+    {
       "path": "pages/create/index",
       "style": {
         "navigationStyle": "custom",

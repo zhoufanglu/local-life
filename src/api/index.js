@@ -53,8 +53,9 @@ const http = ({
 }) => {
   if (!url) return
   return new Promise((resolve, reject) => {
+    const urlTemp = url.includes('http') ? url : BASE_URL + url
     uni.request({
-      url: BASE_URL + url,
+      url: urlTemp,
       method,
       data,
       header: {
