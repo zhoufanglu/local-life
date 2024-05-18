@@ -7,15 +7,15 @@
           :src="props.data.avatar"
           @click="goMine(props.data)"
         />
-        <!--        <uni-tag
-          v-if="props.data.owner"
+        <uni-tag
+          v-if="props.data.userId === userNo"
           class="tag"
           type="primary"
           :inverted="false"
-          text="作者"
+          text="自己"
           size="mini"
           circle
-        />-->
+        />
         <span class="user_name">{{ props.data.nickname }}</span>
         <span class="user_name" v-if="props.data.parentId !== 0">{{
           cReplyName
@@ -88,6 +88,7 @@
     },
   })
 
+  const userNo = Number(uni.getStorageSync('userNo'))
   // 被回复人名称
   const cReplyName = computed(() => {
     return props.data?.nicknameRelay ? ` ▸ ` + props.data?.nicknameRelay : ''
@@ -144,7 +145,7 @@
   // 回复
   function replyClick(item) {
     // 自己不能回复自己
-    if (item.owner) return
+    // if (item.owner) return
     emit('replyClick', item)
   }
 
@@ -156,7 +157,7 @@
   const goMine = (data) => {
     console.log(145, data)
     uni.navigateTo({
-      url: `/pages/mine/index?userType=other`,
+      url: `/pages/mine/index?userType=other&userNo=${data.userId}`,
     })
   }
 </script>

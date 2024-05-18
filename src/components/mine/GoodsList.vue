@@ -9,6 +9,10 @@
       type: Number,
       default: () => 0, // 0=动态， 1=点赞
     },
+    searchUserNo: {
+      type: Number,
+      default: -1,
+    },
   })
 
   const list = ref([])
@@ -20,9 +24,10 @@
       pageNo: 1,
       pageSize: 100,
       type: props.type,
+      userId: props.searchUserNo,
     }).then(({ data }) => {
-      list.value = data.list
-      isNoData.value = !data.list.length
+      list.value = data.list || []
+      isNoData.value = !list.value.length
     })
   }
 

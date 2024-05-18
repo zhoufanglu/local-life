@@ -13,16 +13,6 @@
     },
   })*/
   const list = ref([])
-  // 模拟10个list
-  for (let i = 0; i < 8; i++) {
-    list.value.push({
-      id: i + 3,
-      name: `商品${i + 3}`,
-      price: 100 + i * 10,
-      count: i + 3,
-      imgUrl: 'https://cdn.uviewui.com/uview/swiper/swiper3.png',
-    })
-  }
   const goDetail = (item) => {
     console.log(item.target)
   }
@@ -63,6 +53,8 @@
         <image :src="getStatusImg(order.orderStauts)"></image>
       </view>
     </view>
+    <up-empty v-if="orders.length === 0" mode="data" style="margin-top: 40rpx">
+    </up-empty>
   </view>
 </template>
 

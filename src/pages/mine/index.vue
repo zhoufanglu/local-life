@@ -20,9 +20,10 @@
   })
 
   const userType = ref('mine') // mine/other
+  const searchUserNo = ref(Number(uni.getStorageSync('userNo')))
 
   const tabs = reactive({
-    current: 2,
+    current: 0,
     list: [
       { name: '动态', value: 'dynamicState', index: 0 },
       { name: '点赞', value: 'like', index: 1 },
@@ -31,7 +32,9 @@
   })
   // ?获取用户信息
   const getUserInfo = () => {
-    getUserInfoApi().then(({ data }) => {
+    getUserInfoApi({
+      userId: searchUserNo.value,
+    }).then(({ data }) => {
       variables.avatar = data.avatar
       variables.nickname = data.nickname
       variables.bgUrl = data.background || '/static/mine/bg.jpeg'
@@ -43,6 +46,7 @@
     const params = {
       pageNo: 1,
       pageSize: 100,
+      userId: searchUserNo.value,
     }
     getFansAndFollowApi({
       ...params,
@@ -93,6 +97,12 @@
 
   onLoad((options) => {
     userType.value = options?.userType || 'mine'
+    searchUserNo.value = Number(
+      options?.userNo || Number(uni.getStorageSync('userNo')),
+    )
+    if (searchUserNo.value === Number(uni.getStorageSync('userNo'))) {
+      userType.value = 'mine'
+    }
     if (userType.value === 'other') {
       tabs.list = [
         { name: '动态', value: 'dynamicState', index: 0 },
@@ -187,8 +197,16 @@
         ></u-tabs>
         <u-divider style="width: 95%; margin: 0 auto"></u-divider>
         <view class="tab-inner-panel">
-          <goods-list v-if="tabs.current === 0" :type="0"></goods-list>
-          <goods-list v-if="tabs.current === 1" :type="1"></goods-list>
+          <goods-list
+            v-if="tabs.current === 0"
+            :type="0"
+            :searchUserNo="searchUserNo"
+          ></goods-list>
+          <goods-list
+            v-if="tabs.current === 1"
+            :type="1"
+            :searchUserNo="searchUserNo"
+          ></goods-list>
           <order-list v-if="tabs.current === 2" :orders="orders"></order-list>
         </view>
       </view>

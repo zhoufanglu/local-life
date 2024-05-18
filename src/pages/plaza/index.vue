@@ -6,15 +6,12 @@
       @handleTabChange="handleTabChange"
     ></HeaderPanel>
     <!--?主体-->
-    <!--    @touchStart.stop.prevent="touchStart"
-    @touchMove.stop.prevent="touchMove"
-    @touchEnd.stop.prevent="touchEnd"-->
     <view
       class="inner-content"
       :style="{ height: `calc(100% - ${statusBarHeight * 2 + 204 + 116}rpx)` }"
-      @touchStart.capture="touchStart"
-      @touchMove.capture="touchMove"
-      @touchEnd.capture="touchEnd"
+      @touchstart="touchStart"
+      @touchmove="touchMove"
+      @touchend="touchEnd"
     >
       <!--关注-->
       <waterFallList type="follow" v-if="curPanel === 'follow'"></waterFallList>
@@ -166,7 +163,6 @@
     .inner-content {
       box-sizing: border-box;
       overflow-y: auto;
-      // border: solid 1px red;
     }
   }
 </style>

@@ -33,7 +33,8 @@
     if (
       curType.value === 'follow' ||
       curType.value === 'like' ||
-      curType.value === 'comment'
+      curType.value === 'comment' ||
+      curType.value === 'fans'
     ) {
       getFansAndFollow()
     }

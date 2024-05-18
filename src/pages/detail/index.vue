@@ -26,6 +26,7 @@
       isFan: 1,
     },
   })
+  const userNo = ref(uni.getStorageSync('userNo'))
 
   const { getPrice, getUnit } = useEnums(props.type)
   /**
@@ -221,9 +222,9 @@
   const refreshData = () => {
     getTrendDetail(queryParams.type, queryParams.row)
   }
-  const goMine = () => {
+  const goMine = (userNo) => {
     uni.navigateTo({
-      url: '/pages/mine/index?userType=other',
+      url: `/pages/mine/index?userType=other&userNo=${userNo}`,
     })
   }
 </script>
@@ -248,20 +249,27 @@
         <up-avatar
           :size="30"
           :src="variables.data.avatar"
-          @click="goMine()"
+          @click="goMine(variables.data.publisher)"
         ></up-avatar>
         <text>{{ variables.data.nickname }}</text>
         <view
           @click="handleFollow"
           class="follow"
-          v-if="variables.data.isFan !== 1"
+          v-if="
+            variables.data.isFan !== 1 && variables.data.publisher != userNo
+          "
           >关注</view
         >
         <view
           @click="handleFollow"
           class="followed"
-          v-if="variables.data.isFan === 1"
+          v-if="
+            variables.data.isFan === 1 && variables.data.publisher != userNo
+          "
           >已关注</view
+        >
+        <view class="followed" v-if="variables.data.publisher == userNo"
+          >自己</view
         >
       </view>
     </view>
