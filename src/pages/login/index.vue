@@ -1,7 +1,7 @@
 <script setup>
   import { useLogin } from '@/hooks/useLogin'
   import { ref } from 'vue'
-  const { onGetPhoneNumber } = useLogin('login')
+  const { onGetPhoneNumber, judgeIsLogin } = useLogin('login')
 
   const checked = ref(true)
 
@@ -15,6 +15,14 @@
     content.value =
       'sadas是多少sadas是多少sadas是多少sadas是多少sadas是多少sadas是多少sadas是多少sadas是多少sadas是多少'
   }
+
+  const openVconsole = () => {
+    uni.setEnableDebug({
+      enableDebug: true,
+    })
+  }
+
+  judgeIsLogin()
 </script>
 <template>
   <view class="p-login-page">
@@ -27,6 +35,7 @@
         @getphonenumber="onGetPhoneNumber"
         >手机号快捷登录</button
       >
+      <button @click="openVconsole">test</button>
       <view class="userAgreement">
         <!--        <view class="checkIcon" v-if="isChoice"> 请阅读并勾选用户协议 </view>-->
         <view class="line1">

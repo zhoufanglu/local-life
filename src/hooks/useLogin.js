@@ -31,12 +31,6 @@ const useLogin = (from = 'login') => {
     })
   }
 
-  const handleLogout = () => {
-    logoutApi({}).then((res) => {
-      console.log(33, res)
-    })
-  }
-
   const onGetPhoneNumber = (e) => {
     console.log(34, e.detail)
     if (!e.detail.code) {
@@ -87,10 +81,18 @@ const useLogin = (from = 'login') => {
     }*/
   }
 
+  const judgeIsLogin = () => {
+    if (!!uni.getStorageSync('token')) {
+      uni.navigateTo({
+        url: '/pages/plaza/index',
+      })
+    }
+  }
+
   return {
     handleLogin,
-    handleLogout,
     onGetPhoneNumber,
+    judgeIsLogin,
   }
 }
 

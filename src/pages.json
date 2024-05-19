@@ -19,65 +19,75 @@
 
   },
 */
-    "pages" : [
-        //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-        {
-            "path" : "pages/plaza/index",
-            "style" : {
-                "navigationStyle" : "custom",
-                "navigationBarTitleText" : "广场"
-            }
-        },
-        {
-      "path": "pages/study/index"
-    },
-    {
-      "path": "pages/search/index"
-    },
-    {
-      "path": "pages/message/index"
-    },
-    {
-      "path": "pages/mine/index"
-    },
-    {
-      "path": "pages/detail/index"
-    },
-    {
-      "path": "pages/foods-detail/index"
-    },
-    {
-      "path": "pages/all-foods/index"
-    },
-    {
-      "path": "pages/course-detail/index"
-    },
-    {
-      "path": "pages/shopping-cart/index"
-    },
-    {
-      "path": "pages/edit-profile/index"
-    },
-    {
-      "path": "pages/mine-list/index"
-    },
-    {
-      "path": "pages/message-list/index"
-    },
+  "pages" : [
+      //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
     {
       "path": "pages/login/index"
     },
     {
-      "path": "pages/chat/index"
-    },
-    {
-      "path": "pages/create/index",
-      "style": {
-        "navigationStyle": "custom",
-        "navigationBarTitleText": "创建"
-        }
-}
+          "path" : "pages/plaza/index",
+          "style" : {
+              "navigationStyle" : "custom",
+              "navigationBarTitleText" : "广场"
+          }
+      },
+      {
+    "path": "pages/study/index"
+  },
+      {
+        "path": "pages/search/index"
+      },
+      {
+        "path": "pages/message/index"
+      },
+      {
+        "path": "pages/mine/index"
+      },
+      {
+        "path": "pages/detail/index"
+      },
+      {
+        "path": "pages/foods-detail/index"
+      },
+      {
+        "path": "pages/all-foods/index"
+      },
+      {
+        "path": "pages/course-detail/index"
+      },
+      {
+        "path": "pages/shopping-cart/index"
+      },
+      {
+        "path": "pages/edit-profile/index"
+      },
+      {
+        "path": "pages/mine-list/index"
+      },
+      {
+        "path": "pages/message-list/index"
+      },
   ],
+  "subPackages": [{
+    "root":"subPackages",  //根目录下的分包文件路径
+    "name":"subPackages",  //分包文件名字
+    "pages": [
+      {
+        "path": "create/index",
+        "style": {
+          "navigationStyle": "custom",
+          "navigationBarTitleText": "创建"
+        }
+      },
+      {
+        "path": "chat/index",
+        "style": {
+          "navigationStyle": "custom",
+          "navigationBarTitleText": "创建"
+        }
+      }
+    ]
+  }],
   "requiredPrivateInfos": [
     "getFuzzyLocation",
     "choosePoi",

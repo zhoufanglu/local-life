@@ -55,7 +55,10 @@
             "urlCheck" : false
         },
         "usingComponents" : true,
-      "mergeVirtualHostAttributes": true
+        "mergeVirtualHostAttributes": true,
+        "optimization": {
+          "subPackages": true
+        }
     },
     "mp-alipay" : {
         "usingComponents" : true

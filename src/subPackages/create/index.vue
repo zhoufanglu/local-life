@@ -2,7 +2,7 @@
   import PartTimeJobFilter from '@/components/create/PartTimeJobFilter.vue'
   import TenementFilter from '@/components/create/TenementFilter.vue'
   import ResellFilter from '@/components/create/ResellFilter.vue'
-  import { getBoundInfo } from '@/utils/index.js'
+  import { getBoundInfo } from '@/utils'
   import { onLoad } from '@dcloudio/uni-app'
   import { ref, reactive, watch } from 'vue'
   import {

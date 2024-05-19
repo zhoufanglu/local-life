@@ -105,6 +105,7 @@
       background: userInfo.bgUrl,
       mark: userInfo.mark,
       sex: userInfo.sex,
+      // userId: Number(uni.getStorageSync('userNo')),
       /*likeSet: userInfo.likeSet,
       trends: userInfo.trends,*/
     }).then(() => {

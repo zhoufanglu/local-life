@@ -9,6 +9,7 @@
     getFansAndFollow as getFansAndFollowApi,
   } from '@/api/modules/user'
   import { getMyOrders as getMyOrdersApi } from '@/api/modules/mall'
+  import { useLogout } from '@/hooks/useLogout'
 
   const variables = reactive({
     bgUrl: '',
@@ -137,6 +138,10 @@
     })
   }
   const goUserChat = () => {}
+  const { logout: logoutFn } = useLogout()
+  const logout = () => {
+    logoutFn()
+  }
 </script>
 <template>
   <tab-bar v-if="userType === 'mine'"></tab-bar>
@@ -154,12 +159,20 @@
             :size="60"
             :src="variables.avatar"
           ></up-avatar>
-          <view class="btn" @click="goEditProfile" v-if="userType === 'mine'"
-            >编辑资料</view
-          >
-          <view class="btn" v-if="userType === 'other'" @click="goUserChat"
-            >私信一下</view
-          >
+          <view>
+            <view class="btn" @click="goEditProfile" v-if="userType === 'mine'"
+              >编辑资料</view
+            >
+            <view
+              @click="logout"
+              class="btn logout-btn"
+              v-if="userType === 'mine'"
+              >注销</view
+            >
+            <view class="btn" v-if="userType === 'other'" @click="goUserChat"
+              >私信一下</view
+            >
+          </view>
         </view>
         <view class="username">{{ variables.nickname }}</view>
         <view class="follow-and-fans">
@@ -254,6 +267,10 @@
             border-radius: 8rpx;
             font-size: 26rpx;
             color: #ffffff;
+          }
+          .logout-btn {
+            background: #a26d37;
+            margin-top: 20rpx;
           }
         }
         .username {

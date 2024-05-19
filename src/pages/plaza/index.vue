@@ -58,7 +58,6 @@
   const headerPanelRef = ref(null)
 
   function handleTouchMove(direction) {
-    console.log(61, direction)
     headerPanelRef.value.setCurrent(direction)
   }
 

@@ -51,7 +51,7 @@
 
   const goCreate = (val) => {
     uni.navigateTo({
-      url: `/pages/create/index?type=${val}`,
+      url: `/subPackages/create/index?type=${val}`,
     })
   }
 
@@ -60,9 +60,9 @@
   }
 
   const setCurrent = (direction) => {
-    if (direction === 'left') {
+    if (direction === 'right') {
       current.value = current.value === 0 ? 0 : current.value - 1
-    } else if (direction === 'right') {
+    } else if (direction === 'left') {
       current.value = current.value === 5 ? 5 : current.value + 1
     }
     const value = headerTabs.value.find((i) => i.index === current.value).value
