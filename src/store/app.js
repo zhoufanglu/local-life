@@ -5,8 +5,8 @@ export default defineStore({
   state: () => {
     return {
       systemInfo: {},
-      username: 'aaa',
-      token: 'test',
+      username: '',
+      token: '',
       historyRecords: [],
     }
   },

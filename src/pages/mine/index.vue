@@ -236,6 +236,7 @@
   .p-mine {
     position: relative;
     box-sizing: border-box;
+    overflow-y: hidden;
     // background-color: white;
     .mine-content {
       position: relative;
