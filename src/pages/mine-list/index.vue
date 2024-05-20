@@ -9,6 +9,8 @@
   const list = ref([])
   //like comment follow message
   let curType = ref('follow') // follow: 关注列表, fans: 粉丝列表
+  let searchUserNo = ref('-1') // 查询的用户
+
   uni.showLoading({
     title: '加载中...',
     mask: true,
@@ -17,6 +19,7 @@
     const params = {
       pageNo: 1,
       pageSize: 100,
+      userId: searchUserNo.value,
     }
     getFansAndFollowApi({
       ...params,
@@ -29,6 +32,7 @@
 
   onLoad((options) => {
     curType.value = options.type || 'follow'
+    searchUserNo.value = options.searchUserNo || -1
     //? 关注 点赞 评论
     if (
       curType.value === 'follow' ||
@@ -79,6 +83,7 @@
         <view class="pic-left" @click="goUserDetail">
           <u-avatar
             class="avatar"
+            mode="aspectFill"
             :src="item.avatar"
             :size="50"
             :border="false"

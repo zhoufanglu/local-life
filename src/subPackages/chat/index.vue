@@ -3,7 +3,7 @@
   import { reactive } from 'vue'
   import { getBoundInfo } from '@/utils'
 
-  const { statusBarHeight } = getBoundInfo()
+  const { boundTop } = getBoundInfo()
 
   const variables = reactive({
     username: 'sss',
@@ -78,11 +78,7 @@
       :titleStyle="{ color: '#333', fontSize: '40rpx' }"
     >
     </u-navbar>
-    <scroll-view
-      :scroll-y="true"
-      class="message-content"
-      :style="{ height: `calc(100% - ${88 + 100}rpx)` }"
-    >
+    <scroll-view :scroll-y="true" class="message-content">
       <!--?消息列表-->
       <template :key="index" v-for="(msg, index) in variables.messageList">
         <view class="message-item" :class="index / 2 ? 'left' : 'right'">
@@ -109,11 +105,20 @@
 </template>
 
 <style scoped lang="scss">
+  //env(safe-area-inset-top)
+  //env(safe-area-inset-bottom)
   .p-chat {
     height: 100vh;
     box-sizing: border-box;
     .message-content {
-      margin-top: 86rpx;
+      margin-top: calc(env(safe-area-inset-top) + 44px + 60px);
+      height: calc(
+        100vh - 44px - 50px - calc(env(safe-area-inset-top)) - env(
+            safe-area-inset-bottom
+          ) - 60px
+      );
+      //margin-top: 86rpx;
+      // border: solid 1px red;
       // border: solid 1px red;
       display: flex;
       flex-direction: column;

@@ -89,6 +89,11 @@ const useLogin = (from = 'login') => {
     }
   }
 
+  const sortFun = (x, y) => {
+    if (x > y) return true
+    else if (x < y) return false
+  }
+
   return {
     handleLogin,
     onGetPhoneNumber,

@@ -95,7 +95,6 @@
     }
   }
   /**********************event***********************/
-
   onLoad((options) => {
     userType.value = options?.userType || 'mine'
     searchUserNo.value = Number(
@@ -128,7 +127,7 @@
   }
   const goMineList = (type) => {
     uni.navigateTo({
-      url: `/pages/mine-list/index?type=${type}`,
+      url: `/pages/mine-list/index?type=${type}&searchUserNo=${searchUserNo.value}`,
     })
   }
   const openConsole = () => {
@@ -138,7 +137,11 @@
       enableDebug: true,
     })
   }
-  const goUserChat = () => {}
+  const goUserChat = () => {
+    uni.navigateTo({
+      url: `/subPackages/chat/index`,
+    })
+  }
   const { logout: logoutFn } = useLogout()
   const logout = () => {
     logoutFn()

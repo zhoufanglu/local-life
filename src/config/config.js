@@ -5,7 +5,7 @@
 // ? 生产
 const BASE_URL = 'https://www.lizhaoblog.com'
 
-// ?悟空IM配置
+// ?悟空IM配置, ws-websocket, url-接口
 const WK_ADDR_WS = 'http://8.134.219.155:5200'
 const WK_ADDR_URL = 'http://8.134.219.155:5001'
 

@@ -1,8 +1,8 @@
 <script setup>
-  import { ref } from 'vue'
+  import { ref, watch } from 'vue'
   import { getPublishLikePage as getPublishLikePageApi } from '@/api/modules/user'
   import { useGoDetailByItem } from '@/hooks/useGoDetailByItem'
-  import { onLoad } from '@dcloudio/uni-app'
+  import { onLoad, onShow } from '@dcloudio/uni-app'
   const { goDetailByItem } = useGoDetailByItem()
 
   const props = defineProps({
@@ -18,9 +18,11 @@
 
   const list = ref([])
   const isNoData = ref(false)
+  const loading = ref(false)
 
   //?获取社交点赞/动态, 0=动态， 1=点赞
   const getPublishLikePage = () => {
+    loading.value = true
     getPublishLikePageApi({
       pageNo: 1,
       pageSize: 100,
@@ -29,12 +31,25 @@
     }).then(({ data }) => {
       list.value = data.list || []
       isNoData.value = !list.value.length
+      loading.value = false
     })
   }
 
+  onShow(() => {
+    // console.log('onShow')
+  })
+
   onLoad(() => {
+    // console.log('onLoad')
     getPublishLikePage()
   })
+
+  watch(
+    () => props.searchUserNo,
+    (newValue) => {
+      getPublishLikePage()
+    },
+  )
 
   const goDetail = (item) => {
     // 去动态详情
@@ -43,6 +58,12 @@
 </script>
 <template>
   <view class="panel">
+    <u-loading-icon
+      v-if="loading"
+      text="加载中"
+      textSize="12"
+      style="margin-top: 40rpx"
+    ></u-loading-icon>
     <view
       class="item"
       v-for="(i, index) in list"

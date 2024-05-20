@@ -1,7 +1,6 @@
 import { rentTimeUnits } from '@/enums'
 
 /**
- * @param type dynamicState
  * @i 传入内部函数，是当前选中的动态对象
  */
 export function useEnums() {
