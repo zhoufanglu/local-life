@@ -82,7 +82,7 @@
       mask: true,
     })
     const { data } = await uni.uploadFile({
-      url: `${BASE_URL}/admin-api/infra/file/upload`,
+      url: `${BASE_URL}/app-api/infra/file/upload`,
       name: 'file',
       filePath: filePath,
       formData: { file },

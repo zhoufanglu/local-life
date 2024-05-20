@@ -1,6 +1,8 @@
-import logout from '@/utils/logout'
 // import { showNotify } from 'vant'
 import { BASE_URL } from '@/config/config'
+
+import { useLogout } from '@/hooks/useLogout'
+const { logout } = useLogout()
 
 // const BASE_URL = import.meta.env.VITE_APP_WEB_URL
 
@@ -63,11 +65,13 @@ const http = ({
         ...DATA_TYPE[json].headers,
       },
       success: (res) => {
-        /*const data = res.data
-        console.log(64, data)*/
         if (res.statusCode === 200) {
-          if (res.data.code !== 0) {
+          const code = res.data.code
+          if (code !== 0) {
             uni.$u.toast(res.data.msg || '网络错误')
+            if (code === 401 || code === 403) {
+              logout()
+            }
             reject(res)
           } else {
             resolve(res.data)

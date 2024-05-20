@@ -146,6 +146,11 @@ getData()
       url: `/pages/detail/index?type=${props.type}&row=${JSON.stringify(item)}`,
     })
   }
+  const goMine = (userNo) => {
+    uni.navigateTo({
+      url: `/pages/mine/index?userType=other&userNo=${userNo}`,
+    })
+  }
 </script>
 <script>
   export default {
@@ -183,9 +188,9 @@ getData()
                 mode="widthFix"
               />
               <div class="info">
-                <text>{{ i }}---{{ item.content }}</text>
+                <text>{{ item.content }}</text>
                 <div class="end-row">
-                  <div class="left" @click.stop="goUserInfo">
+                  <div class="left" @click.stop="goMine(item.publisher)">
                     <u-image
                       class="avatar"
                       :src="item.coverImage"

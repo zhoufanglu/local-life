@@ -93,7 +93,7 @@
     const imgList = []
     for (const [index, file] of fileList.value.entries()) {
       const { data } = await uni.uploadFile({
-        url: `${BASE_URL}/admin-api/infra/file/upload`,
+        url: `${BASE_URL}/app-api/infra/file/upload`,
         name: 'file',
         filePath: filePathList.value[index],
         formData: { file },
@@ -156,10 +156,11 @@
       let pages = getCurrentPages() // 当前页面
       let beforePage = pages[pages.length - 2] // 上一页
       setTimeout(() => {
+        uni.$emit('refreshPlazaData')
         uni.navigateBack({
           delta: 1,
           success: function () {
-            beforePage.onLoad() // 执行上一页的onLoad方法
+            // beforePage.onLoad() // 执行上一页的onLoad方法
           },
         })
       }, 500)

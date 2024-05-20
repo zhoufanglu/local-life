@@ -330,12 +330,13 @@
               font-size: 20rpx;
               color: #666666;
               @include ellipsis(1);
-              width: calc(100% - 150rpx);
+              width: calc(100% - 300rpx);
             }
             .price {
               color: #666666;
-              width: 150rpx;
+              min-width: 300rpx;
               text-align: right;
+              // border: solid 1px red;
               text {
                 white-space: nowrap;
                 font-size: 34rpx;

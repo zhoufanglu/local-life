@@ -14,7 +14,7 @@ export function uploadFile(data) {
 export function delFile(data) {
   return http({
     method: 'DELETE',
-    url: '/admin-api/infra/file/delete',
+    url: '/app-api/infra/file/delete',
     data,
     json: 'json',
   })

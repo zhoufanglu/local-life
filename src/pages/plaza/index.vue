@@ -68,6 +68,10 @@
     curPanel.value = options?.curType || 'follow'
     console.log('onload')
     onMounted(() => {
+      headerPanelRef.value.setCurrentByCurType(curPanel.value)
+      uni.$on('refreshPlazaData', () => {
+        console.log('refresh')
+      })
       // ?测试test
       /*curPanel.value = 'follow'
       console.log(119, headerPanelRef.value)

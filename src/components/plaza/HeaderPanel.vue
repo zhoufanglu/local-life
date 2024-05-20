@@ -68,9 +68,17 @@
     const value = headerTabs.value.find((i) => i.index === current.value).value
     emit('handleTabChange', value)
   }
+  /**
+   *
+   * @param curType = follow, dynamicState, foods, partTimeJob, tenement, resell
+   */
+  const setCurrentByCurType = (curType) => {
+    current.value = headerTabs.value.find((i) => i.value === curType).index
+  }
 
   defineExpose({
     setCurrent,
+    setCurrentByCurType,
   })
 </script>
 <script>

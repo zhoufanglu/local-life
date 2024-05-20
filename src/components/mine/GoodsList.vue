@@ -2,6 +2,7 @@
   import { ref } from 'vue'
   import { getPublishLikePage as getPublishLikePageApi } from '@/api/modules/user'
   import { useGoDetailByItem } from '@/hooks/useGoDetailByItem'
+  import { onLoad } from '@dcloudio/uni-app'
   const { goDetailByItem } = useGoDetailByItem()
 
   const props = defineProps({
@@ -31,7 +32,9 @@
     })
   }
 
-  getPublishLikePage()
+  onLoad(() => {
+    getPublishLikePage()
+  })
 
   const goDetail = (item) => {
     // 去动态详情

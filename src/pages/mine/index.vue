@@ -110,11 +110,12 @@
         { name: '点赞', value: 'like', index: 1 },
       ]
     }
+    load()
+
     uni.$on('refreshData', () => {
       console.log('refresh-userinfo')
       getUserInfo()
     })
-    load()
   })
 
   const handleTabClick = (item) => {
@@ -155,7 +156,7 @@
         <view class="avatar-row">
           <!--          <img class="user_avatar" :src="variables.avatar" alt="" />-->
           <up-avatar
-            mode="widthFix"
+            mode="aspectFill"
             :size="60"
             :src="variables.avatar"
           ></up-avatar>
