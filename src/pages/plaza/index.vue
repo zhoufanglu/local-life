@@ -7,6 +7,7 @@
     ></HeaderPanel>
     <!--?主体-->
     <view
+      v-if="componentVisible"
       class="inner-content"
       :style="{ height: `calc(100% - ${statusBarHeight * 2 + 204 + 116}rpx)` }"
       @touchstart="touchStart"
@@ -48,8 +49,10 @@
   import { useRequest } from '@/hooks/useRequest'
   import { getBoundInfo } from '@/utils'
   import { onLoad, onPageScroll } from '@dcloudio/uni-app'
+  import { useRefreshComponent } from '@/hooks/useRefreshComponent'
 
   const { statusBarHeight } = getBoundInfo()
+  const { refresh, componentVisible } = useRefreshComponent()
 
   const { touchStart, touchMove, touchEnd } = useSlipDirection(handleTouchMove)
 
@@ -66,11 +69,10 @@
    */
   onLoad((options) => {
     curPanel.value = options?.curType || 'follow'
-    console.log('onload')
     onMounted(() => {
       headerPanelRef.value.setCurrentByCurType(curPanel.value)
       uni.$on('refreshPlazaData', () => {
-        console.log('refresh')
+        refresh()
       })
       // ?测试test
       /*curPanel.value = 'follow'

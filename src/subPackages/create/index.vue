@@ -169,7 +169,6 @@
   //https://juejin.cn/s/uniapp%E8%8E%B7%E5%8F%96%E4%BD%8D%E7%BD%AE%E4%BF%A1%E6%81%AF
   // openLocation
   const handlePosition = () => {
-    console.log('xx', uni)
     // isGetLocation()
     uni.getFuzzyLocation({
       type: 'wgs84',
@@ -208,6 +207,8 @@
   }
 
   const handleBack = () => {
+    console.log('发起刷新')
+    uni.$emit('refreshPlazaData')
     uni.redirectTo({
       url: '/pages/plaza/index',
     })
