@@ -2,7 +2,6 @@
   import { getBoundInfo, getElRectAsync } from '@/utils'
   import { onMounted, reactive, ref } from 'vue'
   import CComment from '@/components/cc-comment/index.vue'
-  const { boundTop, boundWidth } = getBoundInfo()
   import { onLoad } from '@dcloudio/uni-app'
   import {
     getTrendDetail as getTrendDetailApi,
@@ -10,6 +9,8 @@
     likeUpdate,
   } from '@/api/modules/social'
   import { useEnums } from '@/hooks/useEnums'
+
+  const { boundTop, boundWidth } = getBoundInfo()
   const props = defineProps({
     type: {
       // ? 兼职、租房、转卖, 动态，关注, 这几个界面公用

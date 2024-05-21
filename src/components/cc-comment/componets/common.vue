@@ -146,6 +146,7 @@
   function replyClick(item) {
     // 自己不能回复自己
     // if (item.owner) return
+    console.log(149, item)
     emit('replyClick', item)
   }
 
