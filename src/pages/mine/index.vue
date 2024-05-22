@@ -14,7 +14,7 @@
   const variables = reactive({
     bgUrl: '',
     gender: '',
-    username: '',
+    nickname: '',
     mark: '这个人很懒，什么都没留下',
     fansList: [], // 粉丝列表
     followList: [], // 关注列表
@@ -139,7 +139,7 @@
   }
   const goUserChat = () => {
     uni.navigateTo({
-      url: `/subPackages/chat/index`,
+      url: `/subPackages/chat/index?toUserNo=${searchUserNo.value}&nickname=${variables.nickname}`,
     })
   }
   const { logout: logoutFn } = useLogout()

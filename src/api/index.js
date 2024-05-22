@@ -69,7 +69,7 @@ const http = ({
           const code = res.data.code
           if (code !== 0) {
             uni.$u.toast(res.data.msg || '网络错误')
-            if (code === 401 || code === 403) {
+            if (code === 401) {
               logout()
             }
             reject(res)

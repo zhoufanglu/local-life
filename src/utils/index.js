@@ -52,3 +52,25 @@ export function getElRectAsync(query) {
     })
   })
 }
+
+export function getTime(data, type) {
+  //data时间戳，type返回的类型默认Y,可传参Y和H
+  let time = new Date(data)
+  let Y = time.getFullYear()
+  let Mon = time.getMonth() + 1
+  let Day = time.getDate()
+  let H = time.getHours()
+  let Min = time.getMinutes()
+  let S = time.getSeconds()
+  //自定义选择想要返回的类型
+  if (type === 'Y') {
+    //返回年月日2020-10-10
+    return `${Y}-${Mon}-${Day}`
+  } else if (type === 'H') {
+    //返回时分秒20：10：10
+    return `${H}:${Min}:${S}`
+  } else {
+    //返回年月日时分秒2020-10-10 10:26:38
+    return `${Y}-${Mon}-${Day} ${H}:${Min}:${S}`
+  }
+}

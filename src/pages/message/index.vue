@@ -4,8 +4,12 @@
   import commentImg from '@/static/message/comment.png'
   import likeImg from '@/static/message/like.png'
   import message from '@/static/message/message.png'
+  import { decode } from 'js-base64'
   import { reactive, ref } from 'vue'
-  import { getBoundInfo } from '@/utils'
+  import { getBoundInfo, getTime } from '@/utils'
+  import { useChat } from '@/hooks/useChat'
+  import { getUserInfoByIds } from '@/api/modules/user'
+  const { connectWK_WK } = useChat({}, getAllMessageCallBack)
 
   const { boundTop } = getBoundInfo()
   const menuList = reactive([
@@ -33,14 +37,27 @@
   const goMineList = (type) => {
     if (type !== 'message') {
       uni.navigateTo({
-        url: `/pages/mine-list/index?type=${type}`,
+        url: `/pages/mine-messageList/index?type=${type}`,
       })
     } else {
       console.log('通知')
     }
   }
   // ?用户列表
-  const list = ref([1, 2, 3, 4, 5, 6, 7, 8])
+  const messageList = ref([1, 2, 3, 4, 5, 6, 7, 8])
+
+  function getAllMessageCallBack(res) {
+    messageList.value = res.filter((msg) => {
+      if (/^\d+$/.test(msg.channel_id)) {
+        msg.content = JSON.parse(decode(msg.recents[0].payload)).content
+        return msg
+      }
+    })
+    const ids = messageList.value.map((msg) => msg.channel_id)
+    // 根据获取到的id进行拼接
+    getUserInfoByIds({ ids }).then((res) => {})
+  }
+
   const goUserMessageDetail = (i) => {}
 </script>
 <script>
@@ -79,13 +96,13 @@
           <text>{{ i.title }}</text>
         </view>
       </view>
-      <view class="user-message-list"></view>
+      <view class="user-message-messageList"></view>
       <scroll-view
-        class="u-scroll-view list"
+        class="u-scroll-view messageList"
         :scroll-y="true"
         lower-threshold="100"
       >
-        <view class="item" v-for="(i, index) in list" :key="index">
+        <view class="item" v-for="(i, index) in messageList" :key="index">
           <view class="pic-left" @click="goUserMessageDetail(i)">
             <u-avatar
               class="avatar"
@@ -96,12 +113,12 @@
             <view class="user-info">
               <view class="text-row">
                 <text class="username">沃尔什</text>
-                <text class="text">大萨达算多爽啊是的都是大萨达</text>
+                <text class="text">{{ i.content }}</text>
               </view>
             </view>
           </view>
           <view class="right">
-            <text>2024-05-14 </text>
+            <text>{{ getTime(i.timestamp) }}</text>
           </view>
         </view>
       </scroll-view>
@@ -148,10 +165,10 @@
           }
         }
       }
-      .user-message-list {
+      .user-message-messageList {
         // border: solid 1px red;
       }
-      .list {
+      .messageList {
         // display: none !important;
         // height: calc(100vh - 223rpx - 15rpx);
         border-radius: 24rpx;

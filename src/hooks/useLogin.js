@@ -1,6 +1,7 @@
 import useStore from '@/store/app.js'
 import { BASE_URL } from '@/config/config'
 import { loginByWx, logoutApi } from '@/api/modules/user.js'
+import { registerInIM } from '@/api/modules/im'
 
 /**
  * @param from 来自哪个页面 login = 登录
@@ -58,10 +59,18 @@ const useLogin = (from = 'login') => {
               // t设置token
               uni.setStorageSync('token', `Bearer ` + res.data.accessToken)
               uni.setStorageSync('userNo', res.data.userId)
-              uni.$u.toast('登录成功')
-              uni.hideLoading()
-              uni.navigateTo({
-                url: '/pages/plaza/index',
+              //? 注册IM
+              registerInIM({
+                uid: uni.getStorageSync('userNo').toString(), // 通信的用户唯一ID，可以随机uuid （建议自己服务端的用户唯一uid） （WuKongIMSDK需要）
+                token: uni.getStorageSync('token'), // 校验的token，随机uuid（建议使用自己服务端的用户的token）（WuKongIMSDK需要）
+                device_flag: 1, // 设备标识  0.app 1.web （相同用户相同设备标记的主设备登录会互相踢，从设备将共存）
+                device_level: 1, // 设备等级 0.为从设备 1.为主设备
+              }).then((res) => {
+                uni.$u.toast('登录成功')
+                uni.hideLoading()
+                uni.navigateTo({
+                  url: '/pages/plaza/index',
+                })
               })
             })
             .catch((err) => {

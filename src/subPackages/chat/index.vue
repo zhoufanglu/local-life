@@ -1,80 +1,76 @@
 <script setup>
-  import { registerInIM } from '@/api/modules/im'
+  import { registerInIM, sendMessage } from '@/api/modules/im'
   import { reactive } from 'vue'
   import { getBoundInfo } from '@/utils'
+  import { onLoad } from '@dcloudio/uni-app'
+  import { useChat } from '@/hooks/useChat'
 
   const { boundTop } = getBoundInfo()
 
   const variables = reactive({
-    username: 'sss',
+    nickname: '',
+    toUserNo: '',
     message: '',
     messageList: [],
   })
 
-  const load = () => {
-    registerInIM({
-      uid: Number(uni.getStorageSync('userNo')), // 通信的用户唯一ID，可以随机uuid （建议自己服务端的用户唯一uid） （WuKongIMSDK需要）
-      token: uni.getStorageSync('token'), // 校验的token，随机uuid（建议使用自己服务端的用户的token）（WuKongIMSDK需要）
-      device_flag: 0, // 设备标识  0.app 1.web （相同用户相同设备标记的主设备登录会互相踢，从设备将共存）
-      device_level: 1, // 设备等级 0.为从设备 1.为主设备
-    }).then((res) => {
-      console.log(12, res)
-      console.log('注册成功')
-    })
-    getMessages()
-  }
-  load()
+  onLoad((options) => {
+    variables.toUserNo = options.toUserNo
+    variables.nickname = options.nickname
+    console.log('load')
+    // ?链接ws
+    connectWK_WK()
+  })
 
-  function getMessages() {
-    // test
-    variables.messageList = [
-      {
-        header: {
-          // 消息头
-          no_persist: 0, // 是否不存储消息 0.存储 1.不存储
-          red_dot: 1, // 是否显示红点计数，0.不显示 1.显示
-          sync_once: 0, // 是否是写扩散，这里一般是0，只有cmd消息才是1
-        },
-        setting: 0, // 消息设置 消息设置是一个 uint8的数字类型 为1个字节，完全由第三方自定义 比如定义第8位为已读未读回执标记，开启则为0000 0001 = 1
-        message_id: 122323343445, // 消息全局唯一ID
-        client_msg_no: 'xxxxx', // 客户端消息编号，可用此字段去重
-        message_seq: 1, // 消息序列号 （用户唯一，有序递增）
-        from_uid: 'xxxx', // 发送者用户id
-        channel_id: 'xxxx', // 频道ID
-        channel_type: 2, // 频道类型 1.个人频道 2.群频道
-        timestamp: 1223434512, // 消息10位到秒的时间戳
-        payload: 'xxxx', // base64编码的消息内容
-      },
-      {
-        header: {
-          // 消息头
-          no_persist: 0, // 是否不存储消息 0.存储 1.不存储
-          red_dot: 1, // 是否显示红点计数，0.不显示 1.显示
-          sync_once: 0, // 是否是写扩散，这里一般是0，只有cmd消息才是1
-        },
-        setting: 0, // 消息设置 消息设置是一个 uint8的数字类型 为1个字节，完全由第三方自定义 比如定义第8位为已读未读回执标记，开启则为0000 0001 = 1
-        message_id: 122323343445, // 消息全局唯一ID
-        client_msg_no: 'xxxxx', // 客户端消息编号，可用此字段去重
-        message_seq: 1, // 消息序列号 （用户唯一，有序递增）
-        from_uid: 'xxxx', // 发送者用户id
-        channel_id: 'xxxx', // 频道ID
-        channel_type: 2, // 频道类型 1.个人频道 2.群频道
-        timestamp: 1223434512, // 消息10位到秒的时间戳
-        payload: 'xxxx', // base64编码的消息内容
-      },
-    ]
+  const { connectWK_WK, listener, sendMessageToUser } = useChat(
+    variables,
+    getAllMessageCallBack,
+  )
+
+  function getAllMessageCallBack(messageList) {
+    // 过滤出当前讨论用户的人
+    const curMessage = messageList.find(
+      (i) => i.channel_id === variables.toUserNo,
+    )
+
+    variables.messageList = curMessage.recents
+    console.log(37, variables.messageList)
   }
 
   /**********************event***********************/
   const handleSend = () => {
-    console.log('send')
+    // console.log('send')
+    const payload = {
+      type: 1, // 消息类型 1.文本 2.图片
+      content: variables.message, // 消息内容
+    }
+    sendMessageToUser(variables.toUserNo, variables.message)
+    /*const params = {
+      header: {
+        // 消息头
+        no_persist: 0, // 是否不存储消息 0.存储 1.不存储
+        red_dot: 1, // 是否显示红点计数，0.不显示 1.显示
+        sync_once: 0, // 是否是写扩散，这里一般是0，只有cmd消息才是1
+      },
+      // uid: variables.toUserNo,
+      // token: uni.getStorageSync('token'),
+      from_uid: uni.getStorageSync('userNo').toString(), // 发送者uid
+      stream_no: '', // 流式消息编号，如果是流式消息，需要指定，否则为空
+      channel_id: '', // 接收频道ID 如果channel_type=1 channel_id为个人uid 如果channel_type=2 channel_id为群id
+      channel_type: 1, // 接收频道类型  1.个人频道 2.群聊频道
+      payload: encode(payload), // 消息，base64编码，消息格式参考下面 【payload 内容参考】的链接
+      // subscribers: ['uid123', 'uid234', '...'], // 订阅者 如果此字段有值，表示消息只发给指定的订阅者,没有值则发给频道内所有订阅者
+    }
+    sendMessage(params).then((res) => {
+      console.log(12, res)
+    })*/
   }
 </script>
 <template>
   <view class="p-chat">
     <u-navbar
       :autoBack="true"
-      :title="variables.username"
+      :title="variables.nickname"
       :titleStyle="{ color: '#333', fontSize: '40rpx' }"
     >
     </u-navbar>
