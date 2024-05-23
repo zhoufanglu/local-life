@@ -43,7 +43,10 @@ const useChat = (variables, getAllMessageCallBack) => {
     console.log('send', userNo, message)
     // 例如发送文本消息hello给用户u10001
     const text = new MessageText(message) // 文本消息
-    WKSDK.shared().chatManager.send(text, new Channel('b', ChannelTypePerson))
+    WKSDK.shared().chatManager.send(
+      text,
+      new Channel(userNo, ChannelTypePerson),
+    )
   }
   //?监听---发送消息状态
   const sendListen = (packet) => {
@@ -51,6 +54,12 @@ const useChat = (variables, getAllMessageCallBack) => {
     if (packet.reasonCode === 1) {
       // 发送成功
       uni.$u.toast('发送成功')
+      variables.messageList.push({
+        avatar: variables.myAvatar,
+        content: variables.message,
+        userType: 'receiver',
+      })
+      variables.message = ''
     } else {
       // 发送失败
       uni.$u.toast('发送失败')
@@ -61,15 +70,23 @@ const useChat = (variables, getAllMessageCallBack) => {
 
   //?监听---接收消息
   const acceptListen = (message) => {
-    console.log('接收消息', message.content)
+    console.log('接收消息', message.content.text)
     console.log('人', message.fromUID)
+    // 自己的消息也会接收到， 把不是自己的塞进去
+    if (message.fromUID !== uni.getStorageSync('userNo')) {
+      variables.messageList.push({
+        avatar: variables.avatar,
+        content: message.content.text,
+        userType: 'sender',
+      })
+    }
   }
   WKSDK.shared().chatManager.addMessageListener(acceptListen)
 
   //?同步最近会话列表（所有人）
   const getRecentMessage = async () => {
     uni.showLoading({
-      title: '加载中...',
+      title: '读取中...',
       mask: true,
     })
     getConversation({
@@ -85,7 +102,33 @@ const useChat = (variables, getAllMessageCallBack) => {
         uni.hideLoading()
       })
   }
-  getRecentMessage()
+  // getRecentMessage()
+
+  //?获取频道的历史消息
+  /*
+  const getChanelHistoryMessages = async (channel) => {
+    const opts = {
+      startMessageSeq: 0, // 开始消息列号（结果包含startMessageSeq的消息）
+      endMessageSeq: 0, //  结束消息列号（结果不包含endMessageSeq的消息）0表示不限制
+      limit: 10000, // 每次限制数量
+      pullMode: 0, // 拉取模式 0:向下拉取 1:向上拉取
+    }
+    const messages = await WKSDK.shared().chatManager.syncMessages(
+      channel,
+      opts,
+    )
+    console.log(102, messages)
+  }
+*/
+
+  //?最近会话数据源
+  // 提供最近会话同步的数据源
+  /*WKSDK.shared().config.provider.syncConversationsCallback = async () => {
+    // 后端提供的获取最近会话列表的接口数据 然后构建成 Conversation对象数组返回
+    let conversations = [];
+    conversations = await request(...)
+    return conversations
+  })*/
 
   //?销毁监听
   onBeforeUnmount(() => {
@@ -100,6 +143,8 @@ const useChat = (variables, getAllMessageCallBack) => {
     disconnectWK_WK,
     listener,
     sendMessageToUser,
+    getRecentMessage,
+    // getChanelHistoryMessages,
   }
 }
 

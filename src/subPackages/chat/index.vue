@@ -1,28 +1,56 @@
 <script setup>
   import { registerInIM, sendMessage } from '@/api/modules/im'
-  import { reactive } from 'vue'
-  import { getBoundInfo } from '@/utils'
+  import { reactive, ref, nextTick } from 'vue'
+  import { getBoundInfo, getTime } from '@/utils'
   import { onLoad } from '@dcloudio/uni-app'
   import { useChat } from '@/hooks/useChat'
-
+  import { decode } from 'js-base64'
+  import { getUserInfo as getUserInfoApi } from '@/api/modules/user'
   const { boundTop } = getBoundInfo()
+  const scrollTop = ref(0)
 
   const variables = reactive({
     nickname: '',
+    avatar: '', // 发送的对象的头像
+    myAvatar: '', //自己的头像
     toUserNo: '',
     message: '',
     messageList: [],
+    toView: '',
   })
+
+  const toView = ref('')
+
+  const getUserInfo = () => {
+    uni.showLoading({
+      title: '读取中...',
+      mask: true,
+    })
+    getUserInfoApi({
+      userId: uni.getStorageSync('userNo'),
+    }).then(({ data }) => {
+      variables.myAvatar = data.avatar
+      getRecentMessage()
+      uni.hideLoading()
+      /*variables.nickname = data.nickname
+      variables.bgUrl = data.background || '/static/mine/bg.jpeg'
+      variables.mark = data.mark || "'这个人很懒，什么都没留下'"*/
+    })
+  }
+  getUserInfo()
 
   onLoad((options) => {
     variables.toUserNo = options.toUserNo
     variables.nickname = options.nickname
+    variables.avatar = options.avatar
     console.log('load')
     // ?链接ws
     connectWK_WK()
+    // ?获取频道历史消息
+    // getChanelHistoryMessages(variables.toUserNo)
   })
 
-  const { connectWK_WK, listener, sendMessageToUser } = useChat(
+  const { connectWK_WK, sendMessageToUser, getRecentMessage } = useChat(
     variables,
     getAllMessageCallBack,
   )
@@ -33,18 +61,43 @@
       (i) => i.channel_id === variables.toUserNo,
     )
 
-    variables.messageList = curMessage.recents
-    console.log(37, variables.messageList)
+    variables.messageList = curMessage.recents.map((i) => {
+      // 1、解析消息内容
+      i.content = JSON.parse(decode(i.payload)).content
+      // 2、拼上头像
+      const senderId = uni.getStorageSync('userNo').toString()
+      if (senderId === i.from_uid) {
+        i.avatar = variables.myAvatar //拼上自己的头像
+        i.userType = 'receiver'
+      } else {
+        i.avatar = variables.avatar
+        i.userType = 'sender'
+      }
+      return {
+        avatar: i.avatar,
+        content: i.content,
+        userType: i.userType,
+        timestamp: getTime(i.timestamp),
+      }
+    })
+    variables.messageList = variables.messageList.reverse()
+    moveToBottom()
   }
+
+  const moveToBottom = () => {}
 
   /**********************event***********************/
   const handleSend = () => {
     // console.log('send')
+    if (!variables.message) {
+      return false
+    }
     const payload = {
       type: 1, // 消息类型 1.文本 2.图片
       content: variables.message, // 消息内容
     }
     sendMessageToUser(variables.toUserNo, variables.message)
+
     /*const params = {
       header: {
         // 消息头
@@ -74,19 +127,30 @@
       :titleStyle="{ color: '#333', fontSize: '40rpx' }"
     >
     </u-navbar>
-    <scroll-view :scroll-y="true" class="message-content">
+    <scroll-view
+      ref="scrollView"
+      :scroll-y="true"
+      id="scrollView"
+      class="message-content scroll-view"
+      :scroll-with-animation="true"
+    >
       <!--?消息列表-->
       <template :key="index" v-for="(msg, index) in variables.messageList">
-        <view class="message-item" :class="index / 2 ? 'left' : 'right'">
+        <view
+          class="message-item"
+          :class="msg.userType === 'sender' ? 'left' : 'right'"
+        >
           <u-avatar
             class="avatar"
-            src="https://www.logosc.cn/uploads/resources/2023/03/17/1679045108_thumb.jpg"
+            :src="msg.avatar"
             :size="38"
             :border="false"
           ></u-avatar>
-          <view class="message">xxx</view>
+          <view class="message">{{ msg.content }}</view>
         </view>
       </template>
+      <view id="bottom" style="height: 1px"></view>
+      <!-- 底部元素 -->
     </scroll-view>
     <div class="footer">
       <u-input

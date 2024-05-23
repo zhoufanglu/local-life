@@ -139,7 +139,7 @@
   }
   const goUserChat = () => {
     uni.navigateTo({
-      url: `/subPackages/chat/index?toUserNo=${searchUserNo.value}&nickname=${variables.nickname}`,
+      url: `/subPackages/chat/index?toUserNo=${searchUserNo.value}&nickname=${variables.nickname}&avatar=${variables.avatar}`,
     })
   }
   const { logout: logoutFn } = useLogout()

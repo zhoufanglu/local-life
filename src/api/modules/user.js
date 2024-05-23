@@ -79,7 +79,7 @@ export function updatePrivacy(data) {
 export function getUserInfoByIds(data) {
   return http({
     method: 'GET',
-    url: '/app-api/social/privacy/get',
+    url: '/app-api/member/user/getBatchUserInfo',
     data,
     json: 'json',
   })

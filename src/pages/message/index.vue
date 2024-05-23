@@ -54,11 +54,28 @@
       }
     })
     const ids = messageList.value.map((msg) => msg.channel_id)
+    uni.showLoading({
+      title: '读取中...',
+      mask: true,
+    })
     // 根据获取到的id进行拼接
-    getUserInfoByIds({ ids }).then((res) => {})
+    getUserInfoByIds({ userIdList: ids }).then(({ data }) => {
+      messageList.value = messageList.value.map((msg, index) => {
+        return {
+          ...msg,
+          ...data[index],
+        }
+      })
+      console.log(70, messageList.value)
+      uni.hideLoading()
+    })
   }
 
-  const goUserMessageDetail = (i) => {}
+  const goUserMessageDetail = (i) => {
+    uni.navigateTo({
+      url: `/subPackages/chat/index?toUserNo=${i.channel_id}&nickname=${i.nickname}&avatar=${i.avatar}`,
+    })
+  }
 </script>
 <script>
   export default {
@@ -106,13 +123,13 @@
           <view class="pic-left" @click="goUserMessageDetail(i)">
             <u-avatar
               class="avatar"
-              src="@/static/plaza/add.png"
+              :src="i.avatar"
               :size="50"
               :border="false"
             ></u-avatar>
             <view class="user-info">
               <view class="text-row">
-                <text class="username">沃尔什</text>
+                <text class="username">{{ i.nickname }}</text>
                 <text class="text">{{ i.content }}</text>
               </view>
             </view>
