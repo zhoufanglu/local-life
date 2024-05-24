@@ -1,13 +1,12 @@
 <script setup>
   import { registerInIM, sendMessage } from '@/api/modules/im'
-  import { reactive, ref, nextTick } from 'vue'
+  import { reactive, ref, nextTick, watch } from 'vue'
   import { getBoundInfo, getTime } from '@/utils'
   import { onLoad } from '@dcloudio/uni-app'
   import { useChat } from '@/hooks/useChat'
   import { decode } from 'js-base64'
   import { getUserInfo as getUserInfoApi } from '@/api/modules/user'
   const { boundTop } = getBoundInfo()
-  const scrollTop = ref(0)
 
   const variables = reactive({
     nickname: '',
@@ -43,17 +42,48 @@
     variables.toUserNo = options.toUserNo
     variables.nickname = options.nickname
     variables.avatar = options.avatar
-    console.log('load')
     // ?链接ws
     connectWK_WK()
+    // ?开启监听通道
+    listener()
     // ?获取频道历史消息
     // getChanelHistoryMessages(variables.toUserNo)
+    uni.$on('handleMessageCallback', (type, message, messageID) => {
+      messageCallback(type, message, messageID)
+    })
   })
 
-  const { connectWK_WK, sendMessageToUser, getRecentMessage } = useChat(
-    variables,
-    getAllMessageCallBack,
-  )
+  // ?接收发消息的回调事件
+  let beforeMessageID = ''
+  const messageCallback = (type, message, messageID) => {
+    // 发送
+    if (type === 'receiver') {
+      // !不清楚小程序为什么会触发2次， 淦，h5没问题
+      if (!variables.message) {
+        return
+      }
+      variables.messageList.push({
+        avatar: variables.myAvatar,
+        content: variables.message,
+        userType: 'receiver',
+      })
+      variables.message = ''
+    }
+    // 接收
+    else if (type === 'sender') {
+      if (beforeMessageID !== messageID) {
+        beforeMessageID = messageID
+        variables.messageList.push({
+          avatar: variables.avatar,
+          content: message,
+          userType: 'sender',
+        })
+      }
+    }
+  }
+
+  const { connectWK_WK, sendMessageToUser, getRecentMessage, listener } =
+    useChat(variables, getAllMessageCallBack)
 
   function getAllMessageCallBack(messageList) {
     // 过滤出当前讨论用户的人
@@ -83,8 +113,20 @@
     variables.messageList = variables.messageList.reverse()
     moveToBottom()
   }
+  const scrollTop = ref(999999)
 
-  const moveToBottom = () => {}
+  watch(
+    () => variables.messageList,
+    () => {
+      moveToBottom()
+    },
+    { deep: true },
+  )
+  const moveToBottom = () => {
+    setTimeout(() => {
+      scrollTop.value = scrollTop.value + 1
+    }, 500)
+  }
 
   /**********************event***********************/
   const handleSend = () => {
@@ -127,31 +169,34 @@
       :titleStyle="{ color: '#333', fontSize: '40rpx' }"
     >
     </u-navbar>
-    <scroll-view
-      ref="scrollView"
-      :scroll-y="true"
-      id="scrollView"
-      class="message-content scroll-view"
-      :scroll-with-animation="true"
-    >
-      <!--?消息列表-->
-      <template :key="index" v-for="(msg, index) in variables.messageList">
-        <view
-          class="message-item"
-          :class="msg.userType === 'sender' ? 'left' : 'right'"
-        >
-          <u-avatar
-            class="avatar"
-            :src="msg.avatar"
-            :size="38"
-            :border="false"
-          ></u-avatar>
-          <view class="message">{{ msg.content }}</view>
-        </view>
-      </template>
-      <view id="bottom" style="height: 1px"></view>
-      <!-- 底部元素 -->
-    </scroll-view>
+    <view class="container">
+      <scroll-view
+        ref="scrollView"
+        :scroll-y="true"
+        :scroll-top="scrollTop"
+        id="scrollView"
+        class="message-content scroll-view"
+        :scroll-with-animation="true"
+      >
+        <!--?消息列表-->
+        <template :key="index" v-for="(msg, index) in variables.messageList">
+          <view
+            class="message-item"
+            :class="msg.userType === 'sender' ? 'left' : 'right'"
+          >
+            <u-avatar
+              class="avatar"
+              :src="msg.avatar"
+              :size="38"
+              :border="false"
+            ></u-avatar>
+            <view class="message">{{ msg.content }}</view>
+          </view>
+        </template>
+        <!-- 底部元素 -->
+        <view id="bottom" style="height: 1px"></view>
+      </scroll-view>
+    </view>
     <div class="footer">
       <u-input
         class="u-send-message"

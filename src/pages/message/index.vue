@@ -9,7 +9,7 @@
   import { getBoundInfo, getTime } from '@/utils'
   import { useChat } from '@/hooks/useChat'
   import { getUserInfoByIds } from '@/api/modules/user'
-  const { connectWK_WK } = useChat({}, getAllMessageCallBack)
+  const { connectWK_WK, getRecentMessage } = useChat({}, getAllMessageCallBack)
 
   const { boundTop } = getBoundInfo()
   const menuList = reactive([
@@ -43,8 +43,9 @@
       console.log('通知')
     }
   }
+  getRecentMessage()
   // ?用户列表
-  const messageList = ref([1, 2, 3, 4, 5, 6, 7, 8])
+  const messageList = ref([])
 
   function getAllMessageCallBack(res) {
     messageList.value = res.filter((msg) => {
@@ -59,7 +60,7 @@
       mask: true,
     })
     // 根据获取到的id进行拼接
-    getUserInfoByIds({ userIdList: ids }).then(({ data }) => {
+    getUserInfoByIds({ userIdListStr: ids.join(',') }).then(({ data }) => {
       messageList.value = messageList.value.map((msg, index) => {
         return {
           ...msg,
@@ -119,8 +120,13 @@
         :scroll-y="true"
         lower-threshold="100"
       >
-        <view class="item" v-for="(i, index) in messageList" :key="index">
-          <view class="pic-left" @click="goUserMessageDetail(i)">
+        <view
+          class="item"
+          @click="goUserMessageDetail(i)"
+          v-for="(i, index) in messageList"
+          :key="index"
+        >
+          <view class="pic-left">
             <u-avatar
               class="avatar"
               :src="i.avatar"

@@ -25,6 +25,7 @@ const useChat = (variables, getAllMessageCallBack) => {
   }
   //?监听
   const listener = () => {
+    console.log('监听ws------')
     // 连接状态监听
     WKSDK.shared().connectManager.addConnectStatusListener(
       (status, reasonCode) => {
@@ -32,7 +33,7 @@ const useChat = (variables, getAllMessageCallBack) => {
       },
     )
   }
-  listener()
+  // listener()
   //?发送消息
   /**
    *
@@ -40,7 +41,7 @@ const useChat = (variables, getAllMessageCallBack) => {
    * @param message
    */
   const sendMessageToUser = (userNo, message) => {
-    console.log('send', userNo, message)
+    console.log('发送消息--------', userNo, message)
     // 例如发送文本消息hello给用户u10001
     const text = new MessageText(message) // 文本消息
     WKSDK.shared().chatManager.send(
@@ -50,16 +51,18 @@ const useChat = (variables, getAllMessageCallBack) => {
   }
   //?监听---发送消息状态
   const sendListen = (packet) => {
-    console.log('消息clientSeq->', packet.clientSeq) // 消息客户端序号用来匹配对应的发送的消息
+    // console.log('消息clientSeq->', packet.clientSeq) // 消息客户端序号用来匹配对应的发送的消息
     if (packet.reasonCode === 1) {
       // 发送成功
       uni.$u.toast('发送成功')
-      variables.messageList.push({
+      uni.$emit('handleMessageCallback', 'receiver')
+      // messageCallback('receiver')
+      /*variables.messageList.push({
         avatar: variables.myAvatar,
         content: variables.message,
         userType: 'receiver',
       })
-      variables.message = ''
+      variables.message = ''*/
     } else {
       // 发送失败
       uni.$u.toast('发送失败')
@@ -70,15 +73,22 @@ const useChat = (variables, getAllMessageCallBack) => {
 
   //?监听---接收消息
   const acceptListen = (message) => {
-    console.log('接收消息', message.content.text)
-    console.log('人', message.fromUID)
+    // console.log('接收消息--', message)
     // 自己的消息也会接收到， 把不是自己的塞进去
-    if (message.fromUID !== uni.getStorageSync('userNo')) {
-      variables.messageList.push({
+    if (Number(message.fromUID) !== Number(uni.getStorageSync('userNo'))) {
+      // console.log('接收他人消息--------', message.content.text)
+      /*variables.messageList.push({
         avatar: variables.avatar,
         content: message.content.text,
         userType: 'sender',
-      })
+      })*/
+      // messageCallback('sender', message.content.text)
+      uni.$emit(
+        'handleMessageCallback',
+        'sender',
+        message.content.text,
+        message.messageID,
+      )
     }
   }
   WKSDK.shared().chatManager.addMessageListener(acceptListen)
@@ -136,6 +146,7 @@ const useChat = (variables, getAllMessageCallBack) => {
     WKSDK.shared().chatManager.removeMessageStatusListener(sendListen)
     WKSDK.shared().chatManager.removeMessageListener(acceptListen)
     disconnectWK_WK()
+    uni.$off('handleMessageCallback')
   })
 
   return {
