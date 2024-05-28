@@ -96,3 +96,22 @@ export function createComment(data) {
     json: 'json',
   })
 }
+
+/**********************消息模块***********************/
+export function getMyLike(data) {
+  return http({
+    method: 'GET',
+    url: '/app-api/social/like/page',
+    data,
+    json: 'json',
+  })
+}
+
+export function getMyComment(data) {
+  return http({
+    method: 'GET',
+    url: '/app-api/social/comment/getCommentPageMsg',
+    data,
+    json: 'json',
+  })
+}

@@ -156,9 +156,10 @@
       height: calc(100% - 46px);
     }
     .content {
+      // border: solid 1px red;
       width: 100%;
       padding: 20rpx;
-      padding-top: 0;
+      padding-top: 10rpx;
       box-sizing: border-box;
       .tab-row {
       }

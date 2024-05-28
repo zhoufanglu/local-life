@@ -5,6 +5,7 @@
   import loadingCom from '@/components/loading.vue'
   import { getTrends, getFoodsList } from '@/api/modules/social'
   import { plazaTypes2 } from '@/enums'
+  import { useScroll } from '@/hooks/useScroll'
   const foods = ref([])
   const variables = reactive({
     pageNo: 1,
@@ -37,6 +38,11 @@
       url: `/pages/foods-detail/index?id=${food.id}`,
     })
   }
+  //?回到顶部
+  const { scrollTop, handleScroll, scrollToTop } = useScroll()
+  defineExpose({
+    scrollToTop,
+  })
 </script>
 <script>
   export default {
@@ -49,6 +55,9 @@
       class="u-scroll-view"
       :scroll-y="true"
       lower-threshold="100"
+      :scroll-top="scrollTop"
+      :scroll-with-animation="true"
+      @scroll="handleScroll"
       @scrolltolower="loadMore"
     >
       <view

@@ -1,57 +1,70 @@
-<!--?关注，评论，点赞，列表-->
+<!--?关注，评论，点赞-->
 <script setup>
   import { ref } from 'vue'
   import { getBoundInfo } from '@/utils'
   import { onLoad } from '@dcloudio/uni-app'
-  const { boundTop } = getBoundInfo()
-  import followImg from '@/static/message/follow.png'
-  import commentImg from '@/static/message/follow.png'
-  import likeImg from '@/static/message/follow.png'
+  import { getMyComment, getMyLike } from '@/api/modules/social'
+  import { getFansAndFollow } from '@/api/modules/user'
 
-  const list = ref([
-    'https://cdn.uviewui.com/uview/swiper/swiper3.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper2.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-  ])
+  const { boundTop } = getBoundInfo()
+  const status = ref('loading') //  loadmore loading nomore
+  const list = ref([])
 
   let curType = ref('follow') // follow comment like
   onLoad((options) => {
     curType.value = options.type || 'follow'
+    getList()
   })
+
+  const getList = async () => {
+    const params = {
+      pageNo: 1,
+      pageSize: 100,
+      replyUserId: uni.getStorageSync('userNo'),
+    }
+    status.value = 'loading'
+    if (curType.value === 'like') {
+      const { data } = await getMyLike(params)
+      list.value = data.list || []
+    } else if (curType.value === 'comment') {
+      const { data } = await getMyComment(params)
+      list.value = data.list || []
+    } else if (curType.value === 'follow') {
+      const { data } = await getFansAndFollow({
+        pageNo: 1,
+        pageSize: 100,
+        type: 0,
+        userId: uni.getStorageSync('userNo'),
+      })
+      list.value = data.list || []
+    }
+    status.value = 'nomore'
+  }
 
   const goDetail = () => {
     /*uni.navigateTo({
       url: '/pages/mine/index',
     })*/
   }
-  const getTitle = () => {
-    if (curType.value === 'follow') {
-      return '关注'
-    } else if (curType.value === 'comment') {
-      return '评论'
-    } else if (curType.value === 'like') {
-      return '点赞'
-    }
-  }
+
   const getInfo = () => {
     if (curType.value === 'follow') {
-      return '关注了你，快去看看吧'
+      return '关注了你'
     } else if (curType.value === 'comment') {
-      return '评论了你，快去看看吧'
+      return '评论了你'
     } else if (curType.value === 'like') {
-      return '点赞了你，快去看看吧！'
+      return '点赞了你！'
     }
+    status.value = 'nomore'
   }
-  const getUrl = () => {
-    if (curType.value === 'follow') {
-      return followImg
+
+  const getTitle = () => {
+    if (curType.value === 'like') {
+      return '点赞'
     } else if (curType.value === 'comment') {
-      return commentImg
-    } else if (curType.value === 'like') {
-      return likeImg
+      return '评论'
+    } else if (curType.value === 'follow') {
+      return '关注'
     }
   }
 </script>
@@ -81,23 +94,24 @@
         height: `calc(100vh - ${boundTop + 44}px)`,
       }"
     >
-      <view class="item" v-for="(item, index) in list" :key="index">
+      <view class="item" v-for="(i, index) in list" :key="index">
         <view class="pic-left" @click="goDetail">
           <u-avatar
             class="avatar"
-            :src="getUrl()"
+            :src="i.avatar"
             :size="50"
             :border="false"
           ></u-avatar>
           <view class="user-info">
-            <text>沃尔什</text>
+            <text>{{ i.nickname }}</text>
             <text>{{ getInfo() }}</text>
           </view>
         </view>
         <view class="right">
-          <text>{{ 10 }}分钟前</text>
+          <text>{{ i.createTimeStr }}</text>
         </view>
       </view>
+      <up-loadmore :status="status" />
     </scroll-view>
   </view>
 </template>

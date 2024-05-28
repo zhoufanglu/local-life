@@ -10,6 +10,7 @@ const useLogin = (from = 'login') => {
   const appStore = useStore()
   console.log(5, appStore.token, BASE_URL)
   const handleLogin = () => {
+    /*
     wx.login({
       success(res) {
         console.log(10, res)
@@ -19,17 +20,18 @@ const useLogin = (from = 'login') => {
           loginByWx({ phoneCode: '232', loginCode: res.code }).then((res) => {
             console.log(16, res)
           })
-          /*wx.request({
+          /!*wx.request({
             url: `${BASE_URL}/app-api/member/auth/weixin-mini-app-login`,
             data: {
               loginCode: res.code,
             },
-          })*/
+          })*!/
         } else {
           console.log('登录失败！' + res.errMsg)
         }
       },
     })
+*/
   }
 
   const onGetPhoneNumber = (e) => {
@@ -65,13 +67,20 @@ const useLogin = (from = 'login') => {
                 token: uni.getStorageSync('token'), // 校验的token，随机uuid（建议使用自己服务端的用户的token）（WuKongIMSDK需要）
                 device_flag: 1, // 设备标识  0.app 1.web （相同用户相同设备标记的主设备登录会互相踢，从设备将共存）
                 device_level: 1, // 设备等级 0.为从设备 1.为主设备
-              }).then((res) => {
-                uni.$u.toast('登录成功')
-                uni.hideLoading()
-                uni.navigateTo({
-                  url: '/pages/plaza/index',
-                })
               })
+                .then((res) => {
+                  uni.$u.toast('登录成功')
+                  uni.hideLoading()
+                  uni.navigateTo({
+                    url: '/pages/plaza/index',
+                  })
+                })
+                .catch((err) => {
+                  uni.$u.toast('登录失败')
+                  console.log(80, err)
+                  //uni.$u.toast(err)
+                  uni.hideLoading()
+                })
             })
             .catch((err) => {
               uni.hideLoading()

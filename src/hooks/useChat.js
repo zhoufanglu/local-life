@@ -114,32 +114,6 @@ const useChat = (variables, getAllMessageCallBack) => {
   }
   // getRecentMessage()
 
-  //?获取频道的历史消息
-  /*
-  const getChanelHistoryMessages = async (channel) => {
-    const opts = {
-      startMessageSeq: 0, // 开始消息列号（结果包含startMessageSeq的消息）
-      endMessageSeq: 0, //  结束消息列号（结果不包含endMessageSeq的消息）0表示不限制
-      limit: 10000, // 每次限制数量
-      pullMode: 0, // 拉取模式 0:向下拉取 1:向上拉取
-    }
-    const messages = await WKSDK.shared().chatManager.syncMessages(
-      channel,
-      opts,
-    )
-    console.log(102, messages)
-  }
-*/
-
-  //?最近会话数据源
-  // 提供最近会话同步的数据源
-  /*WKSDK.shared().config.provider.syncConversationsCallback = async () => {
-    // 后端提供的获取最近会话列表的接口数据 然后构建成 Conversation对象数组返回
-    let conversations = [];
-    conversations = await request(...)
-    return conversations
-  })*/
-
   //?销毁监听
   onBeforeUnmount(() => {
     // !销毁监听

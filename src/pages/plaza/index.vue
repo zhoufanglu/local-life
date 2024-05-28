@@ -4,6 +4,7 @@
     <HeaderPanel
       ref="headerPanelRef"
       @handleTabChange="handleTabChange"
+      @scrollToTop="scrollToTop"
     ></HeaderPanel>
     <!--?主体-->
     <view
@@ -15,20 +16,25 @@
       @touchend="touchEnd"
     >
       <!--关注-->
-      <waterFallList type="follow" v-if="curPanel === 'follow'"></waterFallList>
+      <waterFallList
+        ref="waterFallListFollowRef"
+        type="follow"
+        v-if="curPanel === 'follow'"
+      ></waterFallList>
       <!--动态-->
       <waterFallList
+        ref="waterFallListDynamicStateRef"
         type="dynamicState"
         v-if="curPanel === 'dynamicState'"
       ></waterFallList>
       <!--美食-->
-      <foods type="foods" v-if="curPanel === 'foods'"></foods>
+      <foods ref="foodsRef" type="foods" v-if="curPanel === 'foods'"></foods>
       <!--兼职, 租房, 转卖-->
       <goods-list
+        ref="goodsRef"
         :type="curPanel"
         v-if="['partTimeJob', 'tenement', 'resell'].includes(curPanel)"
       ></goods-list>
-      <up-back-top :scroll-top="scrollTop"></up-back-top>
     </view>
     <!--?底部tab-->
     <tab-bar></tab-bar>
@@ -81,29 +87,26 @@
     })
   })
   /**********************事件***********************/
-  const goUserInfo = () => {
-    console.log('user')
-  }
-
-  const handleLikeClick = (index, isLike) => {
-    list.value[index].isLike = !isLike
-    let likes = list.value[index].likes
-    list.value[index].likes = !isLike ? ++likes : --likes
-    console.log(list.value[0])
-    // showToast(!isLike ? '取消点赞' : '点赞成功')
-  }
 
   const handleTabChange = (tabActive) => {
     curPanel.value = tabActive
   }
 
-  onPageScroll((e) => {
-    scrollTop.value = e.scrollTop
-  })
-
-  const scrollTop = ref(0)
-  const onScrollTop = (e) => {
-    scrollTop.value = e.scrollTop
+  const waterFallListFollowRef = ref(null)
+  const waterFallListDynamicStateRef = ref(null)
+  const foodsRef = ref(null)
+  const goodsRef = ref(null)
+  const scrollToTop = () => {
+    console.log('返回顶部')
+    if (curPanel.value === 'follow') {
+      waterFallListFollowRef.value.scrollToTop()
+    } else if (curPanel.value === 'dynamicState') {
+      waterFallListDynamicStateRef.value.scrollToTop()
+    } else if (curPanel.value === 'foods') {
+      foodsRef.value.scrollToTop()
+    } else if (['partTimeJob', 'tenement', 'resell'].includes(curPanel.value)) {
+      goodsRef.value.scrollToTop()
+    }
   }
 </script>
 

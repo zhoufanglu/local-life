@@ -1,18 +1,13 @@
 <script setup>
-  import { onLoad, onPageScroll, onReachBottom } from '@dcloudio/uni-app'
-  import { data, list } from './data.js'
-  import { reactive, getCurrentInstance, onMounted } from 'vue'
+  import { reactive, getCurrentInstance, onMounted, ref } from 'vue'
   import loadingCom from '@/components/loading.vue'
-  const { proxy } = getCurrentInstance()
   // type = follow, dynamicState
-  const props = defineProps(['type'])
-  import { useLogin } from '@/hooks/useLogin'
   import { getTrends, likeUpdate } from '@/api/modules/social'
   import { plazaTypes2 } from '@/enums'
+  import { useScroll } from '@/hooks/useScroll'
   // import { WXBizDataCrypt } from '@/utils/WXBizDataCrypt'
-
-  const { handleLogin } = useLogin()
-
+  const props = defineProps(['type'])
+  const { proxy } = getCurrentInstance()
   const state = reactive({
     columnNum: 2,
     minHeightColNum: 1,
@@ -31,9 +26,9 @@
   })
 
   /*onLoad(() => {
-setDefaultData()
-getData()
-})*/
+  setDefaultData()
+  getData()
+  })*/
 
   // 模拟获取数据
   function getData() {
@@ -151,6 +146,11 @@ getData()
       url: `/pages/mine/index?userType=other&userNo=${userNo}`,
     })
   }
+  //?回到顶部
+  const { scrollTop, handleScroll, scrollToTop } = useScroll()
+  defineExpose({
+    scrollToTop,
+  })
 </script>
 <script>
   export default {
@@ -161,10 +161,13 @@ getData()
   <view class="p-waterfall-list">
     <scroll-view
       class="follow-scroll-view"
-      scroll-y="true"
-      scroll-x="false"
+      :scroll-y="true"
+      :scroll-x="false"
+      :scroll-top="scrollTop"
+      :scroll-with-animation="true"
       lower-threshold="150"
       @scrolltolower="loadMore"
+      @scroll="handleScroll"
     >
       <view class="container">
         <!--?列数-->

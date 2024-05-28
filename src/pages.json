@@ -65,7 +65,10 @@
         "path": "pages/mine-list/index"
       },
       {
-        "path": "pages/message-list/index"
+        "path": "pages/message-list/index",
+        "style": {
+          "enablePullDownRefresh": true
+        }
       },
   ],
   "subPackages": [{

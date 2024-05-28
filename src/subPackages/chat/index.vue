@@ -107,7 +107,7 @@
         avatar: i.avatar,
         content: i.content,
         userType: i.userType,
-        timestamp: getTime(i.timestamp),
+        timestamp: getTime(i.timestamp * 1000),
       }
     })
     variables.messageList = variables.messageList.reverse()
@@ -160,11 +160,18 @@
       console.log(12, res)
     })*/
   }
+  const handleBack = () => {
+    uni.$emit('refreshData')
+    uni.navigateBack({
+      delta: 1,
+    })
+  }
 </script>
 <template>
   <view class="p-chat">
     <u-navbar
-      :autoBack="true"
+      :autoBack="false"
+      @leftClick="handleBack"
       :title="variables.nickname"
       :titleStyle="{ color: '#333', fontSize: '40rpx' }"
     >

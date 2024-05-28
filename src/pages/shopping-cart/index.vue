@@ -75,7 +75,7 @@
         cartId: cartId.value,
       })
         .then(({ data }) => {
-          list.value = data.cartGoodsInfos
+          list.value = data.cartGoodsInfos || []
           console.log(52, list.value)
         })
         .finally(() => {

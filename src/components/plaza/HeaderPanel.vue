@@ -32,10 +32,21 @@
   // ?事件
   const emit = defineEmits(['handleTabChange'])
 
+  let touchNum = 0
   const handleTabClick = (item) => {
-    // current.value = item.value
+    touchNum++
     current.value = item.index
     emit('handleTabChange', item.value)
+    setTimeout(() => {
+      if (touchNum === 1) {
+        // console.log('单击')
+      }
+      if (touchNum >= 2) {
+        console.log('双击')
+        emit('scrollToTop')
+      }
+      touchNum = 0
+    }, 250)
   }
 
   const handleAdd = () => {

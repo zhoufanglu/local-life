@@ -3,6 +3,7 @@
   import { ref, watch, reactive, computed } from 'vue'
   import { plazaTypes2, rentTimeUnits, rentTypes, rentRoomTypes } from '@/enums'
   import { useEnums } from '@/hooks/useEnums'
+  import { useScroll } from '@/hooks/useScroll'
 
   const props = defineProps({
     type: {
@@ -168,6 +169,11 @@
     }
     return rentTimeUnits[i[propEnum[props.type]] || 1]
   }*/
+  //?回到顶部
+  const { scrollTop, handleScroll, scrollToTop } = useScroll()
+  defineExpose({
+    scrollToTop,
+  })
 </script>
 <script>
   export default {
@@ -209,6 +215,9 @@
       class="u-scroll-view"
       :scroll-y="true"
       lower-threshold="100"
+      :scroll-top="scrollTop"
+      :scroll-with-animation="true"
+      @scroll="handleScroll"
       @scrolltolower="loadMore"
     >
       <view
