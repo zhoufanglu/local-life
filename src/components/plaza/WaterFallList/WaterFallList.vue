@@ -159,7 +159,6 @@
 </script>
 <template>
   <view class="p-waterfall-list">
-    {{ scrollTop }}
     <scroll-view
       class="follow-scroll-view"
       :scroll-y="true"

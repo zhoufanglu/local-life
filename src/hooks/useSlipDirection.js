@@ -18,8 +18,12 @@ const useSlipDirection = (callback) => {
   const touchEnd = (event) => {
     console.log(16, delTax.value)
     if (delTax.value > 50) {
+      console.log('right')
+      delTax.value = 0
       callback('right')
     } else if (delTax.value < -50) {
+      console.log('left')
+      delTax.value = 0
       callback('left')
     }
   }
