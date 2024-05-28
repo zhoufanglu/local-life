@@ -1,4 +1,5 @@
 import { ref } from 'vue'
+// ?监听左移右移事件
 const useSlipDirection = (callback) => {
   const startX = ref(0) // 开始位置
   const delTax = ref(0) // 滑动距离

@@ -1,10 +1,11 @@
 import { ref } from 'vue'
+import { debounce } from '@/utils'
 const useScroll = () => {
   const scrollTop = ref(0)
 
-  const handleScroll = (e) => {
+  const handleScroll = debounce((e) => {
     scrollTop.value = e.detail.scrollTop
-  }
+  }, 500)
 
   const scrollToTop = () => {
     scrollTop.value = 0

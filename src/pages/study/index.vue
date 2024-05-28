@@ -6,6 +6,7 @@
     getGoodsType as getGoodsTypeApi,
     getGoods as getGoodsApi,
   } from '@/api/modules/mall'
+  import { useSlipDirection } from '@/hooks/useSlipDirection'
   const { boundTop, boundWidth } = getBoundInfo()
 
   const { statusBarHeight } = getBoundInfo()
@@ -26,6 +27,7 @@
   function getGoods() {
     getGoodsApi({
       typeId: tabs.list[tabs.current].value,
+      spuName: searchVal.value,
       // typeId: 1,
       page: 1, // 当前页面
       pageNum: 1000, // 页长
@@ -43,10 +45,13 @@
 
   const course = ref()
 
-  const onSearch = () => {}
+  const onSearch = () => {
+    getGoods()
+  }
 
   const handleTabClick = (item) => {
     tabs.current = item.index
+    searchVal.value = ''
     getGoods()
   }
 
@@ -63,6 +68,22 @@
   }
   const loadMore = () => {
     console.log('load more')
+  }
+  /**********************监听左移右移***********************/
+  const { touchStart, touchMove, touchEnd } = useSlipDirection(handleTouchMove)
+  function handleTouchMove(direction) {
+    if (direction === 'left') {
+      tabs.current++
+      if (tabs.current >= tabs.list.length) {
+        tabs.current = tabs.list.length - 1
+      }
+    } else if (direction === 'right') {
+      tabs.current--
+      if (tabs.current < 0) {
+        tabs.current = 0
+      }
+    }
+    getGoods()
   }
 </script>
 <script>
@@ -129,12 +150,17 @@
       <!--?list-->
       <scroll-view
         class="follow-scroll-view"
-        scroll-y="true"
-        scroll-x="false"
+        :scroll-y="true"
+        :scroll-x="false"
         lower-threshold="150"
         @scrolltolower="loadMore"
       >
-        <view class="panel">
+        <view
+          class="panel"
+          @touchstart="touchStart"
+          @touchmove="touchMove"
+          @touchend="touchEnd"
+        >
           <view class="item" v-for="(i, index) in course" :key="index">
             <image
               src="https://cdn.uviewui.com/uview/swiper/swiper3.png"

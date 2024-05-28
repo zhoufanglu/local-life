@@ -74,3 +74,12 @@ export function getTime(data, type) {
     return `${Y}-${Mon}-${Day} ${H}:${Min}:${S}`
   }
 }
+
+// 防抖函数
+export function debounce(func, wait = 500) {
+  let timeout
+  return function (...args) {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => func.apply(this, args), wait)
+  }
+}
