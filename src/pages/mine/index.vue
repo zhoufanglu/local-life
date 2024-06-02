@@ -2,7 +2,7 @@
   import TabBar from '@/components/TabBar.vue'
   import GoodsList from '@/components/mine/GoodsList.vue'
   import OrderList from '@/components/mine/OrderList.vue'
-  import { reactive, ref } from 'vue'
+  import { reactive, ref, nextTick } from 'vue'
   import { onBackPress, onLoad } from '@dcloudio/uni-app'
   import {
     getUserInfo as getUserInfoApi,
@@ -62,7 +62,6 @@
       variables.followList = data.list
     })
   }
-
   // ?获取订单信息
   const orders = ref([])
   const getMyOrders = async () => {
@@ -119,6 +118,9 @@
 
   const handleTabClick = (item) => {
     tabs.current = item.index
+    if (tabs.current === 2) {
+      getMyOrders()
+    }
   }
   const goEditProfile = () => {
     uni.navigateTo({
@@ -219,16 +221,19 @@
         <u-divider style="width: 95%; margin: 0 auto"></u-divider>
         <view class="tab-inner-panel">
           <goods-list
-            v-if="tabs.current === 0"
             :type="0"
+            v-if="tabs.current === 0"
             :searchUserNo="searchUserNo"
           ></goods-list>
           <goods-list
-            v-if="tabs.current === 1"
+            v-else-if="tabs.current === 1"
             :type="1"
             :searchUserNo="searchUserNo"
           ></goods-list>
-          <order-list v-if="tabs.current === 2" :orders="orders"></order-list>
+          <order-list
+            v-else-if="tabs.current === 2"
+            :orders="orders"
+          ></order-list>
         </view>
       </view>
     </view>

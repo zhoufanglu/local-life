@@ -42,7 +42,7 @@
       follow: props.type === 'follow' ? 1 : 0,
     }
     if (props.type === 'follow') {
-      delete params.type
+      params.type = 1
     }
     getTrends(params)
       .then(({ data }) => {

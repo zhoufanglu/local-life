@@ -35,21 +35,16 @@
     })
   }
 
-  onShow(() => {
-    // console.log('onShow')
-  })
+  getPublishLikePage()
 
   onLoad(() => {
     // console.log('onLoad')
-    getPublishLikePage()
+    // getPublishLikePage()
   })
 
-  watch(
-    () => props.searchUserNo,
-    (newValue) => {
-      getPublishLikePage()
-    },
-  )
+  watch([() => props.searchUserNo, () => props.type], (newValue) => {
+    getPublishLikePage()
+  })
 
   const goDetail = (item) => {
     // 去动态详情

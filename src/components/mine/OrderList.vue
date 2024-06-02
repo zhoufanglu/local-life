@@ -6,13 +6,6 @@
   import status030 from '@/static/order/030.png'
 
   const props = defineProps(['orders'])
-  /*const props = defineProps({
-    list: {
-      type: Array,
-      default: () => [],
-    },
-  })*/
-  const list = ref([])
   const goDetail = (item) => {
     console.log(item.target)
   }
