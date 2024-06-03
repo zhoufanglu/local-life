@@ -43,6 +43,7 @@
     }
     if (props.type === 'follow') {
       params.type = 1
+      // delete params.type
     }
     getTrends(params)
       .then(({ data }) => {
@@ -71,7 +72,7 @@
   /** @加载下一个元素 **/
   function loadNextItem() {
     const totalLength = Object.values(state.columnData).flat().length
-    if (totalLength == state.totalList.length) return
+    if (totalLength === state.totalList.length) return
     state.columnData[state.minHeightColNum].push(state.totalList[totalLength])
     // console.log(68, state.columnData)
   }
@@ -151,6 +152,9 @@
   defineExpose({
     scrollToTop,
   })
+  setTimeout(() => {
+    console.log(156, state.columnData)
+  }, 1000)
 </script>
 <script>
   export default {
@@ -182,14 +186,9 @@
             :key="i"
             @click.stop="goDetail(item)"
           >
+            {{ imageLoad() }}
             <div class="item">
-              <img
-                @load="imageLoad"
-                @error="imageLoad"
-                class="pic"
-                :src="item.coverImage"
-                mode="widthFix"
-              />
+              <img class="pic" :src="item.coverImage" mode="widthFix" />
               <div class="info">
                 <text>{{ item.content }}</text>
                 <div class="end-row">

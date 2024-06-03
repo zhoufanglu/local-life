@@ -154,13 +154,11 @@
         :scroll-x="false"
         lower-threshold="150"
         @scrolltolower="loadMore"
+        @touchstart="touchStart"
+        @touchmove="touchMove"
+        @touchend="touchEnd"
       >
-        <view
-          class="panel"
-          @touchstart="touchStart"
-          @touchmove="touchMove"
-          @touchend="touchEnd"
-        >
+        <view class="panel">
           <view class="item" v-for="(i, index) in course" :key="index">
             <image
               src="https://cdn.uviewui.com/uview/swiper/swiper3.png"
