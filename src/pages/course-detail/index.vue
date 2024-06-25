@@ -107,7 +107,7 @@
           <text>已售 {{ variables.curData.saleNum }} 件</text>
         </view>
         <text class="info">{{ variables.curData.goodsDesc }}</text>
-        <text class="course-price">¥{{ variables.curData.goodsPrice }}</text>
+        <text class="course-price">${{ variables.curData.goodsPrice }}</text>
       </view>
       <u-divider style="width: 90%; margin: 0 auto"></u-divider>
       <view class="version">

@@ -1,5 +1,5 @@
 <script setup>
-  import { getBoundInfo } from '@/utils'
+  import { getBoundInfo, getElRectAsync } from '@/utils'
   import { reactive, ref } from 'vue'
   import {
     getUserInfo as getUserInfoApi,
@@ -117,6 +117,13 @@
       uni.hideLoading()
     })
   }
+  const handleBgLick = () => {
+    let info = uni.createSelectorQuery().select('.bg-button')
+    console.log(122, info)
+    //info.click()
+    // bgFilePickerRef.value.click()
+  }
+
   /**********************弹出层***********************/
   const popVisible = ref(false)
   const popUpNickname = ref('')
@@ -209,6 +216,7 @@
             title="背景"
             rightIcon="arrow-right"
             value="value"
+            @click="handleBgLick"
           >
             <template #value>
               <uni-file-picker
@@ -228,6 +236,7 @@
                 }"
                 file-mediatype="image"
               >
+                <!--                <button class="bg-button">sds</button>-->
                 <up-avatar
                   :size="30"
                   shape="square"

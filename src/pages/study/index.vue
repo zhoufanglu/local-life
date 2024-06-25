@@ -160,9 +160,7 @@
       >
         <view class="panel">
           <view class="item" v-for="(i, index) in course" :key="index">
-            <image
-              src="https://cdn.uviewui.com/uview/swiper/swiper3.png"
-            ></image>
+            <image :src="i.mainImg" mode="aspectFill"></image>
             <view class="btn" @click="goDetail(i)">课程详情</view>
           </view>
         </view>

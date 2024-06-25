@@ -298,7 +298,7 @@
         <view
           class="price"
           v-if="['partTimeJob', 'tenement', 'resell'].includes(props.type)"
-          ><text>¥{{ getPrice(variables.data, props.type) }}</text>
+          ><text>${{ getPrice(variables.data, props.type) }}</text>
           <text v-if="props.type !== 'resell'">
             /{{ getUnit(variables.data, props.type) }}
           </text>

@@ -169,16 +169,16 @@
               <!--2兼职,3租房,4转卖, 2,3有单位， 4无单位 -->
               <!--?兼职-->
               <view class="price" v-if="i.type === 2">
-                <text>¥{{ i.partjobPrice }} </text>
+                <text>${{ i.partjobPrice }} </text>
                 <text> /{{ getUnit(i, 'partTimeJob') }}</text>
               </view>
               <!--?租房-->
               <view class="price" v-if="i.type === 3">
-                <text>¥{{ i.rentPrice }} </text>
+                <text>${{ i.rentPrice }} </text>
                 <text> /{{ getUnit(i, 'tenement') }}</text>
               </view>
               <view class="price" v-if="i.type === 4">
-                <text>¥{{ i.resalePrice }} </text>
+                <text>${{ i.resalePrice }} </text>
                 <text></text>
               </view>
             </view>

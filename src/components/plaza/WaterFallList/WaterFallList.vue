@@ -195,7 +195,7 @@
                   <div class="left" @click.stop="goMine(item.publisher)">
                     <u-image
                       class="avatar"
-                      :src="item.coverImage"
+                      :src="item.avatar"
                       shape="circle"
                       width="50rpx"
                       height="50rpx"

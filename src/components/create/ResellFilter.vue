@@ -57,7 +57,7 @@
   <u-cell title="价格:" :isLink="false">
     <template #value>
       <view class="price-input-panel">
-        <text>¥</text>
+        <text>$</text>
 
         <uni-easyinput
           style="color: #a26c38; font-size: 16px; font-weight: 600"

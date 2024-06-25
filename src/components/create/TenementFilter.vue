@@ -163,7 +163,7 @@
         @click="priceFocus = true"
       >
         <view
-          >¥
+          >$
           <input
             :focus="priceFocus"
             class="price-input"
@@ -186,7 +186,7 @@
     <u-cell title="价格:" :isLink="true">
       <template #value>
         <view class="price" style="color: #a26d37"
-          ><text>¥{{ price }}</text></view
+          ><text>${{ price }}</text></view
         >
       </template>
     </u-cell>

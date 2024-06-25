@@ -36,7 +36,7 @@
           <view class="title">{{ order.orderTitle }}</view>
           <view class="info">
             <text>{{ order.skuName }}</text>
-            <text>¥{{ order.goodsPrice }}</text>
+            <text>${{ order.goodsPrice }}</text>
           </view>
           <!--          <view class="btn" style="opacity: 0">查看订单</view>-->
         </view>

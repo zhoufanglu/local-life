@@ -33,7 +33,7 @@
           <text class="title">{{ i.title }}</text>
           <view class="bottom">
             <text>{{ i.foodOpenTime }}</text>
-            <text>¥ {{ i.price }}</text>
+            <text>$ {{ i.price }}</text>
           </view>
         </div>
       </div>

@@ -169,7 +169,7 @@
               </view>
             </view>
             <view class="bottom">
-              <text>¥{{ i.price }}</text>
+              <text>${{ i.price }}</text>
               <view>
                 <cc-numbox
                   :value="i.num"
@@ -194,7 +194,7 @@
             label="全选"
           ></u-checkbox>
         </u-checkbox-group>
-        <text class="price" v-if="allPrice">¥ {{ allPrice }}</text>
+        <text class="price" v-if="allPrice">$ {{ allPrice }}</text>
       </view>
       <view
         v-if="!btnLoading"
