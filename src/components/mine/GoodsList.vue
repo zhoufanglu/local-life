@@ -28,11 +28,17 @@
       pageSize: 100,
       type: props.type,
       userId: props.searchUserNo,
-    }).then(({ data }) => {
-      list.value = data.list || []
-      isNoData.value = !list.value.length
-      loading.value = false
     })
+      .then(({ data }) => {
+        list.value = data.list || []
+        isNoData.value = !list.value.length
+        loading.value = false
+      })
+      .catch((err) => {
+        list.value = []
+        isNoData.value = true
+        loading.value = false
+      })
   }
 
   getPublishLikePage()

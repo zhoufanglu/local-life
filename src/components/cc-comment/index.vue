@@ -1,5 +1,6 @@
 <template>
-  <view class="c_total">评论 {{ total }}</view>
+  <view class="c_total">共 {{ total }} 条评论</view>
+  <slot></slot>
   <template v-if="dataList && dataList.length">
     <view class="c_comment" v-for="(item1, index1) in dataList" :key="item1.id">
       <!-- 一级评论 -->

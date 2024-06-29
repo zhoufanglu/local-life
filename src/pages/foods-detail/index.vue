@@ -78,7 +78,9 @@
           <view>
             <view>
               <text>地址:{{ '  ' }} </text>
-              <text class="address">{{ variables.data.foodAddress }}</text>
+              <text class="address">{{
+                variables.data.foodAddress || '-'
+              }}</text>
             </view>
             <text
               >({{
@@ -89,7 +91,7 @@
         </view>
         <view class="position">
           <img src="@/static/detail/position.png" alt="" />
-          <text>{{ variables.data.foodAddress }}</text>
+          <text>{{ variables.data.foodAddress || '-' }}</text>
         </view>
       </view>
     </view>

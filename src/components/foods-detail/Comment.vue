@@ -58,6 +58,12 @@
       // comments.value.push(comments.value[0])
     })
   }
+  const goMine = (data) => {
+    console.log(145, data)
+    uni.navigateTo({
+      url: `/pages/mine/index?userType=other&userNo=${data.userId}`,
+    })
+  }
 </script>
 <script>
   export default {
@@ -74,6 +80,7 @@
       <view class="top-row">
         <view>
           <u-avatar
+            @click="goMine(i)"
             class="avatar"
             :src="i.avatar"
             :size="38"

@@ -77,7 +77,7 @@
         <view class="info">
           <view class="top">
             <view class="title">{{ food.title }}</view>
-            <text> {{ food.content }} </text>
+            <text class="content"> {{ food.content }} </text>
             <text>营业时间：{{ food.foodOpenTime }}</text>
           </view>
           <view class="img-list">
@@ -142,7 +142,7 @@
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          height: 248rpx;
+          min-height: 248rpx;
           margin-left: 24rpx;
           width: 100%;
           .top {
@@ -161,6 +161,9 @@
             text:nth-child(2) {
               margin: 10rpx 0;
             }
+          }
+          .content {
+            @include ellipsis(3);
           }
           .img-list {
             // border: solid 1px red;

@@ -23,11 +23,7 @@
       </view>
       <view class="top_right" @tap="likeClick(props.data)">
         <view v-if="!likeLoading" style="display: flex; align-items: center">
-          <span :class="[props.data.isLike ? 'active' : '', 'like_count']">{{
-            // cLikeCount
-            props.data.likeCount
-          }}</span>
-          <uni-icons
+          <!--          <uni-icons
             v-if="props.data.isLike"
             type="hand-up-filled"
             size="24"
@@ -38,7 +34,28 @@
             type="hand-up"
             size="24"
             color="#999"
-          ></uni-icons>
+          ></uni-icons>-->
+
+          <image
+            style="width: 20px; height: 18px"
+            v-if="!props.data.isLike"
+            src="@/static/plaza/like.png"
+            alt=""
+          />
+          <image
+            style="width: 20px; height: 18px"
+            v-if="props.data.isLike"
+            src="@/static/plaza/like_active.png"
+            alt=""
+          />
+          <span
+            style="margin-left: 3px"
+            :class="[props.data.isLike ? 'active' : '', 'like_count']"
+            >{{
+              // cLikeCount
+              props.data.likeCount
+            }}</span
+          >
         </view>
 
         <up-loading-icon v-if="likeLoading"></up-loading-icon>

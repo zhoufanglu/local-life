@@ -9,6 +9,7 @@
     likeUpdate,
   } from '@/api/modules/social'
   import { useEnums } from '@/hooks/useEnums'
+  import { getUserInfo as getUserInfoApi } from '@/api/modules/user'
 
   const { boundTop, boundWidth } = getBoundInfo()
   const props = defineProps({
@@ -28,6 +29,14 @@
     },
   })
   const userNo = ref(uni.getStorageSync('userNo'))
+
+  // 获取头像信息
+  const avatar = ref('')
+  getUserInfoApi({
+    userId: userNo.value,
+  }).then(({ data }) => {
+    avatar.value = data.avatar
+  })
 
   const { getPrice, getUnit } = useEnums(props.type)
   /**
@@ -281,6 +290,7 @@
         height: `calc(100% - ${variables.topRowHeight}px)`,
       }"
     >
+      <!--      imgMode="aspectFill"-->
       <u-swiper
         v-if="
           variables.data.imageList.length !== 0 && variables.data.imageList[0]
@@ -288,7 +298,7 @@
         height="732rpx"
         class="detail-swiper"
         :list="variables.data.imageList"
-        imgMode="aspectFill"
+        imgMode="widthFix"
         indicator
         indicatorMode="line"
         circular
@@ -312,7 +322,6 @@
         </view>-->
       </view>
       <u-divider style="width: 95%; margin: 0 auto"></u-divider>
-      <!--?评论-->
       <CComment
         ref="ccRef"
         v-model:userInfo="userInfo"
@@ -327,18 +336,21 @@
         @replyFun="replyFun"
         @deleteFun="deleteFun"
         :deleteMode="deleteMode"
-      ></CComment>
-      <view class="fix-comment" @click="openComment">
+      >
+        <!--?评论-->
+        <view class="my-comment-input" @click="openComment">
+          <u-avatar
+            :src="avatar"
+            class="avatar"
+            :size="34"
+            :border="false"
+          ></u-avatar>
+          <view class="com-info">说点什么</view>
+        </view>
+      </CComment>
+      <!--      <view class="fix-comment" @click="openComment">
         <view class="com-info">说点什么</view>
-        <!--        <u-search
-          :disabled="false"
-          searchIcon=""
-          :focus="false"
-          :showAction="false"
-          placeholder="说点什么"
-          @tap="openComment"
-        ></u-search>-->
-      </view>
+      </view>-->
 
       <!--      <view class="btn" @tap="openComment">说点什么</view>-->
     </view>
@@ -454,6 +466,30 @@
     box-sizing: border-box;
     padding: 0 50rpx;
     width: 100%;
+    .com-info {
+      width: 90%;
+      // border: solid 1px red;
+      border-radius: 30px;
+      height: 60rpx;
+      font-size: 26rpx;
+      @include vertical-center;
+      justify-content: flex-start;
+      background-color: #eee;
+      padding-left: 20rpx;
+    }
+  }
+  .my-comment-input {
+    background: #ffffff;
+    @include vertical-center;
+    justify-content: space-between;
+    height: 98rpx;
+    // border-top: solid 1px #eeeeee;
+    box-sizing: border-box;
+    padding: 0 30rpx;
+    width: 100%;
+    .avatar {
+      margin-right: 10px;
+    }
     .com-info {
       width: 90%;
       // border: solid 1px red;

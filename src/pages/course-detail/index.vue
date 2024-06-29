@@ -10,6 +10,7 @@
     data: {},
     curData: {},
     curType: '基础课程',
+    versions: [], // 版本列表
   })
 
   onMounted(() => {})
@@ -18,6 +19,10 @@
     const spuId = +options?.spuId
     getGoodDetail({ spuId }).then((res) => {
       variables.data = res.data
+      // 获取版本列表
+      variables.versions = res.data.skuList.map((item) => item.goodsName)
+      variables.curType = variables.versions[0]
+      // console.log(24, variables.versions)
       setCurData()
       console.log(34, variables.curData)
     })
@@ -33,10 +38,11 @@
     setCurData()
   }
   const setCurData = () => {
+    // console.log(40, variables.data.skuList)
     variables.curData = variables.data.skuList.find(
-      (item) => item.goodsName === variables.curType,
+      (item) => item?.goodsName === variables.curType,
     )
-    console.log(39, variables.curData)
+    // console.log(39, variables.curData)
   }
 
   const handleCart = () => {
@@ -49,7 +55,7 @@
       addGoodInCart({
         cartId: cartId,
         skuId: variables.curData.skuId,
-        goodsName: variables.curData.goodsName,
+        goodsName: variables.curData?.goodsName,
         num: 1,
       }).then((res) => {
         uni.$u.toast('加入成功')
@@ -103,8 +109,8 @@
       ></u-swiper>
       <view class="course-info">
         <view class="row-1">
-          <text>{{ variables.curData.goodsName }}</text>
-          <text>已售 {{ variables.curData.saleNum }} 件</text>
+          <text>{{ variables.curData?.goodsName }}</text>
+          <text>已售 {{ variables.curData?.saleNum }} 件</text>
         </view>
         <text class="info">{{ variables.curData.goodsDesc }}</text>
         <text class="course-price">${{ variables.curData.goodsPrice }}</text>
@@ -115,17 +121,12 @@
         <view class="panel">
           <view
             class="version-item"
-            :class="variables.curType === '基础课程' ? 'active' : ''"
-            @click="handleTypeChange('基础课程')"
+            v-for="(item, index) in variables.versions"
+            :key="index"
+            :class="variables.curType === item ? 'active' : ''"
+            @click="handleTypeChange(item, index)"
           >
-            基础课程
-          </view>
-          <view
-            class="version-item"
-            :class="variables.curType === '高级课程' ? 'active' : ''"
-            @click="handleTypeChange('高级课程')"
-          >
-            高级课程
+            {{ item }}
           </view>
         </view>
       </view>
