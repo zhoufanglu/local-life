@@ -15,9 +15,7 @@
           height="497rpx"
         ></u-image>
         <div class="info">
-          <text
-            >{{ index }}今天给有聚公司设计的 插画被采纳了，好开啊啊啊啊</text
-          >
+          <text>{{ index }}Fraud FraudFraudFraudFraudFraud</text>
           <div class="end-row">
             <div class="left" @click="goUserInfo">
               <u-image
@@ -27,7 +25,7 @@
                 width="50rpx"
                 height="50rpx"
               ></u-image>
-              <span class="username">用户名</span>
+              <span class="username">Fraud</span>
             </div>
             <div class="right" @click="handleLikeClick(index, item.isLike)">
               <image
